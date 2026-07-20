@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PARTICIPANT
+  MODERATOR
+  ADMIN
+}
+
+enum ReferralStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  CLOSED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  phone         String    @unique
+  passwordHash  String
+  role          Role      @default(PARTICIPANT)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile            Profile?
+  referrals          Referral[] @relation("ReferrerReferrals")
+  referredReferral   Referral?  @relation("ReferredUser")
+  notifications      Notification[]
+  sessions           Session[]
+  leaderboardEntries Leaderboard[]
+  verificationLogs   VerificationLog[]
+
+  @@map("users")
+}
+
+model Profile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  fullName          String
+  instagram         String   @unique
+  state             String
+  school            String
+  referralCode      String   @unique
+  referralLink      String   @unique
+  qrCodeUrl         String?
+  totalReferrals    Int      @default(0)
+  verifiedReferrals Int      @default(0)
+  pendingReferrals  Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Referral {
+  id                String         @id @default(cuid())
+  campaignId        String         @default("referral-challenge-2026")
+  referrerId        String
+  referredById      String         @unique
+  referredEmail     String         @unique
+  referredPhone     String         @unique
+  referredInstagram String         @unique
+  status            ReferralStatus @default(PENDING)
+  verifiedAt        DateTime?
+  verifiedBy        String?
+  rejectionReason   String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  referrer      User      @relation("ReferrerReferrals", fields: [referrerId], references: [id])
+  referredUser  User?     @relation("ReferredUser", fields: [referredById], references: [id])
+  campaign      Campaign  @relation(fields: [campaignId], references: [id])
+
+  @@map("referrals")
+}
+
+model Campaign {
+  id                  String         @id
+  name                String
+  description         String?
+  status              CampaignStatus @default(DRAFT)
+  startDate           DateTime?
+  endDate             DateTime?
+  registrationEnabled Boolean        @default(true)
+  leaderboardVisible  Boolean        @default(true)
+  goldReward          Int            @default(10000)
+  silverReward        Int            @default(7000)
+  bronzeReward        Int            @default(5000)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  referrals   Referral[]
+  leaderboard Leaderboard[]
+  rewards     Reward[]
+  settings    Setting[]
+
+  @@map("campaigns")
+}
+
+model Leaderboard {
+  id           String   @id @default(cuid())
+  userId       String
+  campaignId   String
+  rank         Int
+  totalRefs    Int      @default(0)
+  verifiedRefs Int      @default(0)
+  score        Float    @default(0)
+  updatedAt    DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@unique([userId, campaignId])
+  @@map("leaderboard")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("info")
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Reward {
+  id          String   @id @default(cuid())
+  campaignId  String
+  name        String
+  description String?
+  tier        String
+  value       Int
+  claimed     Boolean  @default(false)
+  claimedAt   DateTime?
+  userId      String?
+  createdAt   DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@map("rewards")
+}
+
+model VerificationLog {
+  id          String   @id @default(cuid())
+  userId      String
+  action      String
+  performedBy String
+  details     String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("verification_logs")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Setting {
+  id         String   @id @default(cuid())
+  campaignId String
+  key        String
+  value      String
+  updatedAt  DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@unique([campaignId, key])
+  @@map("settings")
+}

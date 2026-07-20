@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "tailwindcss";
+
+@theme inline {
+  --color-purple: #5B2D90;
+  --color-purple-light: #7B4DB0;
+  --color-purple-dark: #3D1A60;
+  --color-gold: #C89A2B;
+  --color-gold-light: #D4AD4F;
+  --color-gold-dark: #A07A1F;
+  --color-chocolate: #4A2E1F;
+  --color-chocolate-light: #6B4A3A;
+  --color-chocolate-dark: #2E1A0F;
+  --color-cream: #FFF8EF;
+  --color-cream-dark: #F5E6D0;
+
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #FFF8EF;
+  color: #2E1A0F;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #5B2D90;
+  color: #FFF8EF;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF8EF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5B2D90;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7B4DB0;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+.glass {
+  background: rgba(255, 248, 239, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(91, 45, 144, 0.1);
+}
+
+.glass-dark {
+  background: rgba(91, 45, 144, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(91, 45, 144, 0.2);
+}
