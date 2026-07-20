@@ -13,11 +13,6 @@ export const metadata: Metadata = {
     locale: "en_NG",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Hearts by Charming | Referral Challenge 2026",
-    description: "Join the Hearts by Charming Referral Challenge. Share, earn rewards, and make a difference.",
-  },
 };
 
 export default function RootLayout({
@@ -27,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-cream text-chocolate antialiased">
+      <body className="min-h-screen bg-cream text-brown-dark antialiased">
         {children}
       </body>
     </html>

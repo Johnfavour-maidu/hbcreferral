@@ -4,22 +4,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.97]",
   {
     variants: {
       variant: {
-        default: "bg-purple text-white hover:bg-purple-light shadow-lg shadow-purple/25",
-        gold: "bg-gold text-white hover:bg-gold-light shadow-lg shadow-gold/25",
-        chocolate: "bg-chocolate text-cream hover:bg-chocolate-light",
-        outline: "border-2 border-purple text-purple hover:bg-purple hover:text-white",
-        ghost: "text-chocolate hover:bg-cream-dark",
-        link: "text-purple underline-offset-4 hover:underline",
-        destructive: "bg-red-500 text-white hover:bg-red-600",
+        default: "bg-gold text-white hover:bg-gold-dark shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30",
+        gold: "bg-gold text-white hover:bg-gold-dark shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30",
+        brown: "bg-brown text-cream hover:bg-brown-light shadow-lg shadow-brown/20",
+        outline: "border-2 border-brown/20 text-brown hover:bg-brown hover:text-white hover:border-brown",
+        ghost: "text-brown hover:bg-cream-dark",
+        link: "text-gold underline-offset-4 hover:underline",
+        destructive: "bg-error text-white hover:bg-red-700 shadow-lg shadow-error/20",
+        success: "bg-success text-white hover:bg-green-700",
       },
       size: {
         default: "h-11 px-6 py-2",
-        sm: "h-9 px-4",
+        sm: "h-9 px-4 text-xs",
         lg: "h-13 px-8 text-base",
+        xl: "h-14 px-10 text-base",
         icon: "h-10 w-10",
       },
     },

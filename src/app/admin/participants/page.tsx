@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import { Search, Download, Eye, Ban, Trash2 } from "lucide-react";
+import { Search, Download, Eye, Ban } from "lucide-react";
 import { toast } from "sonner";
 
 interface Participant {
@@ -32,30 +32,19 @@ export default function AdminParticipantsPage() {
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    async function fetchParticipants() {
-      try {
-        const res = await fetch("/api/admin/participants");
-        if (res.ok) {
-          const data = await res.json();
-          setParticipants(data.participants);
-        }
-      } catch (error) {
-        console.error("Failed to fetch participants:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchParticipants();
+    fetch("/api/admin/participants")
+      .then((r) => r.json())
+      .then((d) => setParticipants(d.participants || []))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = participants.filter((p) => {
-    const matchesSearch =
-      p.fullName.toLowerCase().includes(search.toLowerCase()) ||
-      p.email.toLowerCase().includes(search.toLowerCase()) ||
-      p.instagram.toLowerCase().includes(search.toLowerCase());
-    if (filter === "active") return matchesSearch && p.isActive;
-    if (filter === "inactive") return matchesSearch && !p.isActive;
-    return matchesSearch;
+    const q = search.toLowerCase();
+    const match = p.fullName.toLowerCase().includes(q) || p.email.toLowerCase().includes(q) || p.instagram.toLowerCase().includes(q);
+    if (filter === "active") return match && p.isActive;
+    if (filter === "inactive") return match && !p.isActive;
+    return match;
   });
 
   const exportCSV = () => {
@@ -72,24 +61,19 @@ export default function AdminParticipantsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple" />
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-cream">
       <AdminSidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-6 lg:p-8">
         <PageWrapper>
           <FadeIn>
             <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold text-chocolate">Participants</h1>
-              <Button onClick={exportCSV} variant="outline">
-                <Download className="h-4 w-4 mr-2" />
-                Export CSV
+              <h1 className="text-3xl font-extrabold text-brown-dark">Participants</h1>
+              <Button onClick={exportCSV} variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-1" /> Export CSV
               </Button>
             </div>
           </FadeIn>
@@ -99,65 +83,46 @@ export default function AdminParticipantsPage() {
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-chocolate/40" />
-                    <Input
-                      placeholder="Search by name, email, or Instagram..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      className="pl-10"
-                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
+                    <Input className="pl-10" placeholder="Search by name, email, or Instagram..." value={search} onChange={(e) => setSearch(e.target.value)} />
                   </div>
                   <div className="flex gap-2">
                     {["all", "active", "inactive"].map((f) => (
-                      <Button
-                        key={f}
-                        variant={filter === f ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setFilter(f)}
-                        className="capitalize"
-                      >
-                        {f}
-                      </Button>
+                      <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)} className="capitalize">{f}</Button>
                     ))}
                   </div>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto -mx-6 px-6">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-cream-dark">
-                        <th className="text-left py-3 px-3 font-medium text-chocolate/70">Name</th>
-                        <th className="text-left py-3 px-3 font-medium text-chocolate/70">Email</th>
-                        <th className="text-left py-3 px-3 font-medium text-chocolate/70">Instagram</th>
-                        <th className="text-left py-3 px-3 font-medium text-chocolate/70">State</th>
-                        <th className="text-center py-3 px-3 font-medium text-chocolate/70">Refs</th>
-                        <th className="text-center py-3 px-3 font-medium text-chocolate/70">Verified</th>
-                        <th className="text-center py-3 px-3 font-medium text-chocolate/70">Status</th>
-                        <th className="text-center py-3 px-3 font-medium text-chocolate/70">Actions</th>
+                      <tr className="border-b-2 border-cream-dark">
+                        <th className="text-left py-3 px-3 font-semibold text-brown-light">Name</th>
+                        <th className="text-left py-3 px-3 font-semibold text-brown-light">Email</th>
+                        <th className="text-left py-3 px-3 font-semibold text-brown-light">Instagram</th>
+                        <th className="text-left py-3 px-3 font-semibold text-brown-light">State</th>
+                        <th className="text-center py-3 px-3 font-semibold text-brown-light">Refs</th>
+                        <th className="text-center py-3 px-3 font-semibold text-brown-light">Verified</th>
+                        <th className="text-center py-3 px-3 font-semibold text-brown-light">Status</th>
+                        <th className="text-center py-3 px-3 font-semibold text-brown-light">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filtered.map((p) => (
-                        <tr key={p.id} className="border-b border-cream-dark/50 hover:bg-cream/50">
-                          <td className="py-3 px-3 font-medium text-chocolate">{p.fullName}</td>
-                          <td className="py-3 px-3 text-chocolate/70">{p.email}</td>
-                          <td className="py-3 px-3 text-chocolate/70">{p.instagram}</td>
-                          <td className="py-3 px-3 text-chocolate/70">{p.state}</td>
-                          <td className="py-3 px-3 text-center font-medium text-purple">{p.totalReferrals}</td>
-                          <td className="py-3 px-3 text-center font-medium text-green-600">{p.verifiedReferrals}</td>
+                        <tr key={p.id} className="border-b border-cream-dark/50 hover:bg-cream/50 transition-colors">
+                          <td className="py-3 px-3 font-medium text-brown-dark">{p.fullName}</td>
+                          <td className="py-3 px-3 text-brown-light">{p.email}</td>
+                          <td className="py-3 px-3 text-brown-light">{p.instagram}</td>
+                          <td className="py-3 px-3 text-brown-light">{p.state}</td>
+                          <td className="py-3 px-3 text-center font-bold text-gold">{p.totalReferrals}</td>
+                          <td className="py-3 px-3 text-center font-bold text-success">{p.verifiedReferrals}</td>
                           <td className="py-3 px-3 text-center">
-                            <Badge variant={p.isActive ? "success" : "danger"}>
-                              {p.isActive ? "Active" : "Suspended"}
-                            </Badge>
+                            <Badge variant={p.isActive ? "success" : "danger"}>{p.isActive ? "Active" : "Suspended"}</Badge>
                           </td>
                           <td className="py-3 px-3 text-center">
                             <div className="flex items-center justify-center gap-1">
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Eye className="h-3 w-3" />
-                              </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500">
-                                <Ban className="h-3 w-3" />
-                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8"><Eye className="h-3 w-3" /></Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-error"><Ban className="h-3 w-3" /></Button>
                             </div>
                           </td>
                         </tr>

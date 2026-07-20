@@ -19,20 +19,11 @@ export default function ReferralHistoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchReferrals() {
-      try {
-        const res = await fetch("/api/referrals");
-        if (res.ok) {
-          const data = await res.json();
-          setReferrals(data.referrals);
-        }
-      } catch (error) {
-        console.error("Failed to fetch referrals:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchReferrals();
+    fetch("/api/referrals")
+      .then((r) => r.json())
+      .then((d) => setReferrals(d.referrals || []))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   const statusConfig = {
@@ -42,19 +33,15 @@ export default function ReferralHistoryPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple" />
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
   }
 
   return (
     <PageWrapper>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-5 sm:px-10 lg:px-20 py-8 lg:py-12">
         <FadeIn>
-          <h1 className="text-3xl font-bold text-chocolate flex items-center gap-3 mb-8">
-            <History className="h-8 w-8 text-purple" />
+          <h1 className="text-3xl font-extrabold text-brown-dark flex items-center gap-3 mb-8">
+            <History className="h-8 w-8 text-gold" />
             Referral History
           </h1>
         </FadeIn>
@@ -66,31 +53,29 @@ export default function ReferralHistoryPage() {
             </CardHeader>
             <CardContent>
               {referrals.length > 0 ? (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto -mx-6 px-6">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-cream-dark">
-                        <th className="text-left py-3 px-4 font-medium text-chocolate/70">Name</th>
-                        <th className="text-left py-3 px-4 font-medium text-chocolate/70">Instagram</th>
-                        <th className="text-left py-3 px-4 font-medium text-chocolate/70">Joined</th>
-                        <th className="text-left py-3 px-4 font-medium text-chocolate/70">Status</th>
+                      <tr className="border-b-2 border-cream-dark">
+                        <th className="text-left py-3 px-4 font-semibold text-brown-light">Name</th>
+                        <th className="text-left py-3 px-4 font-semibold text-brown-light">Instagram</th>
+                        <th className="text-left py-3 px-4 font-semibold text-brown-light">Joined</th>
+                        <th className="text-left py-3 px-4 font-semibold text-brown-light">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {referrals.map((ref) => {
                         const status = statusConfig[ref.status as keyof typeof statusConfig];
-                        const StatusIcon = status.icon;
+                        const StatusIcon = status?.icon || Clock;
                         return (
-                          <tr key={ref.id} className="border-b border-cream-dark/50 hover:bg-cream/50">
-                            <td className="py-3 px-4 font-medium text-chocolate">{ref.fullName}</td>
-                            <td className="py-3 px-4 text-chocolate/70">{ref.instagram}</td>
-                            <td className="py-3 px-4 text-chocolate/50">
-                              {new Date(ref.createdAt).toLocaleDateString()}
-                            </td>
+                          <tr key={ref.id} className="border-b border-cream-dark/50 hover:bg-cream/50 transition-colors">
+                            <td className="py-3 px-4 font-medium text-brown-dark">{ref.fullName}</td>
+                            <td className="py-3 px-4 text-brown-light">{ref.instagram}</td>
+                            <td className="py-3 px-4 text-brown-light/70">{new Date(ref.createdAt).toLocaleDateString()}</td>
                             <td className="py-3 px-4">
-                              <Badge variant={status.variant} className="gap-1">
+                              <Badge variant={status?.variant || "default"} className="gap-1">
                                 <StatusIcon className="h-3 w-3" />
-                                {status.label}
+                                {status?.label || ref.status}
                               </Badge>
                             </td>
                           </tr>
@@ -100,9 +85,7 @@ export default function ReferralHistoryPage() {
                   </table>
                 </div>
               ) : (
-                <p className="text-center text-chocolate/50 py-8">
-                  No referrals yet. Share your link to get started!
-                </p>
+                <p className="text-center text-brown-light/50 py-8">No referrals yet. Share your link to get started!</p>
               )}
             </CardContent>
           </Card>

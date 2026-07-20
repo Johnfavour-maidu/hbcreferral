@@ -33,7 +33,7 @@ export function Avatar({ src, alt, fallback, size = "md", className }: AvatarPro
   return (
     <div
       className={cn(
-        "flex items-center justify-center rounded-full bg-purple text-white font-semibold ring-2 ring-cream-dark",
+        "flex items-center justify-center rounded-full bg-gold text-white font-semibold ring-2 ring-cream-dark",
         sizeClasses[size],
         className
       )}

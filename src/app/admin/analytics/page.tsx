@@ -4,22 +4,9 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-const COLORS = ["#5B2D90", "#C89A2B", "#4A2E1F", "#7B4DB0", "#D4AD4F"];
+const COLORS = ["#C89A2B", "#4A2E1F", "#7B5B43", "#E5C66A", "#A07A1F"];
 
 interface AnalyticsData {
   dailySignups: { date: string; count: number }[];
@@ -36,80 +23,53 @@ export default function AdminAnalyticsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchAnalytics() {
-      try {
-        const res = await fetch("/api/admin/analytics");
-        if (res.ok) {
-          const result = await res.json();
-          setData(result);
-        }
-      } catch (error) {
-        console.error("Failed to fetch analytics:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchAnalytics();
+    fetch("/api/admin/analytics")
+      .then((r) => r.json())
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading || !data) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple" />
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-cream">
       <AdminSidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-6 lg:p-8">
         <PageWrapper>
           <FadeIn>
-            <h1 className="text-3xl font-bold text-chocolate mb-8">Analytics</h1>
+            <h1 className="text-3xl font-extrabold text-brown-dark mb-8">Analytics</h1>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <FadeIn delay={0.1}>
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <p className="text-sm text-chocolate/70">Total Signups</p>
-                  <p className="text-3xl font-bold text-purple mt-1">{data.totalSignups}</p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn delay={0.15}>
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <p className="text-sm text-chocolate/70">Total Verified</p>
-                  <p className="text-3xl font-bold text-green-600 mt-1">{data.totalVerified}</p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <p className="text-sm text-chocolate/70">Conversion Rate</p>
-                  <p className="text-3xl font-bold text-gold mt-1">{data.referralConversion}%</p>
-                </CardContent>
-              </Card>
-            </FadeIn>
+            {[
+              { label: "Total Signups", value: data.totalSignups, color: "text-gold" },
+              { label: "Total Verified", value: data.totalVerified, color: "text-success" },
+              { label: "Conversion Rate", value: `${data.referralConversion}%`, color: "text-gold" },
+            ].map((s, i) => (
+              <FadeIn key={s.label} delay={i * 0.05}>
+                <Card><CardContent className="p-5 text-center">
+                  <p className="text-sm text-brown-light">{s.label}</p>
+                  <p className={`text-3xl font-extrabold ${s.color} mt-1`}>{s.value}</p>
+                </CardContent></Card>
+              </FadeIn>
+            ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <FadeIn delay={0.25}>
+            <FadeIn delay={0.2}>
               <Card>
-                <CardHeader>
-                  <CardTitle>Daily Signups</CardTitle>
-                </CardHeader>
+                <CardHeader><CardTitle>Daily Signups</CardTitle></CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={data.dailySignups}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#F5E6D0" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#F7F3EC" />
                       <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip />
-                      <Line type="monotone" dataKey="count" stroke="#5B2D90" strokeWidth={2} dot={{ fill: "#5B2D90" }} />
+                      <Line type="monotone" dataKey="count" stroke="#C89A2B" strokeWidth={2} dot={{ fill: "#C89A2B" }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -118,16 +78,12 @@ export default function AdminAnalyticsPage() {
 
             <FadeIn delay={0.3}>
               <Card>
-                <CardHeader>
-                  <CardTitle>Top States</CardTitle>
-                </CardHeader>
+                <CardHeader><CardTitle>Top States</CardTitle></CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Pie data={data.topStates} dataKey="count" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
-                        {data.topStates.map((_, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
+                        {data.topStates.map((_, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                       </Pie>
                       <Tooltip />
                     </PieChart>
@@ -140,16 +96,14 @@ export default function AdminAnalyticsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FadeIn delay={0.35}>
               <Card>
-                <CardHeader>
-                  <CardTitle>Top Referrers</CardTitle>
-                </CardHeader>
+                <CardHeader><CardTitle>Top Referrers</CardTitle></CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {data.topReferrers.map((r, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-chocolate/50 w-6">#{i + 1}</span>
-                        <span className="flex-1 text-sm text-chocolate">{r.name}</span>
-                        <span className="font-bold text-purple">{r.count}</span>
+                      <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-cream transition-colors">
+                        <span className="text-sm font-bold text-brown-light/50 w-6">#{i + 1}</span>
+                        <span className="flex-1 text-sm text-brown-dark">{r.name}</span>
+                        <span className="font-bold text-gold">{r.count}</span>
                       </div>
                     ))}
                   </div>
@@ -159,16 +113,14 @@ export default function AdminAnalyticsPage() {
 
             <FadeIn delay={0.4}>
               <Card>
-                <CardHeader>
-                  <CardTitle>Top Schools</CardTitle>
-                </CardHeader>
+                <CardHeader><CardTitle>Top Schools</CardTitle></CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {data.topSchools.map((s, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-chocolate/50 w-6">#{i + 1}</span>
-                        <span className="flex-1 text-sm text-chocolate">{s.name}</span>
-                        <span className="font-bold text-purple">{s.count}</span>
+                      <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-cream transition-colors">
+                        <span className="text-sm font-bold text-brown-light/50 w-6">#{i + 1}</span>
+                        <span className="flex-1 text-sm text-brown-dark">{s.name}</span>
+                        <span className="font-bold text-gold">{s.count}</span>
                       </div>
                     ))}
                   </div>

@@ -11,25 +11,24 @@ export const siteConfig = {
 };
 
 export const colors = {
-  purple: {
-    DEFAULT: "#5B2D90",
-    light: "#7B4DB0",
-    dark: "#3D1A60",
-  },
   gold: {
     DEFAULT: "#C89A2B",
-    light: "#D4AD4F",
+    light: "#E5C66A",
     dark: "#A07A1F",
   },
-  chocolate: {
+  brown: {
     DEFAULT: "#4A2E1F",
-    light: "#6B4A3A",
-    dark: "#2E1A0F",
+    light: "#7B5B43",
+    dark: "#2D2118",
   },
   cream: {
     DEFAULT: "#FFF8EF",
-    dark: "#F5E6D0",
+    dark: "#F7F3EC",
   },
+  white: "#FFFFFF",
+  success: "#3BA55C",
+  warning: "#F59E0B",
+  error: "#DC2626",
 };
 
 export const REWARD_TIERS = {

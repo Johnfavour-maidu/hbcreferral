@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import { Download, FileText, FileSpreadsheet, File } from "lucide-react";
+import { Download, FileSpreadsheet, File } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AdminExportsPage() {
@@ -24,11 +24,8 @@ export default function AdminExportsPage() {
         a.click();
         toast.success(`${type} exported as ${format.toUpperCase()}!`);
       }
-    } catch {
-      toast.error("Export failed");
-    } finally {
-      setLoading(null);
-    }
+    } catch { toast.error("Export failed"); }
+    finally { setLoading(null); }
   };
 
   const exports = [
@@ -39,40 +36,29 @@ export default function AdminExportsPage() {
   ];
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-cream">
       <AdminSidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-6 lg:p-8">
         <PageWrapper>
           <FadeIn>
-            <h1 className="text-3xl font-bold text-chocolate flex items-center gap-3 mb-8">
-              <Download className="h-8 w-8 text-purple" />
-              Export Data
+            <h1 className="text-3xl font-extrabold text-brown-dark flex items-center gap-3 mb-8">
+              <Download className="h-8 w-8 text-gold" /> Export Data
             </h1>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {exports.map((exp, i) => (
-              <FadeIn key={exp.type} delay={i * 0.1}>
+              <FadeIn key={exp.type} delay={i * 0.08}>
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">{exp.label}</CardTitle>
-                    <p className="text-sm text-chocolate/60">{exp.description}</p>
+                    <p className="text-sm text-brown-light">{exp.description}</p>
                   </CardHeader>
                   <CardContent>
                     <div className="flex gap-2">
                       {["csv", "json"].map((format) => (
-                        <Button
-                          key={format}
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleExport(exp.type, format)}
-                          disabled={loading === `${exp.type}-${format}`}
-                        >
-                          {format === "csv" ? (
-                            <FileSpreadsheet className="h-4 w-4 mr-1" />
-                          ) : (
-                            <File className="h-4 w-4 mr-1" />
-                          )}
+                        <Button key={format} variant="outline" size="sm" onClick={() => handleExport(exp.type, format)} disabled={loading === `${exp.type}-${format}`}>
+                          {format === "csv" ? <FileSpreadsheet className="h-4 w-4 mr-1" /> : <File className="h-4 w-4 mr-1" />}
                           {format.toUpperCase()}
                         </Button>
                       ))}

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import { CheckCircle, XCircle, Clock, Check, X } from "lucide-react";
+import { CheckCircle, Check, X } from "lucide-react";
 import { toast } from "sonner";
 
 interface VerificationItem {
@@ -24,20 +24,11 @@ export default function AdminVerificationPage() {
   const [filter, setFilter] = useState("PENDING");
 
   useEffect(() => {
-    async function fetchItems() {
-      try {
-        const res = await fetch("/api/admin/verify");
-        if (res.ok) {
-          const data = await res.json();
-          setItems(data.verifications);
-        }
-      } catch (error) {
-        console.error("Failed to fetch verifications:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchItems();
+    fetch("/api/admin/verify")
+      .then((r) => r.json())
+      .then((d) => setItems(d.verifications || []))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   const handleAction = async (id: string, action: "approve" | "reject") => {
@@ -47,94 +38,56 @@ export default function AdminVerificationPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, action }),
       });
-
       if (res.ok) {
         setItems((prev) => prev.filter((i) => i.id !== id));
         toast.success(action === "approve" ? "Referral approved!" : "Referral rejected");
       }
-    } catch {
-      toast.error("Failed to process");
-    }
+    } catch { toast.error("Failed to process"); }
   };
 
   const filtered = items.filter((i) => filter === "ALL" || i.status === filter);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple" />
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-cream">
       <AdminSidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-6 lg:p-8">
         <PageWrapper>
           <FadeIn>
-            <h1 className="text-3xl font-bold text-chocolate mb-8">Verification Queue</h1>
+            <h1 className="text-3xl font-extrabold text-brown-dark mb-8">Verification Queue</h1>
           </FadeIn>
 
           <FadeIn delay={0.1}>
             <div className="flex gap-2 mb-6">
               {["PENDING", "VERIFIED", "REJECTED", "ALL"].map((f) => (
-                <Button
-                  key={f}
-                  variant={filter === f ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilter(f)}
-                >
-                  {f}
-                </Button>
+                <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)}>{f}</Button>
               ))}
             </div>
           </FadeIn>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filtered.map((item, i) => (
-              <FadeIn key={item.id} delay={i * 0.05}>
+              <FadeIn key={item.id} delay={i * 0.03}>
                 <Card>
                   <CardContent className="p-5 flex items-center gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <p className="font-medium text-chocolate">{item.referredName}</p>
+                        <p className="font-semibold text-brown-dark">{item.referredName}</p>
                         <Badge variant="default">{item.referredInstagram}</Badge>
-                        <Badge
-                          variant={
-                            item.status === "PENDING"
-                              ? "warning"
-                              : item.status === "VERIFIED"
-                              ? "success"
-                              : "danger"
-                          }
-                        >
-                          {item.status}
-                        </Badge>
+                        <Badge variant={item.status === "PENDING" ? "warning" : item.status === "VERIFIED" ? "success" : "danger"}>{item.status}</Badge>
                       </div>
-                      <p className="text-sm text-chocolate/60">
-                        Referred by: <strong>{item.referrerName}</strong> •{" "}
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </p>
+                      <p className="text-sm text-brown-light">Referred by: <strong>{item.referrerName}</strong> · {new Date(item.createdAt).toLocaleDateString()}</p>
                     </div>
-
                     {item.status === "PENDING" && (
                       <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          className="bg-green-600 hover:bg-green-700"
-                          onClick={() => handleAction(item.id, "approve")}
-                        >
-                          <Check className="h-4 w-4 mr-1" />
-                          Approve
+                        <Button size="sm" className="bg-success hover:bg-green-700" onClick={() => handleAction(item.id, "approve")}>
+                          <Check className="h-4 w-4 mr-1" /> Approve
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleAction(item.id, "reject")}
-                        >
-                          <X className="h-4 w-4 mr-1" />
-                          Reject
+                        <Button size="sm" variant="destructive" onClick={() => handleAction(item.id, "reject")}>
+                          <X className="h-4 w-4 mr-1" /> Reject
                         </Button>
                       </div>
                     )}
@@ -142,14 +95,8 @@ export default function AdminVerificationPage() {
                 </Card>
               </FadeIn>
             ))}
-
             {filtered.length === 0 && (
-              <Card>
-                <CardContent className="p-8 text-center">
-                  <CheckCircle className="h-12 w-12 text-chocolate/20 mx-auto mb-3" />
-                  <p className="text-chocolate/50">No items to verify</p>
-                </CardContent>
-              </Card>
+              <Card><CardContent className="p-8 text-center"><CheckCircle className="h-12 w-12 text-brown-light/20 mx-auto mb-3" /><p className="text-brown-light/50">No items to verify</p></CardContent></Card>
             )}
           </div>
         </PageWrapper>

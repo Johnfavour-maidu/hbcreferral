@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Logo } from "@/components/shared/logo";
 import { FadeIn } from "@/components/shared/animations";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 export default function LoginPage() {
@@ -37,86 +37,68 @@ export default function LoginPage() {
         password: data.password,
         redirect: false,
       });
-
-      if (result?.error) {
-        throw new Error("Invalid email or password");
-      }
-
+      if (result?.error) throw new Error("Invalid email or password");
       toast.success("Welcome back!");
       router.push("/dashboard");
     } catch (error: any) {
-      toast.error("Login failed", {
-        description: error.message,
-      });
+      toast.error("Login failed", { description: error.message });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-cream to-gold/5 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-cream section-padding flex items-center justify-center">
       <FadeIn>
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md mx-auto px-5">
           <div className="text-center mb-8">
             <Logo size="lg" />
-            <p className="text-chocolate/70 mt-3">Welcome back</p>
+            <p className="text-brown-light mt-3">Welcome back</p>
           </div>
 
-          <Card className="shadow-xl border-cream-dark">
-            <CardHeader className="text-center">
+          <Card className="shadow-xl">
+            <CardHeader className="text-center pb-2">
               <CardTitle className="text-2xl">Log In</CardTitle>
               <CardDescription>Access your referral dashboard</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" placeholder="you@example.com" {...register("email")} />
-                  {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
+                  <Label>Email Address</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
+                    <Input className="pl-10" type="email" placeholder="you@example.com" {...register("email")} />
+                  </div>
+                  {errors.email && <p className="text-error text-xs">{errors.email.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label>Password</Label>
                   <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      {...register("password")}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-chocolate/50 hover:text-chocolate"
-                    >
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
+                    <Input className="pl-10" type={showPassword ? "text" : "password"} placeholder="Enter your password" {...register("password")} />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-brown-light/50 hover:text-brown transition-colors">
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
-                  {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
+                  {errors.password && <p className="text-error text-xs">{errors.password.message}</p>}
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <Link href="/forgot-password" className="text-sm text-purple hover:underline">
+                <div className="flex items-center justify-end">
+                  <Link href="/forgot-password" className="text-sm text-gold hover:underline font-medium">
                     Forgot password?
                   </Link>
                 </div>
 
                 <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
                   {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Logging in...
-                    </>
-                  ) : (
-                    "Log In"
-                  )}
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</>
+                  ) : "Log In"}
                 </Button>
 
-                <p className="text-center text-sm text-chocolate/70">
+                <p className="text-center text-sm text-brown-light">
                   Don&apos;t have an account?{" "}
-                  <Link href="/register" className="text-purple font-medium hover:underline">
-                    Register now
-                  </Link>
+                  <Link href="/register" className="text-gold font-semibold hover:underline">Register now</Link>
                 </p>
               </form>
             </CardContent>

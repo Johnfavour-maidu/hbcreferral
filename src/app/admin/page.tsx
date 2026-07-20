@@ -2,28 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
-import {
-  Users,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  UserCheck,
-  ArrowUpRight,
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-} from "recharts";
+import { Users, CheckCircle, Clock, TrendingUp, UserCheck, ArrowUpRight } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface AdminStats {
   totalParticipants: number;
@@ -41,64 +24,49 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        const res = await fetch("/api/admin/stats");
-        if (res.ok) {
-          const data = await res.json();
-          setStats(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch admin stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchStats();
+    fetch("/api/admin/stats")
+      .then((r) => r.json())
+      .then(setStats)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading || !stats) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple" />
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
   }
 
   const overviewCards = [
-    { title: "Total Participants", value: stats.totalParticipants, icon: Users, color: "text-purple", href: "/admin/participants" },
-    { title: "Verified Referrals", value: stats.verifiedReferrals, icon: CheckCircle, color: "text-green-600", href: "/admin/verification" },
-    { title: "Pending Verification", value: stats.pendingVerifications, icon: Clock, color: "text-yellow-600", href: "/admin/verification" },
-    { title: "Today's Registrations", value: stats.todayRegistrations, icon: TrendingUp, color: "text-gold", href: "/admin/participants" },
-    { title: "Total Referrals", value: stats.totalReferrals, icon: ArrowUpRight, color: "text-purple-light", href: "/admin/leaderboard" },
-    { title: "Top Referrer", value: stats.topReferrer || "N/A", icon: UserCheck, color: "text-chocolate", href: "/admin/leaderboard" },
+    { title: "Total Participants", value: stats.totalParticipants.toLocaleString(), icon: Users, color: "text-gold", bg: "bg-gold/10", href: "/admin/participants" },
+    { title: "Verified Referrals", value: stats.verifiedReferrals.toLocaleString(), icon: CheckCircle, color: "text-success", bg: "bg-success/10", href: "/admin/verification" },
+    { title: "Pending Verification", value: stats.pendingVerifications.toLocaleString(), icon: Clock, color: "text-warning", bg: "bg-warning/10", href: "/admin/verification" },
+    { title: "Today's Registrations", value: stats.todayRegistrations.toLocaleString(), icon: TrendingUp, color: "text-gold", bg: "bg-gold/10", href: "/admin/participants" },
+    { title: "Total Referrals", value: stats.totalReferrals.toLocaleString(), icon: ArrowUpRight, color: "text-brown", bg: "bg-brown/10", href: "/admin/leaderboard" },
+    { title: "Top Referrer", value: stats.topReferrer || "N/A", icon: UserCheck, color: "text-gold", bg: "bg-gold/10", href: "/admin/leaderboard" },
   ];
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-cream">
       <AdminSidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-6 lg:p-8">
         <PageWrapper>
           <FadeIn>
-            <h1 className="text-3xl font-bold text-chocolate mb-8">Admin Dashboard</h1>
+            <h1 className="text-3xl font-extrabold text-brown-dark mb-8">Admin Dashboard</h1>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {overviewCards.map((card, i) => (
               <FadeIn key={card.title} delay={i * 0.05}>
                 <Link href={card.href}>
-                  <Card className="hover:shadow-lg transition-all group cursor-pointer">
-                    <CardContent className="p-6">
+                  <Card className="group cursor-pointer">
+                    <CardContent className="p-5">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-chocolate/70">{card.title}</p>
-                          <p className={`text-2xl font-bold ${card.color} mt-1`}>
-                            {typeof card.value === "number"
-                              ? card.value.toLocaleString()
-                              : card.value}
-                          </p>
+                          <p className="text-sm text-brown-light">{card.title}</p>
+                          <p className={`text-2xl font-extrabold ${card.color} mt-1`}>{card.value}</p>
                         </div>
-                        <card.icon className={`h-8 w-8 ${card.color} opacity-50 group-hover:opacity-100 transition-opacity`} />
+                        <div className={`w-10 h-10 rounded-xl ${card.bg} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                          <card.icon className={`h-5 w-5 ${card.color}`} />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -110,17 +78,15 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FadeIn delay={0.3}>
               <Card>
-                <CardHeader>
-                  <CardTitle>Daily Registrations</CardTitle>
-                </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
+                  <h3 className="font-bold text-brown-dark mb-4">Daily Registrations</h3>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={stats.dailyGrowth}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#F5E6D0" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#F7F3EC" />
                       <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip />
-                      <Bar dataKey="count" fill="#5B2D90" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="count" fill="#C89A2B" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -129,16 +95,12 @@ export default function AdminDashboard() {
 
             <FadeIn delay={0.4}>
               <Card>
-                <CardHeader>
-                  <CardTitle>Verification Rate</CardTitle>
-                </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
+                  <h3 className="font-bold text-brown-dark mb-4">Verification Rate</h3>
                   <div className="flex items-center justify-center h-[300px]">
                     <div className="text-center">
-                      <div className="text-6xl font-bold text-purple">
-                        {stats.verificationRate}%
-                      </div>
-                      <p className="text-chocolate/70 mt-2">Referrals Verified</p>
+                      <div className="text-6xl font-extrabold text-gold">{stats.verificationRate}%</div>
+                      <p className="text-brown-light mt-2">Referrals Verified</p>
                     </div>
                   </div>
                 </CardContent>
