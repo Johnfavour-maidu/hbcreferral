@@ -2,7 +2,6 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,7 +60,7 @@ function RegisterForm() {
 
   if (isSuccess) {
     return (
-      <div className="px-8 sm:px-10 py-20 text-center space-y-6 animate-in fade-in zoom-in duration-500">
+      <div className="py-12 text-center space-y-6 animate-in fade-in zoom-in duration-500">
         <div className="mx-auto w-16 h-16 rounded-full bg-success/10 flex items-center justify-center">
           <CheckCircle2 className="h-8 w-8 text-success" />
         </div>
@@ -84,27 +83,17 @@ function RegisterForm() {
   const inputClass = "h-[52px] rounded-xl border-cream-dark text-[15px]";
 
   return (
-    <div className="px-8 sm:px-10 pt-10 pb-8">
-      <div className="flex flex-col items-center mb-8">
-        <Link href="/" className="mb-7">
-          <Image
-            src="/assets/logo/logo-horizontal-md.png"
-            alt="Hearts by Charming"
-            width={220}
-            height={60}
-            style={{ width: 220, height: "auto" }}
-            priority
-          />
-        </Link>
+    <>
+      <div className="text-center mb-8">
         <h1 className="text-[26px] sm:text-[30px] font-extrabold text-brown-dark mb-2">
           Create Account
         </h1>
-        <p className="text-brown-light text-sm text-center">
+        <p className="text-brown-light text-[15px] text-center">
           Join the Referral Challenge 2026 — Edition 1
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-[20px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-[18px]">
         <div className="space-y-2">
           <Label htmlFor="fullName" className="text-[13px] font-medium text-brown-dark">
             Full Name
@@ -273,7 +262,7 @@ function RegisterForm() {
           <input type="hidden" {...register("referredBy")} value={referredBy} />
         )}
 
-        <div className="flex items-start gap-3 pt-2">
+        <div className="flex items-start gap-3 pt-1">
           <input
             type="checkbox"
             id="agreeToRules"
@@ -295,7 +284,7 @@ function RegisterForm() {
           <p className="text-error text-xs">{errors.agreeToRules.message}</p>
         )}
 
-        <div className="pt-3">
+        <div className="pt-2">
           <Button
             type="submit"
             className="w-full h-[54px] rounded-xl text-[15px] font-semibold"
@@ -312,7 +301,7 @@ function RegisterForm() {
           </Button>
         </div>
 
-        <p className="text-center text-[13px] text-brown-light pt-2">
+        <p className="text-center text-[13px] text-brown-light pt-1">
           Already have an account?{" "}
           <Link
             href="/login"
@@ -321,12 +310,8 @@ function RegisterForm() {
             Log In
           </Link>
         </p>
-
-        <p className="text-center text-[11px] text-brown-light/50 pt-5 border-t border-border">
-          &copy; {new Date().getFullYear()} Hearts by Charming. All rights reserved.
-        </p>
       </form>
-    </div>
+    </>
   );
 }
 

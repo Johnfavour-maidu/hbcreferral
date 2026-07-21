@@ -27,10 +27,10 @@ export function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 h-20 transition-all duration-300 ${
+      className={`sticky top-0 z-50 h-20 transition-all duration-300 bg-white border-b border-cream-dark ${
         scrolled
-          ? "glass shadow-[0_1px_3px_rgba(74,46,31,0.08)]"
-          : "bg-white/80 backdrop-blur-sm"
+          ? "shadow-[0_2px_8px_rgba(74,46,31,0.06)]"
+          : "shadow-none"
       }`}
     >
       <div
