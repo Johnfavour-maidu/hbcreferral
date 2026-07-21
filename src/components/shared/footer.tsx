@@ -8,7 +8,7 @@ export function Footer() {
         className="flex flex-col items-center text-center"
         style={{ paddingTop: 40, paddingBottom: 40, paddingLeft: 32, paddingRight: 32 }}
       >
-        <Link href="/" className="mb-4">
+        <Link href="/" className="mb-5">
           <Image
             src="/assets/logo/logo-horizontal-sm.png"
             alt="Hearts by Charming"
@@ -18,29 +18,13 @@ export function Footer() {
           />
         </Link>
 
-        <p className="text-brown-light text-xs font-medium tracking-wide mb-4">
+        <p className="text-brown-light text-xs font-medium tracking-wide mb-3">
           Referral Challenge 2026 – Edition 1
         </p>
 
-        <p className="text-brown-light/50 text-[11px] mb-4">
+        <p className="text-brown-light/50 text-[11px]">
           &copy; {new Date().getFullYear()} Hearts by Charming. All rights reserved.
         </p>
-
-        <div className="flex items-center gap-4 text-[11px]">
-          <Link
-            href="/privacy"
-            className="text-brown-light/50 hover:text-gold transition-colors"
-          >
-            Privacy Policy
-          </Link>
-          <span className="text-brown-light/20">•</span>
-          <Link
-            href="/terms"
-            className="text-brown-light/50 hover:text-gold transition-colors"
-          >
-            Terms
-          </Link>
-        </div>
       </div>
     </footer>
   );
