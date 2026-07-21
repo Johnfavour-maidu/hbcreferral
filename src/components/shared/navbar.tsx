@@ -6,6 +6,7 @@ import { Menu, X, Bell } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { Logo } from "@/components/shared/logo";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,9 +34,10 @@ export function Navbar() {
       }`}
     >
       <div
-        className="h-full flex items-center justify-end"
+        className="h-full flex items-center justify-between"
         style={{ maxWidth: 1280, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}
       >
+        <Logo size="sm" />
         <div className="hidden md:flex items-center gap-4">
           {isDashboard ? (
             <Button variant="ghost" size="icon" asChild>

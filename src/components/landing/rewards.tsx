@@ -1,102 +1,115 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, Medal, Award } from "lucide-react";
+import { Trophy, Medal, Ribbon } from "lucide-react";
 
 const tiers = [
   {
-    icon: Trophy,
-    name: "GOLD TIER",
+    name: "GOLD",
     subtitle: "Highest Referrals",
-    reward: "₦20,000",
-    gradient: "from-[#FDF6E3] to-[#FFF8EF]",
-    border: "border-gold/25",
-    iconBg: "bg-gold/10",
-    iconColor: "text-gold",
-    nameColor: "text-gold",
-    rewardColor: "text-gold-dark",
-    shadow: "shadow-gold/8",
+    amount: "₦20,000",
+    label: "GRAND PRIZE",
+    cardClass: "reward-card-gold",
+    badgeClass: "tier-badge-gold",
+    prizeClass: "prize-gold",
+    labelColor: "text-gold/60",
+    watermark: Trophy,
     highlight: true,
   },
   {
-    icon: Medal,
-    name: "SILVER TIER",
+    name: "SILVER",
     subtitle: "2nd Highest Referrals",
-    reward: "₦15,000",
-    gradient: "from-[#F8F9FA] to-[#FFFFFF]",
-    border: "border-gray-200",
-    iconBg: "bg-gray-100",
-    iconColor: "text-gray-400",
-    nameColor: "text-gray-500",
-    rewardColor: "text-brown-dark",
-    shadow: "shadow-gray-200/30",
+    amount: "₦15,000",
+    label: "RUNNER UP",
+    cardClass: "reward-card-silver",
+    badgeClass: "tier-badge-silver",
+    prizeClass: "prize-silver",
+    labelColor: "text-gray-400",
+    watermark: Medal,
     highlight: false,
   },
   {
-    icon: Award,
-    name: "BRONZE TIER",
+    name: "BRONZE",
     subtitle: "3rd Highest Referrals",
-    reward: "₦10,000",
-    gradient: "from-[#FFF8EF] to-[#FFFFFF]",
-    border: "border-amber-200",
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-600",
-    nameColor: "text-amber-600",
-    rewardColor: "text-brown-dark",
-    shadow: "shadow-amber-100/30",
+    amount: "₦10,000",
+    label: "TOP FINALIST",
+    cardClass: "reward-card-bronze",
+    badgeClass: "tier-badge-bronze",
+    prizeClass: "prize-bronze",
+    labelColor: "text-amber-600/50",
+    watermark: Ribbon,
     highlight: false,
   },
 ];
 
 export function RewardsPreview() {
   return (
-    <section id="rewards" className="bg-white pt-16 pb-16 lg:pt-20 lg:pb-20">
-      <div style={{ maxWidth: 1000, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center"
-          style={{ marginBottom: 40 }}
-        >
-          <span className="inline-block text-gold text-sm font-semibold uppercase tracking-widest mb-3">
-            Prizes
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brown-dark mb-4">
-            Earn Amazing Rewards
-          </h2>
-          <p className="text-brown-light text-lg leading-[1.7] text-center mx-auto block max-w-[650px]">
-            The more referrals you make, the bigger the reward. Start today!
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {tiers.map((tier, i) => (
-            <motion.div
-              key={tier.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className={`relative bg-gradient-to-b ${tier.gradient} border-2 ${tier.border} rounded-[20px] p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${tier.shadow} ${
-                tier.highlight ? "ring-1 ring-gold/15" : ""
-              }`}
+    <section id="rewards" className="bg-white">
+      <div style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+            style={{ marginBottom: 48 }}
+          >
+            <span className="inline-block text-gold text-sm font-semibold uppercase tracking-widest mb-3">
+              Prizes
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brown-dark mb-4">
+              Earn Amazing Rewards
+            </h2>
+            <p
+              className="text-brown-light text-lg leading-[1.75] text-center mx-auto"
+              style={{ maxWidth: 560 }}
             >
-              {tier.highlight && (
-                <div className="absolute -top-6 -right-6 w-28 h-28 bg-gold/8 rounded-full blur-2xl pointer-events-none" />
-              )}
-              <div className={`w-14 h-14 rounded-2xl ${tier.iconBg} flex items-center justify-center mx-auto mb-6`}>
-                <tier.icon className={`h-7 w-7 ${tier.iconColor}`} />
-              </div>
-              <div className={`text-xs font-bold ${tier.nameColor} uppercase tracking-widest mb-2`}>
-                {tier.name}
-              </div>
-              <div className="text-sm text-brown-light mb-5">{tier.subtitle}</div>
-              <div className={`text-[32px] font-extrabold ${tier.rewardColor} leading-tight`}>
-                {tier.reward}
-              </div>
-            </motion.div>
-          ))}
+              The more referrals you make, the bigger the reward. Start today!
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 items-start">
+            {tiers.map((tier, i) => {
+              const WatermarkIcon = tier.watermark;
+              return (
+                <motion.div
+                  key={tier.name}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.12, duration: 0.5 }}
+                  className={`reward-card ${tier.cardClass}`}
+                >
+                  <WatermarkIcon
+                    className="reward-watermark"
+                    strokeWidth={1}
+                    style={{ width: 120, height: 120 }}
+                  />
+
+                  <div className={`tier-badge ${tier.badgeClass} mb-5`}>
+                    ★ {tier.name} TIER ★
+                  </div>
+
+                  <p className="text-sm font-medium text-brown-light/60 mb-4 tracking-wide">
+                    {tier.subtitle}
+                  </p>
+
+                  <div
+                    className={`font-[900] leading-none mb-4 ${tier.prizeClass}`}
+                    style={{ fontSize: "clamp(40px, 5vw, 52px)" }}
+                  >
+                    {tier.amount}
+                  </div>
+
+                  <div
+                    className={`text-[11px] font-bold uppercase tracking-[0.18em] ${tier.labelColor}`}
+                  >
+                    {tier.label}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

@@ -138,3 +138,156 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Premium Award Card Styles */
+.reward-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1.5px solid transparent;
+  padding: 32px 28px 28px;
+  text-align: center;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reward-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.reward-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.reward-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Gold Card */
+.reward-card-gold {
+  background: linear-gradient(160deg, #FFFBF0 0%, #FFF3D6 30%, #FCE8B5 60%, #FFF8EF 100%);
+  border-color: rgba(200, 154, 43, 0.3);
+  box-shadow:
+    0 2px 8px rgba(200, 154, 43, 0.06),
+    0 8px 32px rgba(200, 154, 43, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  min-height: 220px;
+}
+
+.reward-card-gold:hover {
+  box-shadow:
+    0 4px 12px rgba(200, 154, 43, 0.1),
+    0 16px 48px rgba(200, 154, 43, 0.18),
+    0 0 40px rgba(200, 154, 43, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transform: translateY(-10px) scale(1.03);
+}
+
+/* Silver Card */
+.reward-card-silver {
+  background: linear-gradient(160deg, #FAFBFC 0%, #F1F3F5 30%, #E9ECEF 60%, #F8F9FA 100%);
+  border-color: rgba(134, 142, 150, 0.2);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    0 8px 32px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  min-height: 208px;
+}
+
+.reward-card-silver:hover {
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    0 16px 48px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Bronze Card */
+.reward-card-bronze {
+  background: linear-gradient(160deg, #FFF9F2 0%, #FFF0E0 30%, #FFE6CC 60%, #FFF8EF 100%);
+  border-color: rgba(180, 120, 60, 0.2);
+  box-shadow:
+    0 2px 8px rgba(180, 120, 60, 0.04),
+    0 8px 32px rgba(180, 120, 60, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  min-height: 208px;
+}
+
+.reward-card-bronze:hover {
+  box-shadow:
+    0 4px 12px rgba(180, 120, 60, 0.06),
+    0 16px 48px rgba(180, 120, 60, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Tier Badge */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tier-badge-gold {
+  background: linear-gradient(135deg, rgba(200, 154, 43, 0.12), rgba(229, 198, 106, 0.12));
+  border: 1px solid rgba(200, 154, 43, 0.25);
+  color: #B88A22;
+}
+
+.tier-badge-silver {
+  background: linear-gradient(135deg, rgba(134, 142, 150, 0.08), rgba(173, 181, 189, 0.08));
+  border: 1px solid rgba(134, 142, 150, 0.2);
+  color: #6C757D;
+}
+
+.tier-badge-bronze {
+  background: linear-gradient(135deg, rgba(180, 120, 60, 0.08), rgba(200, 150, 80, 0.08));
+  border: 1px solid rgba(180, 120, 60, 0.2);
+  color: #A0662A;
+}
+
+/* Metallic Prize Text */
+.prize-gold {
+  background: linear-gradient(135deg, #B88A22 0%, #D4A843 25%, #E5C66A 50%, #D4A843 75%, #B88A22 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prize-silver {
+  background: linear-gradient(135deg, #6C757D 0%, #ADB5BD 25%, #CED4DA 50%, #ADB5BD 75%, #6C757D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prize-bronze {
+  background: linear-gradient(135deg, #8B5E34 0%, #B47840 25%, #C89A5A 50%, #B47840 75%, #8B5E34 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Watermark */
+.reward-watermark {
+  position: absolute;
+  bottom: -12px;
+  right: -8px;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+}

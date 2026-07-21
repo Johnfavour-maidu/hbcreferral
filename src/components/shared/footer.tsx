@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Instagram, Twitter, Facebook, Mail, MapPin } from "lucide-react";
+import { Logo } from "@/components/shared/logo";
 
 const quickLinks = [
   { href: "/", label: "Home" },
@@ -22,14 +22,9 @@ export function Footer() {
       <div style={{ maxWidth: 1280, margin: "0 auto", paddingLeft: 32, paddingRight: 32, paddingTop: 80, paddingBottom: 80 }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           <div className="lg:col-span-5">
-            <Image
-              src="/assets/logo/logo-horizontal-sm.png"
-              alt="Hearts by Charming"
-              width={140}
-              height={36}
-              className="mb-5 brightness-0 invert opacity-80"
-              style={{ height: 36, width: "auto", objectFit: "contain" }}
-            />
+            <div className="mb-5 brightness-0 invert opacity-80">
+              <Logo size="sm" />
+            </div>
             <p className="text-cream/50 text-sm leading-relaxed mb-6" style={{ maxWidth: 320 }}>
               Empowering youth through community, connection, and meaningful impact. Join our
               referral challenge and help us grow.
