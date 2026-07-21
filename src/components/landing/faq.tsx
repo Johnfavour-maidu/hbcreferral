@@ -36,7 +36,7 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="bg-bg" style={{ paddingTop: 80, paddingBottom: 64 }}>
+    <section id="faq" className="bg-bg" style={{ paddingTop: 80, paddingBottom: 48 }}>
       <div style={{ maxWidth: 900, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

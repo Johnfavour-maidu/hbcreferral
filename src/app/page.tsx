@@ -3,7 +3,6 @@ import { Footer } from "@/components/shared/footer";
 import { HeroSection } from "@/components/landing/hero";
 import { RewardsPreview } from "@/components/landing/rewards";
 import { FAQSection } from "@/components/landing/faq";
-import { SocialSection } from "@/components/landing/social";
 import { CTASection } from "@/components/landing/cta";
 
 export default function HomePage() {
@@ -14,7 +13,6 @@ export default function HomePage() {
         <HeroSection />
         <RewardsPreview />
         <FAQSection />
-        <SocialSection />
         <CTASection />
       </main>
       <Footer />

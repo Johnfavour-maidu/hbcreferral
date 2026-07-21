@@ -40,7 +40,7 @@ const socials = [
 
 export function CTASection() {
   return (
-    <section className="section-padding bg-bg">
+    <section className="bg-bg" style={{ paddingTop: 48, paddingBottom: 48 }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
 
         {/* Social Media Card */}
@@ -50,16 +50,18 @@ export function CTASection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="brown-gradient rounded-3xl overflow-hidden text-center"
-          style={{ marginBottom: 36 }}
+          style={{ marginBottom: 44 }}
         >
-          <div className="px-8 md:px-16" style={{ paddingTop: 56, paddingBottom: 56 }}>
+          <div className="px-8 md:px-16" style={{ paddingTop: 48, paddingBottom: 48, textAlign: "center" as const }}>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 24 }}>
               Follow Us on Social Media
             </h2>
-            <p className="text-cream/65 text-lg leading-[1.75] max-w-xl mx-auto" style={{ marginBottom: 32 }}>
-              Stay connected with Hearts by Charming for inspiring content and community highlights.
-              Follow us and never miss an update.
-            </p>
+            <div style={{ maxWidth: 580, marginBottom: 32, marginLeft: "auto", marginRight: "auto" }}>
+              <p className="text-cream/65 text-lg leading-[1.8]">
+                Stay connected with Hearts by Charming for inspiring content and community highlights.
+                Follow us and never miss an update.
+              </p>
+            </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6">
               {socials.map((s) => (
@@ -91,16 +93,15 @@ export function CTASection() {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gold-light rounded-full blur-[100px]" />
           </div>
 
-          <div className="relative px-8 md:px-16 text-center" style={{ paddingTop: 56, paddingBottom: 56 }}>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 20 }}>
+          <div className="relative px-8 md:px-16" style={{ paddingTop: 48, paddingBottom: 48, textAlign: "center" as const }}>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 24 }}>
               Ready to Get Started Today?
             </h2>
-            <p
-              className="text-cream/65 text-lg leading-[1.75] text-center max-w-xl mx-auto"
-              style={{ marginBottom: 28 }}
-            >
-              Join the challenge today and compete to win amazing cash prizes
-            </p>
+            <div style={{ maxWidth: 520, marginBottom: 32, marginLeft: "auto", marginRight: "auto" }}>
+              <p className="text-cream/65 text-lg leading-[1.8]">
+                Join the challenge today and compete to win amazing cash prizes
+              </p>
+            </div>
             <Button
               size="default"
               className="group min-w-[220px] h-[50px] rounded-[22px] px-8 text-[15px] font-semibold bg-gold hover:bg-gold-dark"
