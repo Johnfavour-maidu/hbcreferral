@@ -65,10 +65,7 @@ export function RewardsPreview() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brown-dark mb-4">
             Earn Amazing Rewards
           </h2>
-          <p
-            className="text-brown-light text-lg leading-[1.8] mx-auto text-center"
-            style={{ maxWidth: 580 }}
-          >
+          <p className="text-brown-light text-lg leading-[1.7] text-center mx-auto block max-w-[650px]">
             The more referrals you make, the bigger the reward. Start today!
           </p>
         </motion.div>

@@ -25,10 +25,7 @@ export function CTASection() {
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream mb-6 leading-tight">
                 Ready to Get Started Today?
               </h2>
-              <p
-                className="text-cream/65 text-lg leading-[1.8] mb-12 mx-auto text-center"
-                style={{ maxWidth: 600 }}
-              >
+              <p className="text-cream/65 text-lg leading-[1.7] text-center mx-auto block max-w-[650px] mb-12">
                 Join hundreds of young changemakers already participating in the referral
                 challenge. Your journey to impact starts here.
               </p>
