@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, Medal, Ribbon } from "lucide-react";
 
 const tiers = [
   {
@@ -12,9 +11,6 @@ const tiers = [
     cardClass: "reward-card-gold",
     badgeClass: "tier-badge-gold",
     prizeClass: "prize-gold",
-    labelColor: "text-[#9A7418]/70",
-    subtitleColor: "text-[#8B6E1A]/50",
-    watermark: Trophy,
   },
   {
     name: "SILVER",
@@ -24,9 +20,6 @@ const tiers = [
     cardClass: "reward-card-silver",
     badgeClass: "tier-badge-silver",
     prizeClass: "prize-silver",
-    labelColor: "text-[#495057]/55",
-    subtitleColor: "text-[#6C757D]/50",
-    watermark: Medal,
   },
   {
     name: "BRONZE",
@@ -36,9 +29,6 @@ const tiers = [
     cardClass: "reward-card-bronze",
     badgeClass: "tier-badge-bronze",
     prizeClass: "prize-bronze",
-    labelColor: "text-[#8B5E34]/55",
-    subtitleColor: "text-[#A07040]/50",
-    watermark: Ribbon,
   },
 ];
 
@@ -67,47 +57,36 @@ export function RewardsPreview() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 items-start">
-            {tiers.map((tier, i) => {
-              const WatermarkIcon = tier.watermark;
-              return (
-                <motion.div
-                  key={tier.name}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.12, duration: 0.5 }}
-                  className={`reward-card ${tier.cardClass}`}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 items-stretch">
+            {tiers.map((tier, i) => (
+              <motion.div
+                key={tier.name}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12, duration: 0.5 }}
+                className={`reward-card ${tier.cardClass}`}
+              >
+                <div className={`tier-badge ${tier.badgeClass} mb-4`}>
+                  ★ {tier.name} TIER ★
+                </div>
+
+                <p className="text-[13px] font-semibold mb-2 tracking-wide text-center text-[#1F1F1F]">
+                  {tier.subtitle}
+                </p>
+
+                <div
+                  className={`font-[900] leading-none mb-3 text-center ${tier.prizeClass}`}
+                  style={{ fontSize: "clamp(42px, 5vw, 54px)" }}
                 >
-                  <WatermarkIcon
-                    className="reward-watermark"
-                    strokeWidth={1}
-                    style={{ width: 110, height: 110 }}
-                  />
+                  {tier.amount}
+                </div>
 
-                  <div className={`tier-badge ${tier.badgeClass} mb-3`}>
-                    ★ {tier.name} TIER ★
-                  </div>
-
-                  <p className={`text-[13px] font-semibold mb-2 tracking-wide text-center ${tier.subtitleColor}`}>
-                    {tier.subtitle}
-                  </p>
-
-                  <div
-                    className={`font-[900] leading-none mb-2 text-center ${tier.prizeClass}`}
-                    style={{ fontSize: "clamp(42px, 5vw, 54px)" }}
-                  >
-                    {tier.amount}
-                  </div>
-
-                  <div
-                    className={`text-[10.5px] font-bold uppercase tracking-[0.2em] text-center ${tier.labelColor}`}
-                  >
-                    {tier.label}
-                  </div>
-                </motion.div>
-              );
-            })}
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.2em] text-center text-[#1F1F1F]">
+                  {tier.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

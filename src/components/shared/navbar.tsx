@@ -47,7 +47,7 @@ export function Navbar() {
             </Button>
           ) : (
             <>
-              <Button variant="ghost" size="default" className="min-w-[170px] h-12 rounded-xl px-6 text-[15px]" asChild>
+              <Button variant="outline" size="default" className="min-w-[170px] h-12 rounded-xl px-6 text-[15px]" asChild>
                 <Link href="/login">Login</Link>
               </Button>
               <Button size="default" className="min-w-[170px] h-12 rounded-xl px-6 text-[15px]" asChild>
@@ -76,7 +76,7 @@ export function Navbar() {
             className="md:hidden border-t border-border overflow-hidden"
           >
             <div className="py-4 space-y-2 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
-              <Button variant="ghost" className="w-full h-12 rounded-xl text-[15px]" asChild>
+              <Button variant="outline" className="w-full h-12 rounded-xl text-[15px]" asChild>
                 <Link href="/login" onClick={() => setMobileOpen(false)}>
                   Login
                 </Link>

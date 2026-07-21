@@ -36,13 +36,14 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="bg-bg pt-24 pb-12 lg:pt-24 lg:pb-12">
+    <section id="faq" className="bg-bg pt-24 pb-16 lg:pt-32 lg:pb-20">
       <div style={{ maxWidth: 900, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center"
+          style={{ marginBottom: 48 }}
         >
           <span className="inline-block text-gold text-sm font-semibold uppercase tracking-widest mb-3">
             FAQ
@@ -50,7 +51,7 @@ export function FAQSection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brown-dark mb-4">
             Learn About the Challenge
           </h2>
-          <p className="text-brown-light text-lg leading-[1.7] text-center mx-auto block max-w-[650px]">
+          <p className="text-brown-light text-lg leading-[1.7] text-center">
             Everything you need to know before joining the Hearts by Charming Referral Challenge.
           </p>
         </motion.div>

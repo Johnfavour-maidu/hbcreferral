@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const sizeMap = {
-  sm: { src: "/assets/logo/logo-horizontal-sm.png", height: 36 },
+  sm: { src: "/assets/logo/logo-horizontal-sm.png", height: 44 },
   md: { src: "/assets/logo/logo-horizontal-md.png", height: 48 },
   lg: { src: "/assets/logo/logo-horizontal-lg.png", height: 64 },
   xl: { src: "/assets/logo/logo-xl.png", height: 100 },
