@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,22 +28,12 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="px-8 sm:px-10 pt-10 pb-8">
-      <div className="flex flex-col items-center mb-8">
-        <Link href="/" className="mb-6">
-          <Image
-            src="/assets/logo/logo-horizontal-md.png"
-            alt="Hearts by Charming"
-            width={200}
-            height={52}
-            style={{ width: 200, height: "auto" }}
-            priority
-          />
-        </Link>
+    <>
+      <div className="text-center mb-8">
         <h1 className="text-2xl sm:text-[28px] font-bold text-brown-dark mb-2">
           {sent ? "Check Your Email" : "Forgot Password?"}
         </h1>
-        <p className="text-brown-light text-sm text-center">
+        <p className="text-brown-light text-[15px] text-center">
           {sent
             ? "We've sent a password reset link to your email."
             : "Enter your email and we'll send you a reset link."}
@@ -78,7 +67,7 @@ export default function ForgotPasswordPage() {
             </Label>
             <Input
               id="email"
-              className="h-12 rounded-xl border-cream-dark text-[15px]"
+              className="h-[52px] rounded-xl border-cream-dark text-[15px]"
               type="email"
               placeholder="you@example.com"
               value={email}
@@ -94,7 +83,7 @@ export default function ForgotPasswordPage() {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Sending...
                 </>
               ) : (
@@ -114,10 +103,6 @@ export default function ForgotPasswordPage() {
           Back to Login
         </Link>
       </div>
-
-      <p className="text-center text-[11px] text-brown-light/50 pt-6 mt-6 border-t border-border">
-        &copy; {new Date().getFullYear()} Hearts by Charming. All rights reserved.
-      </p>
-    </div>
+    </>
   );
 }

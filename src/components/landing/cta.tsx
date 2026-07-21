@@ -52,11 +52,11 @@ export function CTASection() {
           className="brown-gradient rounded-3xl overflow-hidden text-center"
           style={{ marginBottom: 44 }}
         >
-          <div className="px-8 md:px-16" style={{ paddingTop: 48, paddingBottom: 48, textAlign: "center" as const }}>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 24 }}>
+          <div className="px-8 md:px-16" style={{ paddingTop: 32, paddingBottom: 28, textAlign: "center" as const }}>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 16 }}>
               Follow Us on Social Media
             </h2>
-            <div style={{ maxWidth: 580, marginBottom: 32, marginLeft: "auto", marginRight: "auto" }}>
+            <div style={{ maxWidth: 580, marginBottom: 20, marginLeft: "auto", marginRight: "auto" }}>
               <p className="text-cream/65 text-lg leading-[1.8]">
                 Stay connected with Hearts by Charming for inspiring content and community highlights.
                 Follow us and never miss an update.
@@ -93,11 +93,11 @@ export function CTASection() {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gold-light rounded-full blur-[100px]" />
           </div>
 
-          <div className="relative px-8 md:px-16" style={{ paddingTop: 48, paddingBottom: 48, textAlign: "center" as const }}>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 24 }}>
+          <div className="relative px-8 md:px-16" style={{ paddingTop: 32, paddingBottom: 28, textAlign: "center" as const }}>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 16 }}>
               Ready to Get Started Today?
             </h2>
-            <div style={{ maxWidth: 520, marginBottom: 32, marginLeft: "auto", marginRight: "auto" }}>
+            <div style={{ maxWidth: 520, marginBottom: 20, marginLeft: "auto", marginRight: "auto" }}>
               <p className="text-cream/65 text-lg leading-[1.8]">
                 Join the challenge today and compete to win amazing cash prizes
               </p>

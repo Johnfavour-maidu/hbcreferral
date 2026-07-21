@@ -123,10 +123,10 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <div className="pt-1">
+        <div className="pt-2">
           <Button
             type="submit"
-            className="w-full h-[54px] rounded-xl text-[15px] font-semibold"
+            className="w-full h-[52px] rounded-xl text-[15px] font-semibold"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -140,7 +140,7 @@ export default function LoginPage() {
           </Button>
         </div>
 
-        <p className="text-center text-[13px] text-brown-light pt-2">
+        <p className="text-center text-[13px] text-brown-light pt-3">
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
