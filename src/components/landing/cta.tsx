@@ -15,19 +15,19 @@ export function CTASection() {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gold-light rounded-full blur-[100px]" />
           </div>
 
-          <div className="relative pt-28 pb-32 px-8 md:px-16 text-center">
+          <div className="relative px-8 md:px-16 text-center" style={{ paddingTop: 56, paddingBottom: 56 }}>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream mb-5 leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 20 }}>
                 Ready to Get Started Today?
               </h2>
               <p
                 className="text-cream/65 text-lg leading-[1.75] text-center"
-                style={{ marginBottom: 32 }}
+                style={{ marginBottom: 28 }}
               >
                 Join hundreds of young changemakers already participating in the referral
                 challenge. Your journey to impact starts here.
