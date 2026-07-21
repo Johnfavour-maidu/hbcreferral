@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,19 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordStrength } from "@/components/ui/password-strength";
-import {
-  Eye,
-  EyeOff,
-  Loader2,
-  CheckCircle2,
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  GraduationCap,
-  Instagram,
-  ArrowRight,
-} from "lucide-react";
+import { Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 function RegisterForm() {
@@ -72,7 +61,7 @@ function RegisterForm() {
 
   if (isSuccess) {
     return (
-      <div className="text-center space-y-6 py-4 animate-in fade-in zoom-in duration-500">
+      <div className="px-8 sm:px-10 py-20 text-center space-y-6 animate-in fade-in zoom-in duration-500">
         <div className="mx-auto w-16 h-16 rounded-full bg-success/10 flex items-center justify-center">
           <CheckCircle2 className="h-8 w-8 text-success" />
         </div>
@@ -92,62 +81,71 @@ function RegisterForm() {
     );
   }
 
+  const inputClass = "h-[52px] rounded-xl border-cream-dark text-[15px]";
+
   return (
-    <>
-      <div className="text-center mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-brown-dark">
+    <div className="px-8 sm:px-10 pt-10 pb-8">
+      <div className="flex flex-col items-center mb-8">
+        <Link href="/" className="mb-7">
+          <Image
+            src="/assets/logo/logo-horizontal-md.png"
+            alt="Hearts by Charming"
+            width={220}
+            height={60}
+            style={{ width: 220, height: "auto" }}
+            priority
+          />
+        </Link>
+        <h1 className="text-[26px] sm:text-[30px] font-extrabold text-brown-dark mb-2">
           Create Account
         </h1>
-        <p className="text-brown-light mt-2 text-sm">
+        <p className="text-brown-light text-sm text-center">
           Join the Referral Challenge 2026 — Edition 1
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-[20px]">
         <div className="space-y-2">
-          <Label htmlFor="fullName">Full Name</Label>
-          <div className="relative">
-            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
-            <Input
-              id="fullName"
-              className="pl-10 h-12"
-              placeholder="e.g. Mary Johnson"
-              {...register("fullName")}
-            />
-          </div>
+          <Label htmlFor="fullName" className="text-[13px] font-medium text-brown-dark">
+            Full Name
+          </Label>
+          <Input
+            id="fullName"
+            className={inputClass}
+            placeholder="e.g. Mary Johnson"
+            {...register("fullName")}
+          />
           {errors.fullName && (
             <p className="text-error text-xs mt-1">{errors.fullName.message}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <div className="relative">
-            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
-            <Input
-              id="email"
-              className="pl-10 h-12"
-              type="email"
-              placeholder="you@example.com"
-              {...register("email")}
-            />
-          </div>
+          <Label htmlFor="email" className="text-[13px] font-medium text-brown-dark">
+            Email Address
+          </Label>
+          <Input
+            id="email"
+            className={inputClass}
+            type="email"
+            placeholder="you@example.com"
+            {...register("email")}
+          />
           {errors.email && (
             <p className="text-error text-xs mt-1">{errors.email.message}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
-          <div className="relative">
-            <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
-            <Input
-              id="phone"
-              className="pl-10 h-12"
-              placeholder="e.g. 08012345678"
-              {...register("phone")}
-            />
-          </div>
+          <Label htmlFor="phone" className="text-[13px] font-medium text-brown-dark">
+            Phone Number
+          </Label>
+          <Input
+            id="phone"
+            className={inputClass}
+            placeholder="e.g. 08012345678"
+            {...register("phone")}
+          />
           {errors.phone && (
             <p className="text-error text-xs mt-1">{errors.phone.message}</p>
           )}
@@ -155,53 +153,36 @@ function RegisterForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="state">State</Label>
-            <div className="relative">
-              <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40 pointer-events-none" />
-              <select
-                id="state"
-                className="flex h-12 w-full rounded-xl border-2 border-cream-dark bg-white pl-10 pr-4 py-3 text-sm text-brown-dark focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold transition-all duration-300 appearance-none cursor-pointer"
-                {...register("state")}
-              >
-                <option value="">Select state</option>
-                {NIGERIAN_STATES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg
-                  className="h-4 w-4 text-brown-light/40"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
+            <Label htmlFor="state" className="text-[13px] font-medium text-brown-dark">
+              State
+            </Label>
+            <select
+              id="state"
+              className={`flex w-full rounded-xl border-2 border-cream-dark bg-white px-4 text-[15px] text-brown-dark focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold transition-all duration-300 appearance-none cursor-pointer ${inputClass}`}
+              {...register("state")}
+            >
+              <option value="">Select state</option>
+              {NIGERIAN_STATES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
             {errors.state && (
               <p className="text-error text-xs mt-1">{errors.state.message}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="school">School</Label>
-            <div className="relative">
-              <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
-              <Input
-                id="school"
-                className="pl-10 h-12"
-                placeholder="School name"
-                {...register("school")}
-              />
-            </div>
+            <Label htmlFor="school" className="text-[13px] font-medium text-brown-dark">
+              School
+            </Label>
+            <Input
+              id="school"
+              className={inputClass}
+              placeholder="School name"
+              {...register("school")}
+            />
             {errors.school && (
               <p className="text-error text-xs mt-1">{errors.school.message}</p>
             )}
@@ -209,28 +190,29 @@ function RegisterForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="instagram">Instagram Username</Label>
-          <div className="relative">
-            <Instagram className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
-            <Input
-              id="instagram"
-              className="pl-10 h-12"
-              placeholder="@username"
-              {...register("instagram")}
-            />
-          </div>
+          <Label htmlFor="instagram" className="text-[13px] font-medium text-brown-dark">
+            Instagram Username
+          </Label>
+          <Input
+            id="instagram"
+            className={inputClass}
+            placeholder="@username"
+            {...register("instagram")}
+          />
           {errors.instagram && (
             <p className="text-error text-xs mt-1">{errors.instagram.message}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-[13px] font-medium text-brown-dark">
+            Password
+          </Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              className="h-12 pr-11"
+              className={`${inputClass} pr-11`}
               placeholder="Min. 8 characters"
               {...register("password")}
             />
@@ -241,9 +223,9 @@ function RegisterForm() {
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? (
-                <EyeOff className="h-4 w-4" />
+                <EyeOff className="h-[18px] w-[18px]" />
               ) : (
-                <Eye className="h-4 w-4" />
+                <Eye className="h-[18px] w-[18px]" />
               )}
             </button>
           </div>
@@ -254,12 +236,14 @@ function RegisterForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword" className="text-[13px] font-medium text-brown-dark">
+            Confirm Password
+          </Label>
           <div className="relative">
             <Input
               id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
-              className="h-12 pr-11"
+              className={`${inputClass} pr-11`}
               placeholder="Repeat password"
               {...register("confirmPassword")}
             />
@@ -272,9 +256,9 @@ function RegisterForm() {
               }
             >
               {showConfirmPassword ? (
-                <EyeOff className="h-4 w-4" />
+                <EyeOff className="h-[18px] w-[18px]" />
               ) : (
-                <Eye className="h-4 w-4" />
+                <Eye className="h-[18px] w-[18px]" />
               )}
             </button>
           </div>
@@ -289,16 +273,16 @@ function RegisterForm() {
           <input type="hidden" {...register("referredBy")} value={referredBy} />
         )}
 
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 pt-2">
           <input
             type="checkbox"
             id="agreeToRules"
-            className="mt-1 h-4 w-4 rounded border-cream-dark text-gold focus:ring-gold/20 cursor-pointer"
+            className="mt-0.5 h-4 w-4 rounded border-cream-dark text-gold focus:ring-gold/20 cursor-pointer shrink-0"
             {...register("agreeToRules")}
           />
           <label
             htmlFor="agreeToRules"
-            className="text-sm text-brown-light leading-relaxed cursor-pointer"
+            className="text-[13px] text-brown-light leading-relaxed cursor-pointer"
           >
             I agree to the{" "}
             <Link href="/rules" className="text-gold font-semibold hover:underline">
@@ -311,25 +295,24 @@ function RegisterForm() {
           <p className="text-error text-xs">{errors.agreeToRules.message}</p>
         )}
 
-        <Button
-          type="submit"
-          className="w-full h-12 text-[15px] font-semibold rounded-xl"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Creating Account...
-            </>
-          ) : (
-            <>
-              Register Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </>
-          )}
-        </Button>
+        <div className="pt-3">
+          <Button
+            type="submit"
+            className="w-full h-[54px] rounded-xl text-[15px] font-semibold"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Creating Account...
+              </>
+            ) : (
+              "Register Now"
+            )}
+          </Button>
+        </div>
 
-        <p className="text-center text-sm text-brown-light">
+        <p className="text-center text-[13px] text-brown-light pt-2">
           Already have an account?{" "}
           <Link
             href="/login"
@@ -338,8 +321,12 @@ function RegisterForm() {
             Log In
           </Link>
         </p>
+
+        <p className="text-center text-[11px] text-brown-light/50 pt-5 border-t border-border">
+          &copy; {new Date().getFullYear()} Hearts by Charming. All rights reserved.
+        </p>
       </form>
-    </>
+    </div>
   );
 }
 
