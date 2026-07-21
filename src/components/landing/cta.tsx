@@ -7,32 +7,44 @@ import Link from "next/link";
 
 export function CTASection() {
   return (
-    <section className="section-padding bg-brown relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-20 w-72 h-72 bg-gold rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-80 h-80 bg-gold-light rounded-full blur-3xl" />
-      </div>
+    <section className="section-padding bg-bg">
+      <div style={{ maxWidth: 1280, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
+        <div className="relative brown-gradient rounded-3xl overflow-hidden">
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <div className="absolute top-0 left-1/4 w-80 h-80 bg-gold rounded-full blur-[100px]" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gold-light rounded-full blur-[100px]" />
+          </div>
 
-      <div className="relative max-w-4xl mx-auto px-5 sm:px-10 lg:px-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl md:text-5xl font-extrabold text-cream mb-6">
-            Ready to Make a Difference?
-          </h2>
-          <p className="text-cream/70 text-lg mb-10 max-w-2xl mx-auto">
-            Join hundreds of young changemakers already participating in the referral challenge.
-            Your journey to impact starts here.
-          </p>
-          <Button size="xl" className="group" asChild>
-            <Link href="/register">
-              Start Referring Today
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
-        </motion.div>
+          <div className="relative pt-20 pb-24 px-8 md:px-16 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream mb-6 leading-tight">
+                Ready to Get Started Today?
+              </h2>
+              <p
+                className="text-cream/65 text-lg leading-[1.8] mb-12 mx-auto text-center"
+                style={{ maxWidth: 600 }}
+              >
+                Join hundreds of young changemakers already participating in the referral
+                challenge. Your journey to impact starts here.
+              </p>
+              <Button
+                size="default"
+                className="group min-w-[220px] h-12 rounded-xl px-8 text-[15px] font-semibold bg-gold hover:bg-gold-dark"
+                asChild
+              >
+                <Link href="/register">
+                  Start Referring Today
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

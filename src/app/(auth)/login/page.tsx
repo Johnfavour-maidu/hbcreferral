@@ -10,10 +10,7 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Logo } from "@/components/shared/logo";
-import { FadeIn } from "@/components/shared/animations";
-import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 export default function LoginPage() {
@@ -48,63 +45,110 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-cream section-padding flex items-center justify-center">
-      <FadeIn>
-        <div className="w-full max-w-md mx-auto px-5">
-          <div className="text-center mb-8">
-            <Logo size="lg" />
-            <p className="text-brown-light mt-3">Welcome back</p>
+    <>
+      <div className="text-center mb-8">
+        <p className="text-gold font-semibold text-sm uppercase tracking-wider mb-2">
+          Welcome Back
+        </p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-brown-dark">
+          Log In
+        </h1>
+        <p className="text-brown-light mt-2 text-sm">
+          Access your referral dashboard
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="email">Email Address</Label>
+          <div className="relative">
+            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
+            <Input
+              id="email"
+              className="pl-10 h-12"
+              type="email"
+              placeholder="you@example.com"
+              {...register("email")}
+            />
           </div>
-
-          <Card className="shadow-xl">
-            <CardHeader className="text-center pb-2">
-              <CardTitle className="text-2xl">Log In</CardTitle>
-              <CardDescription>Access your referral dashboard</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Email Address</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
-                    <Input className="pl-10" type="email" placeholder="you@example.com" {...register("email")} />
-                  </div>
-                  {errors.email && <p className="text-error text-xs">{errors.email.message}</p>}
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
-                    <Input className="pl-10" type={showPassword ? "text" : "password"} placeholder="Enter your password" {...register("password")} />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-brown-light/50 hover:text-brown transition-colors">
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                  {errors.password && <p className="text-error text-xs">{errors.password.message}</p>}
-                </div>
-
-                <div className="flex items-center justify-end">
-                  <Link href="/forgot-password" className="text-sm text-gold hover:underline font-medium">
-                    Forgot password?
-                  </Link>
-                </div>
-
-                <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                  {isLoading ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</>
-                  ) : "Log In"}
-                </Button>
-
-                <p className="text-center text-sm text-brown-light">
-                  Don&apos;t have an account?{" "}
-                  <Link href="/register" className="text-gold font-semibold hover:underline">Register now</Link>
-                </p>
-              </form>
-            </CardContent>
-          </Card>
+          {errors.email && (
+            <p className="text-error text-xs mt-1">{errors.email.message}</p>
+          )}
         </div>
-      </FadeIn>
-    </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <div className="relative">
+            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/40" />
+            <Input
+              id="password"
+              className="pl-10 pr-11 h-12"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              {...register("password")}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-brown-light/40 hover:text-brown transition-colors"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-error text-xs mt-1">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-cream-dark text-gold focus:ring-gold/20 cursor-pointer"
+            />
+            <span className="text-sm text-brown-light">Remember me</span>
+          </label>
+          <Link
+            href="/forgot-password"
+            className="text-sm text-gold hover:underline font-medium"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full h-12 text-[15px] font-semibold rounded-xl"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              Logging in...
+            </>
+          ) : (
+            <>
+              Log In
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </>
+          )}
+        </Button>
+
+        <p className="text-center text-sm text-brown-light">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="text-gold font-semibold hover:underline"
+          >
+            Register Now
+          </Link>
+        </p>
+      </form>
+    </>
   );
 }
