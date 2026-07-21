@@ -32,8 +32,8 @@ export function HeroSection() {
             </h1>
 
             <p
-              className="text-brown-light text-lg lg:text-xl leading-[1.75] text-center mx-auto"
-              style={{ maxWidth: 640, marginBottom: 32 }}
+              className="text-brown-light text-lg lg:text-xl leading-[1.75] text-center"
+              style={{ marginBottom: 32 }}
             >
               Share the love, grow our community, and earn amazing rewards.
               Every referral makes a real impact in youth development.

@@ -145,7 +145,7 @@ body {
   overflow: hidden;
   border-radius: 24px;
   border: 1.5px solid transparent;
-  padding: 32px 28px 28px;
+  padding: 24px 24px 20px;
   text-align: center;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -161,7 +161,7 @@ body {
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.06) 40%,
     rgba(255, 255, 255, 0) 60%
   );
   pointer-events: none;
@@ -175,13 +175,13 @@ body {
 
 /* Gold Card */
 .reward-card-gold {
-  background: linear-gradient(160deg, #FFFBF0 0%, #FFF3D6 30%, #FCE8B5 60%, #FFF8EF 100%);
+  background: linear-gradient(160deg, #FFFCF2 0%, #FFF4DA 35%, #FCEDBE 65%, #FFF9EE 100%);
   border-color: rgba(200, 154, 43, 0.3);
   box-shadow:
-    0 2px 8px rgba(200, 154, 43, 0.06),
-    0 8px 32px rgba(200, 154, 43, 0.08),
+    0 2px 6px rgba(200, 154, 43, 0.06),
+    0 8px 28px rgba(200, 154, 43, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  min-height: 220px;
+  min-height: 196px;
 }
 
 .reward-card-gold:hover {
@@ -195,13 +195,13 @@ body {
 
 /* Silver Card */
 .reward-card-silver {
-  background: linear-gradient(160deg, #FAFBFC 0%, #F1F3F5 30%, #E9ECEF 60%, #F8F9FA 100%);
+  background: linear-gradient(160deg, #FAFBFC 0%, #F1F3F5 35%, #E9ECEF 65%, #F8F9FA 100%);
   border-color: rgba(134, 142, 150, 0.2);
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.03),
-    0 8px 32px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.03),
+    0 8px 28px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  min-height: 208px;
+  min-height: 184px;
 }
 
 .reward-card-silver:hover {
@@ -213,13 +213,13 @@ body {
 
 /* Bronze Card */
 .reward-card-bronze {
-  background: linear-gradient(160deg, #FFF9F2 0%, #FFF0E0 30%, #FFE6CC 60%, #FFF8EF 100%);
+  background: linear-gradient(160deg, #FFFAF3 0%, #FFF1E2 35%, #FFE8CC 65%, #FFF9F0 100%);
   border-color: rgba(180, 120, 60, 0.2);
   box-shadow:
-    0 2px 8px rgba(180, 120, 60, 0.04),
-    0 8px 32px rgba(180, 120, 60, 0.06),
+    0 2px 6px rgba(180, 120, 60, 0.04),
+    0 8px 28px rgba(180, 120, 60, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  min-height: 208px;
+  min-height: 184px;
 }
 
 .reward-card-bronze:hover {
@@ -233,50 +233,50 @@ body {
 .tier-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 16px;
+  gap: 5px;
+  padding: 5px 14px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .tier-badge-gold {
-  background: linear-gradient(135deg, rgba(200, 154, 43, 0.12), rgba(229, 198, 106, 0.12));
-  border: 1px solid rgba(200, 154, 43, 0.25);
-  color: #B88A22;
+  background: linear-gradient(135deg, rgba(184, 138, 34, 0.14), rgba(200, 154, 43, 0.14));
+  border: 1px solid rgba(200, 154, 43, 0.3);
+  color: #9A7418;
 }
 
 .tier-badge-silver {
-  background: linear-gradient(135deg, rgba(134, 142, 150, 0.08), rgba(173, 181, 189, 0.08));
-  border: 1px solid rgba(134, 142, 150, 0.2);
-  color: #6C757D;
+  background: linear-gradient(135deg, rgba(73, 80, 87, 0.08), rgba(108, 117, 125, 0.08));
+  border: 1px solid rgba(108, 117, 125, 0.22);
+  color: #495057;
 }
 
 .tier-badge-bronze {
-  background: linear-gradient(135deg, rgba(180, 120, 60, 0.08), rgba(200, 150, 80, 0.08));
-  border: 1px solid rgba(180, 120, 60, 0.2);
-  color: #A0662A;
+  background: linear-gradient(135deg, rgba(160, 102, 42, 0.08), rgba(180, 120, 60, 0.08));
+  border: 1px solid rgba(180, 120, 60, 0.22);
+  color: #8B5E34;
 }
 
 /* Metallic Prize Text */
 .prize-gold {
-  background: linear-gradient(135deg, #B88A22 0%, #D4A843 25%, #E5C66A 50%, #D4A843 75%, #B88A22 100%);
+  background: linear-gradient(135deg, #9A7418 0%, #B88A22 20%, #D4A843 45%, #E5C66A 55%, #D4A843 80%, #B88A22 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .prize-silver {
-  background: linear-gradient(135deg, #6C757D 0%, #ADB5BD 25%, #CED4DA 50%, #ADB5BD 75%, #6C757D 100%);
+  background: linear-gradient(135deg, #343A40 0%, #495057 20%, #6C757D 45%, #868E96 55%, #6C757D 80%, #495057 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .prize-bronze {
-  background: linear-gradient(135deg, #8B5E34 0%, #B47840 25%, #C89A5A 50%, #B47840 75%, #8B5E34 100%);
+  background: linear-gradient(135deg, #6B4226 0%, #8B5E34 20%, #A07040 45%, #B47840 55%, #A07040 80%, #8B5E34 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -285,9 +285,10 @@ body {
 /* Watermark */
 .reward-watermark {
   position: absolute;
-  bottom: -12px;
-  right: -8px;
-  opacity: 0.035;
+  bottom: -10px;
+  right: -6px;
+  opacity: 0.025;
+  filter: blur(0.5px);
   pointer-events: none;
   z-index: 0;
 }

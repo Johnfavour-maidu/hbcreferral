@@ -26,8 +26,8 @@ export function CTASection() {
                 Ready to Get Started Today?
               </h2>
               <p
-                className="text-cream/65 text-lg leading-[1.75] text-center mx-auto"
-                style={{ maxWidth: 580, marginBottom: 40 }}
+                className="text-cream/65 text-lg leading-[1.75] text-center"
+                style={{ marginBottom: 40 }}
               >
                 Join hundreds of young changemakers already participating in the referral
                 challenge. Your journey to impact starts here.
