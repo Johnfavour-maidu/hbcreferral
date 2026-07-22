@@ -1,6 +1,6 @@
 import prisma from "./prisma";
 
-const CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const CHARS = "abcdefghjkmnpqrstuvwxyz23456789";
 
 function generateCode(length: number = 6): string {
   let code = "";
@@ -32,10 +32,10 @@ export async function generateReferralCode(): Promise<string> {
   let attempts = 0;
 
   do {
-    code = `HBC-${generateCode(5)}`;
+    code = `hbc-${generateCode(5)}`;
     attempts++;
     if (attempts > 100) {
-      code = `HBC-${generateCode(6)}`;
+      code = `hbc-${generateCode(6)}`;
       break;
     }
   } while (

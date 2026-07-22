@@ -1,12 +1,11 @@
 import { redirect } from "next/navigation";
-import { NextRequest } from "next/server";
+
+const INSTAGRAM_URL = "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr";
 
 export default async function ReferralPage({
   params,
 }: {
   params: Promise<{ code: string }>;
 }) {
-  const { code } = await params;
-
-  redirect(`/register?ref=${code}`);
+  redirect(INSTAGRAM_URL);
 }
