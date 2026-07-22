@@ -48,7 +48,7 @@ export async function GET() {
       distinct: ["state"],
     });
 
-    const dailyGrowth = [];
+    const dailyRegistrations = [];
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
@@ -58,22 +58,41 @@ export async function GET() {
 
       const count = await prisma.user.count({
         where: {
+          role: "PARTICIPANT",
           createdAt: { gte: date, lt: nextDate },
         },
       });
 
-      dailyGrowth.push({
+      dailyRegistrations.push({
         date: date.toLocaleDateString("en-NG", { month: "short", day: "numeric" }),
         count,
       });
     }
 
-    const verificationRate = totalReferrals > 0
-      ? Math.round((verifiedReferrals / totalReferrals) * 100)
-      : 0;
+    const dailyReferrals = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+      const nextDate = new Date(date);
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      const verified = await prisma.referral.count({
+        where: { status: "VERIFIED", createdAt: { gte: date, lt: nextDate } },
+      });
+      const pending = await prisma.referral.count({
+        where: { status: "PENDING", createdAt: { gte: date, lt: nextDate } },
+      });
+
+      dailyReferrals.push({
+        date: date.toLocaleDateString("en-NG", { month: "short", day: "numeric" }),
+        verified,
+        pending,
+      });
+    }
 
     const recentParticipants = await prisma.profile.findMany({
-      take: 5,
+      take: 6,
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -111,22 +130,60 @@ export async function GET() {
       take: 5,
       orderBy: { verifiedReferrals: "desc" },
       select: {
+        participantId: true,
         fullName: true,
         school: true,
         verifiedReferrals: true,
       },
     });
 
-    const topStatesRaw = await prisma.profile.groupBy({
-      by: ["state"],
-      _count: { state: true },
-      orderBy: { _count: { state: "desc" } },
-      take: 5,
+    const campaign = await prisma.campaign.findUnique({
+      where: { id: "referral-challenge-2026" },
     });
-    const topStates = topStatesRaw.map((s) => ({
-      name: s.state,
-      count: s._count.state,
-    }));
+
+    let daysRemaining = 0;
+    if (campaign?.endDate) {
+      const now = new Date();
+      const end = new Date(campaign.endDate);
+      daysRemaining = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+    }
+
+    const recentActivity: { type: string; message: string; timestamp: string }[] = [];
+
+    const latestUsers = await prisma.user.findMany({
+      where: { role: "PARTICIPANT" },
+      take: 3,
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true, profile: { select: { fullName: true } } },
+    });
+    latestUsers.forEach((u) => {
+      recentActivity.push({
+        type: "registration",
+        message: `${u.profile?.fullName || "Someone"} registered`,
+        timestamp: u.createdAt.toISOString(),
+      });
+    });
+
+    const latestVerified = await prisma.referral.findMany({
+      where: { status: "VERIFIED" },
+      take: 2,
+      orderBy: { verifiedAt: "desc" },
+      select: {
+        verifiedAt: true,
+        referrer: { select: { profile: { select: { fullName: true } } } },
+      },
+    });
+    latestVerified.forEach((r) => {
+      if (r.verifiedAt) {
+        recentActivity.push({
+          type: "verified",
+          message: `Referral verified for ${r.referrer?.profile?.fullName || "someone"}`,
+          timestamp: r.verifiedAt.toISOString(),
+        });
+      }
+    });
+
+    recentActivity.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     return NextResponse.json({
       totalParticipants,
@@ -136,10 +193,11 @@ export async function GET() {
       todayRegistrations,
       totalReferrals,
       topReferrer: topReferrer?.fullName || "",
+      topReferrerCount: topReferrer?.verifiedReferrals || 0,
       activeSchools: activeSchools.length,
       statesCovered: statesCovered.length,
-      dailyGrowth,
-      verificationRate,
+      dailyRegistrations,
+      dailyReferrals,
       recentParticipants,
       pendingVerificationsList: pendingItems.map((p) => ({
         id: p.id,
@@ -150,7 +208,18 @@ export async function GET() {
         status: p.status,
       })),
       topReferrers,
-      topStates,
+      campaign: campaign
+        ? {
+            name: campaign.name,
+            status: campaign.status,
+            startDate: campaign.startDate?.toISOString() || null,
+            endDate: campaign.endDate?.toISOString() || null,
+            daysRemaining,
+            registrationEnabled: campaign.registrationEnabled,
+            leaderboardVisible: campaign.leaderboardVisible,
+          }
+        : null,
+      recentActivity: recentActivity.slice(0, 5),
     });
   } catch (error) {
     console.error("Admin stats error:", error);
