@@ -152,7 +152,7 @@ export default function DashboardPage() {
     {
       name: "Instagram",
       icon: InstagramIcon,
-      url: `https://www.instagram.com/direct/new/?text=${encodeURIComponent(referralMessage)}`,
+      url: "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr",
       bg: "bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737]",
       hoverBg: "hover:opacity-90",
       shadow: "hover:shadow-[0_8px_20px_rgba(225,48,108,0.3)]",
@@ -312,8 +312,8 @@ export default function DashboardPage() {
             style={{
               background: "#fff",
               borderRadius: 16,
-              border: "1px solid #E7D8C6",
-              padding: "20px 16px",
+              border: "2px solid #C89A2B",
+              padding: "14px 14px",
               boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
             }}
           >
@@ -405,7 +405,7 @@ export default function DashboardPage() {
                 userSelect: "all",
               }}
             >
-              {profile.referralLink}
+              {profile.referralLink.toLowerCase()}
             </code>
             <button
               onClick={() => copyToClipboard(profile.referralLink)}
@@ -426,22 +426,6 @@ export default function DashboardPage() {
               <Copy style={{ width: 16, height: 16 }} />
             </button>
           </div>
-
-          {/* Code Badge */}
-          <span
-            style={{
-              display: "inline-flex",
-              fontSize: 11,
-              color: "#999",
-              fontFamily: "monospace",
-              background: "rgba(247,243,236,0.8)",
-              padding: "4px 10px",
-              borderRadius: 8,
-              border: "1px solid #E7D8C6",
-            }}
-          >
-            Code: {profile.referralCode}
-          </span>
 
           {/* Share Buttons */}
           <div style={{ marginTop: 24 }}>
@@ -478,6 +462,73 @@ export default function DashboardPage() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ─── Leaderboard Card ─── */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "2px solid #C89A2B",
+          overflow: "hidden",
+          marginBottom: 40,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
+            padding: "24px 28px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 16,
+              background: "rgba(200,154,43,0.1)",
+              border: "1px solid rgba(200,154,43,0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Trophy style={{ width: 28, height: 28, color: "#C89A2B" }} strokeWidth={1.8} />
+          </div>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#2D2118", margin: 0 }}>Leaderboard</h3>
+            <p style={{ fontSize: 14, color: "#7B5B43", marginTop: 4, marginBottom: 0 }}>
+              See where you rank among all participants and track your progress.
+            </p>
+          </div>
+          <Link
+            href="/leaderboard"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              height: 48,
+              padding: "0 28px",
+              borderRadius: 16,
+              background: "#C89A2B",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: 14,
+              textDecoration: "none",
+              boxShadow: "0 4px 12px rgba(200,154,43,0.25)",
+              transition: "all 0.2s",
+              flexShrink: 0,
+            }}
+          >
+            <Trophy style={{ width: 16, height: 16 }} />
+            View Leaderboard
+            <ArrowRight style={{ width: 16, height: 16 }} />
+          </Link>
         </div>
       </div>
 
@@ -548,72 +599,6 @@ export default function DashboardPage() {
               </a>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* ─── Leaderboard Card ─── */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 16,
-          border: "1px solid #E7D8C6",
-          overflow: "hidden",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 20,
-            padding: "24px 28px",
-            flexWrap: "wrap",
-          }}
-        >
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 16,
-              background: "rgba(200,154,43,0.1)",
-              border: "1px solid rgba(200,154,43,0.2)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <Trophy style={{ width: 28, height: 28, color: "#C89A2B" }} strokeWidth={1.8} />
-          </div>
-          <div style={{ flex: 1, minWidth: 200 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#2D2118", margin: 0 }}>Leaderboard</h3>
-            <p style={{ fontSize: 14, color: "#7B5B43", marginTop: 4, marginBottom: 0 }}>
-              See where you rank among all participants and track your progress.
-            </p>
-          </div>
-          <Link
-            href="/leaderboard"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              height: 48,
-              padding: "0 28px",
-              borderRadius: 16,
-              background: "#C89A2B",
-              color: "#fff",
-              fontWeight: 600,
-              fontSize: 14,
-              textDecoration: "none",
-              boxShadow: "0 4px 12px rgba(200,154,43,0.25)",
-              transition: "all 0.2s",
-              flexShrink: 0,
-            }}
-          >
-            <Trophy style={{ width: 16, height: 16 }} />
-            View Leaderboard
-            <ArrowRight style={{ width: 16, height: 16 }} />
-          </Link>
         </div>
       </div>
 

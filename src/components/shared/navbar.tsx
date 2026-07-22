@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Bell } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,13 +39,7 @@ export function Navbar() {
       >
         <Logo size="sm" />
         <div className="hidden md:flex items-center gap-4">
-          {isDashboard ? (
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/notifications">
-                <Bell className="h-5 w-5" />
-              </Link>
-            </Button>
-          ) : (
+          {isDashboard ? null : (
             <>
               <Button variant="outline" size="default" className="min-w-[170px] h-12 rounded-xl px-6 text-[15px]" asChild>
                 <Link href="/login">Login</Link>
