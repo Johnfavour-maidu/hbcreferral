@@ -10,6 +10,23 @@ function generateCode(length: number = 6): string {
   return code;
 }
 
+export async function generateParticipantId(): Promise<string> {
+  const lastProfile = await prisma.profile.findFirst({
+    orderBy: { createdAt: "desc" },
+    select: { participantId: true },
+  });
+
+  let nextNumber = 1;
+  if (lastProfile?.participantId) {
+    const match = lastProfile.participantId.match(/HBC(\d+)/);
+    if (match) {
+      nextNumber = parseInt(match[1], 10) + 1;
+    }
+  }
+
+  return `HBC${String(nextNumber).padStart(7, "0")}`;
+}
+
 export async function generateReferralCode(): Promise<string> {
   let code: string;
   let attempts = 0;

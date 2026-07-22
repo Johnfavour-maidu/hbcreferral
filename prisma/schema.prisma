@@ -50,6 +50,7 @@ model User {
 model Profile {
   id                String   @id @default(cuid())
   userId            String   @unique
+  participantId     String   @unique
   fullName          String
   instagram         String   @unique
   state             String

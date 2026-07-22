@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
-import { generateReferralCode, generateReferralLink } from "@/lib/referral";
+import { generateReferralCode, generateReferralLink, generateParticipantId } from "@/lib/referral";
 import { registerSchema } from "@/lib/validations";
 
 export async function POST(request: NextRequest) {
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     const passwordHash = await bcrypt.hash(validated.password, 12);
     const referralCode = await generateReferralCode();
     const referralLink = generateReferralLink(referralCode);
+    const participantId = await generateParticipantId();
 
     let referredById: string | undefined;
     if (validated.referredBy) {
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
         passwordHash,
         profile: {
           create: {
+            participantId,
             fullName: validated.fullName,
             instagram: normalizedInstagram,
             state: validated.state,
@@ -111,6 +113,7 @@ export async function POST(request: NextRequest) {
         id: user.id,
         email: user.email,
         name: user.profile?.fullName,
+        participantId: user.profile?.participantId,
         referralCode: user.profile?.referralCode,
       },
     });

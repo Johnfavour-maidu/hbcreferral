@@ -17,6 +17,7 @@ export async function GET() {
 
     const formatted = participants.map((p) => ({
       id: p.id,
+      participantId: p.profile?.participantId || "",
       fullName: p.profile?.fullName || "",
       email: p.email,
       phone: p.phone,

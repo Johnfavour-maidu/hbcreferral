@@ -1,12 +1,3 @@
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen bg-bg relative flex items-center justify-center px-4 py-12">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/[0.03] rounded-full blur-[120px]" />
-      </div>
-      <div className="relative z-10" style={{ width: "100%", maxWidth: 480 }}>
-        {children}
-      </div>
-    </div>
-  );
+export default function AuthGroupLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

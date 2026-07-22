@@ -1,6 +1,7 @@
 export interface UserProfile {
   id: string;
   userId: string;
+  participantId: string;
   fullName: string;
   instagram: string;
   state: string;
