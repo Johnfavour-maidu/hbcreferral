@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
@@ -21,6 +21,10 @@ export async function GET() {
       where: { status: "PENDING" },
     });
 
+    const rejectedReferrals = await prisma.referral.count({
+      where: { status: "REJECTED" },
+    });
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayRegistrations = await prisma.user.count({
@@ -32,6 +36,16 @@ export async function GET() {
     const topReferrer = await prisma.profile.findFirst({
       orderBy: { verifiedReferrals: "desc" },
       select: { fullName: true, verifiedReferrals: true },
+    });
+
+    const activeSchools = await prisma.profile.findMany({
+      select: { school: true },
+      distinct: ["school"],
+    });
+
+    const statesCovered = await prisma.profile.findMany({
+      select: { state: true },
+      distinct: ["state"],
     });
 
     const dailyGrowth = [];
@@ -58,15 +72,85 @@ export async function GET() {
       ? Math.round((verifiedReferrals / totalReferrals) * 100)
       : 0;
 
+    const recentParticipants = await prisma.profile.findMany({
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        participantId: true,
+        fullName: true,
+        state: true,
+        school: true,
+        totalReferrals: true,
+        verifiedReferrals: true,
+        createdAt: true,
+      },
+    });
+
+    const pendingItems = await prisma.referral.findMany({
+      where: { status: "PENDING" },
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        referredEmail: true,
+        referredInstagram: true,
+        referrer: {
+          select: {
+            profile: {
+              select: { fullName: true },
+            },
+          },
+        },
+        createdAt: true,
+        status: true,
+      },
+    });
+
+    const topReferrers = await prisma.profile.findMany({
+      take: 5,
+      orderBy: { verifiedReferrals: "desc" },
+      select: {
+        fullName: true,
+        school: true,
+        verifiedReferrals: true,
+      },
+    });
+
+    const topStatesRaw = await prisma.profile.groupBy({
+      by: ["state"],
+      _count: { state: true },
+      orderBy: { _count: { state: "desc" } },
+      take: 5,
+    });
+    const topStates = topStatesRaw.map((s) => ({
+      name: s.state,
+      count: s._count.state,
+    }));
+
     return NextResponse.json({
       totalParticipants,
       verifiedReferrals,
       pendingVerifications,
+      rejectedReferrals,
       todayRegistrations,
       totalReferrals,
       topReferrer: topReferrer?.fullName || "",
+      activeSchools: activeSchools.length,
+      statesCovered: statesCovered.length,
       dailyGrowth,
       verificationRate,
+      recentParticipants,
+      pendingVerificationsList: pendingItems.map((p) => ({
+        id: p.id,
+        referredEmail: p.referredEmail,
+        referredInstagram: p.referredInstagram,
+        referrerName: p.referrer?.profile?.fullName || "Unknown",
+        createdAt: p.createdAt.toISOString(),
+        status: p.status,
+      })),
+      topReferrers,
+      topStates,
     });
   } catch (error) {
     console.error("Admin stats error:", error);
