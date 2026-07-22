@@ -11,8 +11,6 @@ import {
   Share2,
   Hash,
   ArrowRight,
-  Bell,
-  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,8 +27,6 @@ interface DashboardData {
   leaderboardPosition: number;
   totalParticipants: number;
 }
-
-/* ─── Share Icons ─── */
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -87,8 +83,6 @@ function TikTokIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-
-/* ─── Main Dashboard ─── */
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -226,179 +220,160 @@ export default function DashboardPage() {
     {
       label: "Total Referrals",
       value: profile.totalReferrals,
-      description: "Total invited participants",
+      sub: "Total invited participants",
       icon: Users,
       color: "text-gold",
       bg: "bg-gold/10",
-      border: "border-gold/15",
+      borderColor: "border-gold/20",
     },
     {
       label: "Verified",
       value: profile.verifiedReferrals,
-      description: "Confirmed referrals",
+      sub: "Confirmed referrals",
       icon: CheckCircle,
       color: "text-success",
       bg: "bg-success/10",
-      border: "border-success/15",
+      borderColor: "border-success/20",
     },
     {
       label: "Pending",
       value: profile.pendingReferrals,
-      description: "Awaiting verification",
+      sub: "Awaiting verification",
       icon: Clock,
       color: "text-warning",
       bg: "bg-warning/10",
-      border: "border-warning/15",
+      borderColor: "border-warning/20",
     },
     {
       label: "Leaderboard",
       value: `#${data.leaderboardPosition}`,
-      description: "Your current rank",
+      sub: "Your current rank",
       icon: Trophy,
       color: "text-[#8B5CF6]",
       bg: "bg-[#8B5CF6]/10",
-      border: "border-[#8B5CF6]/15",
+      borderColor: "border-[#8B5CF6]/20",
     },
   ];
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="max-w-[1200px] mx-auto px-5 sm:px-8 py-8 sm:py-12">
 
-      {/* ─── Header ─── */}
-      <div className="mb-8">
-        <h1 className="text-[28px] sm:text-[32px] lg:text-[36px] font-extrabold text-brown-dark leading-tight tracking-tight">
-          Hello, {firstName} 👋
-        </h1>
-        <p className="text-brown-light/60 text-[14px] sm:text-[15px] mt-1.5">
-          Welcome to your Hearts by Charming Referral Dashboard
-        </p>
-        <div className="mt-3">
-          <span className="inline-flex items-center gap-1.5 bg-gold/10 text-gold-dark text-[11px] font-semibold px-3 py-1.5 rounded-full border border-gold/20">
-            <Hash className="h-3 w-3" />
-            {profile.participantId}
-          </span>
+        {/* ─── Header ─── */}
+        <div className="mb-8">
+          <h1 className="text-3xl sm:text-[34px] font-extrabold text-brown-dark leading-tight">
+            Hello, {firstName} 👋
+          </h1>
+          <p className="text-brown-light/60 text-sm mt-1.5">
+            Welcome to your Hearts by Charming Referral Dashboard
+          </p>
+          <div className="mt-3">
+            <span className="inline-flex items-center gap-1.5 bg-gold/10 text-gold-dark text-xs font-semibold px-3 py-1.5 rounded-full border border-gold/20">
+              <Hash className="h-3 w-3" />
+              {profile.participantId}
+            </span>
+          </div>
         </div>
-      </div>
 
-      {/* ─── Stat Cards (Horizontal) ─── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-white rounded-[18px] border border-cream-dark/60 p-4 sm:p-5 hover:shadow-[0_4px_16px_rgba(74,46,31,0.08),0_12px_32px_rgba(74,46,31,0.06)] hover:-translate-y-0.5 transition-all duration-300 group"
-          >
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div
-                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl ${stat.bg} border ${stat.border} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300`}
-              >
-                <stat.icon
-                  className={`h-5 w-5 sm:h-[22px] sm:w-[22px] ${stat.color}`}
-                  strokeWidth={2}
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[11px] sm:text-[12px] text-brown-light/60 font-medium uppercase tracking-wide truncate">
-                  {stat.label}
-                </p>
-                <p
-                  className={`text-[24px] sm:text-[28px] font-extrabold ${stat.color} leading-none mt-0.5`}
-                >
-                  {typeof stat.value === "number"
-                    ? stat.value.toLocaleString()
-                    : stat.value}
-                </p>
-                <p className="text-[10px] sm:text-[11px] text-brown-light/40 font-medium mt-0.5 truncate">
-                  {stat.description}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ─── Divider ─── */}
-      <div className="h-px bg-gradient-to-r from-transparent via-cream-dark to-transparent mb-10" />
-
-      {/* ─── Referral Link Card ─── */}
-      <div className="bg-white rounded-[20px] border border-cream-dark/60 overflow-hidden mb-10 hover:shadow-[0_4px_16px_rgba(74,46,31,0.06)] transition-shadow duration-300">
-        <div className="h-[2px] bg-gradient-to-r from-gold/40 via-gold to-gold/40" />
-        <div className="p-6 sm:p-8">
-          {/* Title */}
-          <div className="flex items-center gap-2.5 mb-6">
-            <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
-              <Share2 className="h-[18px] w-[18px] text-gold" />
-            </div>
-            <div>
-              <h2 className="text-[17px] font-bold text-brown-dark leading-none">
-                Your Referral Link
-              </h2>
-              <p className="text-[12px] text-brown-light/50 mt-0.5">
-                Share this link to invite participants
-              </p>
-            </div>
-          </div>
-
-          {/* Link Input */}
-          <div className="flex items-center gap-2 p-3 sm:p-3.5 bg-cream/70 rounded-2xl border border-cream-dark/80 mb-3">
-            <code className="flex-1 text-[13px] sm:text-[14px] text-brown-dark/80 break-all font-mono leading-relaxed select-all">
-              {profile.referralLink}
-            </code>
-            <button
-              onClick={() => copyToClipboard(profile.referralLink)}
-              className={`shrink-0 h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                copied
-                  ? "bg-success/10 text-success hover:bg-success/20"
-                  : "bg-gold/10 text-gold hover:bg-gold/20"
-              }`}
+        {/* ─── Stat Cards ─── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="bg-white rounded-2xl border border-cream-dark p-5 hover:shadow-lg hover:shadow-brown/5 transition-all duration-300 hover:-translate-y-0.5"
             >
-              <Copy className="h-4 w-4" />
-            </button>
-          </div>
+              <div className="flex items-center gap-3.5">
+                <div className={`w-12 h-12 rounded-xl ${stat.bg} border ${stat.borderColor} flex items-center justify-center shrink-0`}>
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} strokeWidth={2} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] text-brown-light/50 font-semibold uppercase tracking-wider">
+                    {stat.label}
+                  </p>
+                  <p className={`text-[26px] font-extrabold ${stat.color} leading-none mt-0.5`}>
+                    {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
+                  </p>
+                  <p className="text-[11px] text-brown-light/40 mt-1">
+                    {stat.sub}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Referral Code */}
-          <span className="inline-flex items-center text-[11px] text-brown-light/50 font-mono bg-cream-dark/40 px-2.5 py-1 rounded-lg">
-            Code: {profile.referralCode}
-          </span>
+        {/* ─── Referral Link Card ─── */}
+        <div className="bg-white rounded-2xl border border-cream-dark overflow-hidden mb-10">
+          <div className="h-[2px] bg-gradient-to-r from-gold/40 via-gold to-gold/40" />
+          <div className="p-6 sm:p-8">
+            <div className="flex items-center gap-2.5 mb-5">
+              <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
+                <Share2 className="h-[18px] w-[18px] text-gold" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-brown-dark">Your Referral Link</h2>
+                <p className="text-xs text-brown-light/50 mt-0.5">Share this link to invite participants</p>
+              </div>
+            </div>
 
-          {/* Share Section */}
-          <div className="mt-6">
-            <p className="text-[11px] text-brown-light/50 font-medium uppercase tracking-wide mb-3">
-              Share via
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
-              {shareLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={link.name === "TikTok" ? handleTikTok : undefined}
-                  className={`flex items-center justify-center gap-2 h-11 rounded-2xl text-[13px] font-semibold text-white ${link.bg} ${link.hoverBg} ${link.shadow} ${link.textColor || ""} hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200`}
-                >
-                  <link.icon className="h-4 w-4" />
-                  {link.name}
-                </a>
-              ))}
+            {/* Link Input */}
+            <div className="flex items-center gap-3 p-3.5 bg-cream/60 rounded-xl border border-cream-dark mb-3">
+              <code className="flex-1 text-sm text-brown-dark/80 break-all font-mono select-all">
+                {profile.referralLink}
+              </code>
+              <button
+                onClick={() => copyToClipboard(profile.referralLink)}
+                className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                  copied
+                    ? "bg-success/10 text-success"
+                    : "bg-gold/10 text-gold hover:bg-gold/20"
+                }`}
+              >
+                <Copy className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Code Badge */}
+            <span className="inline-flex items-center text-[11px] text-brown-light/50 font-mono bg-cream-dark/40 px-2.5 py-1 rounded-lg">
+              Code: {profile.referralCode}
+            </span>
+
+            {/* Share Buttons */}
+            <div className="mt-6">
+              <p className="text-[11px] text-brown-light/40 font-semibold uppercase tracking-wider mb-3">
+                Share via
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                {shareLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={link.name === "TikTok" ? handleTikTok : undefined}
+                    className={`flex items-center gap-2 h-10 px-4 rounded-xl text-[13px] font-semibold text-white ${link.bg} ${link.hoverBg} ${link.shadow} ${link.textColor || ""} hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200`}
+                  >
+                    <link.icon className="h-4 w-4" />
+                    {link.name}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ─── Follow Hearts by Charming ─── */}
-      <div className="mb-10">
-        <div className="brown-gradient rounded-[24px] overflow-hidden">
-          <div className="px-8 md:px-16 text-center" style={{ paddingTop: 40, paddingBottom: 36 }}>
+        {/* ─── Follow Hearts by Charming ─── */}
+        <div className="brown-gradient rounded-3xl overflow-hidden mb-10">
+          <div className="px-8 md:px-16 py-12 md:py-14 text-center">
             <h2 className="text-3xl md:text-4xl lg:text-[42px] font-extrabold text-cream leading-tight mb-4">
               Follow Hearts by Charming
             </h2>
-            <div className="max-w-[580px] mx-auto mb-8">
-              <p className="text-cream/65 text-[15px] md:text-[17px] leading-[1.8]">
-                Stay connected with Hearts by Charming for inspiring content and community highlights.
-                Follow us and never miss an update.
-              </p>
-            </div>
+            <p className="text-cream/60 text-[15px] md:text-[17px] leading-relaxed max-w-[580px] mx-auto mb-8">
+              Stay connected with Hearts by Charming for inspiring content and community highlights.
+              Follow us and never miss an update.
+            </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               {socials.map((s) => (
                 <a
                   key={s.name}
@@ -414,31 +389,30 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ─── Leaderboard Card ─── */}
-      <div className="bg-white rounded-[20px] border border-cream-dark/60 overflow-hidden hover:shadow-[0_4px_16px_rgba(74,46,31,0.06)] transition-shadow duration-300">
-        <div className="p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
-          <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
-            <Trophy className="h-7 w-7 text-gold" strokeWidth={1.8} />
+        {/* ─── Leaderboard Card ─── */}
+        <div className="bg-white rounded-2xl border border-cream-dark overflow-hidden">
+          <div className="p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+            <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
+              <Trophy className="h-7 w-7 text-gold" strokeWidth={1.8} />
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="text-lg font-bold text-brown-dark">Leaderboard</h3>
+              <p className="text-sm text-brown-light/60 mt-1">
+                See where you rank among all participants and track your progress.
+              </p>
+            </div>
+            <Link
+              href="/leaderboard"
+              className="shrink-0 inline-flex items-center gap-2 h-12 rounded-2xl px-7 bg-gold hover:bg-gold-dark text-white font-semibold text-sm shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:shadow-[0_6px_20px_rgba(200,154,43,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            >
+              <Trophy className="h-4 w-4" />
+              View Leaderboard
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
-          <div className="flex-1">
-            <h3 className="text-[17px] font-bold text-brown-dark leading-none mb-1.5">
-              Leaderboard
-            </h3>
-            <p className="text-[13px] sm:text-[14px] text-brown-light/60 leading-relaxed">
-              See where you rank among all participants and track your progress.
-            </p>
-          </div>
-          <Link
-            href="/leaderboard"
-            className="shrink-0 inline-flex items-center gap-2 h-11 sm:h-12 rounded-2xl px-6 sm:px-8 bg-gold hover:bg-gold-dark text-white font-semibold text-[14px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:shadow-[0_6px_20px_rgba(200,154,43,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-          >
-            <Trophy className="h-4 w-4" />
-            View Leaderboard
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
+
       </div>
     </div>
   );
