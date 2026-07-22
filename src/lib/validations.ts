@@ -12,8 +12,8 @@ export const registerSchema = z
       .min(10, "Phone number must be at least 10 digits")
       .max(15, "Phone number is too long")
       .regex(/^(\+234|0)[0-9]{10}$/, "Enter a valid Nigerian phone number (e.g. 08012345678)"),
-    state: z.string().min(2, "Please select your state"),
-    school: z.string().min(2, "School name is required"),
+    state: z.string().optional().default(""),
+    school: z.string().optional().default(""),
     instagram: z
       .string()
       .min(1, "Instagram username is required")
