@@ -8,41 +8,17 @@ import {
   Users,
   CheckCircle,
   Trophy,
-  Gift,
-  School,
-  MapPin,
-  BarChart3,
-  Bell,
-  Megaphone,
-  FileText,
-  UserCog,
-  Settings,
   ChevronLeft,
   LogOut,
   X,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-const mainNav = [
+const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Participants", href: "/admin/participants", icon: Users },
   { label: "Verification", href: "/admin/verification", icon: CheckCircle },
   { label: "Leaderboard", href: "/admin/leaderboard", icon: Trophy },
-  { label: "Rewards", href: "/admin/rewards", icon: Gift },
-];
-
-const managementNav = [
-  { label: "Schools", href: "/admin/analytics", icon: School },
-  { label: "States", href: "/admin/analytics", icon: MapPin },
-  { label: "Reports", href: "/admin/exports", icon: FileText },
-  { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-  { label: "Campaign", href: "/admin/campaign", icon: Megaphone },
-];
-
-const systemNav = [
-  { label: "Notifications", href: "/admin", icon: Bell },
-  { label: "Admin Users", href: "/admin", icon: UserCog },
-  { label: "Settings", href: "/admin/campaign", icon: Settings },
 ];
 
 interface AdminSidebarProps {
@@ -68,14 +44,9 @@ export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
     return pathname.startsWith(href);
   };
 
-  const NavGroup = ({ title, items }: { title: string; items: typeof mainNav }) => (
-    <div className="mb-1">
-      {!collapsed && (
-        <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-cream/25">
-          {title}
-        </p>
-      )}
-      {items.map((item) => (
+  const NavItems = () => (
+    <>
+      {navItems.map((item) => (
         <Link
           key={item.label}
           href={item.href}
@@ -91,7 +62,7 @@ export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
           {!collapsed && <span>{item.label}</span>}
         </Link>
       ))}
-    </div>
+    </>
   );
 
   const sidebarContent = (
@@ -125,12 +96,8 @@ export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-        <NavGroup title="Overview" items={mainNav} />
-        <div className="border-t border-white/[0.06] my-2 pt-2" />
-        <NavGroup title="Management" items={managementNav} />
-        <div className="border-t border-white/[0.06] my-2 pt-2" />
-        <NavGroup title="System" items={systemNav} />
+      <nav className="flex-1 overflow-y-auto py-3 px-2">
+        <NavItems />
       </nav>
 
       {/* Footer */}
@@ -172,11 +139,7 @@ export function AdminSidebar({ mobileOpen, onMobileClose }: AdminSidebarProps) {
               </button>
             </div>
             <nav className="flex-1 overflow-y-auto py-3 px-2">
-              <NavGroup title="Overview" items={mainNav} />
-              <div className="border-t border-white/[0.06] my-2 pt-2" />
-              <NavGroup title="Management" items={managementNav} />
-              <div className="border-t border-white/[0.06] my-2 pt-2" />
-              <NavGroup title="System" items={systemNav} />
+              <NavItems />
             </nav>
             <div className="border-t border-white/[0.06] p-2 shrink-0">
               <Link
