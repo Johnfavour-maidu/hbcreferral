@@ -216,204 +216,421 @@ export default function DashboardPage() {
     },
   ];
 
-  const stats = [
-    {
-      label: "Total Referrals",
-      value: profile.totalReferrals,
-      sub: "Total invited participants",
-      icon: Users,
-      color: "text-gold",
-      bg: "bg-gold/10",
-      borderColor: "border-gold/20",
-    },
-    {
-      label: "Verified",
-      value: profile.verifiedReferrals,
-      sub: "Confirmed referrals",
-      icon: CheckCircle,
-      color: "text-success",
-      bg: "bg-success/10",
-      borderColor: "border-success/20",
-    },
-    {
-      label: "Pending",
-      value: profile.pendingReferrals,
-      sub: "Awaiting verification",
-      icon: Clock,
-      color: "text-warning",
-      bg: "bg-warning/10",
-      borderColor: "border-warning/20",
-    },
-    {
-      label: "Leaderboard",
-      value: `#${data.leaderboardPosition}`,
-      sub: "Your current rank",
-      icon: Trophy,
-      color: "text-[#8B5CF6]",
-      bg: "bg-[#8B5CF6]/10",
-      borderColor: "border-[#8B5CF6]/20",
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
-      <div className="max-w-[1200px] mx-auto px-5 sm:px-8 py-8 sm:py-12">
-
-        {/* ─── Header ─── */}
-        <div className="mb-8">
-          <h1 className="text-3xl sm:text-[34px] font-extrabold text-brown-dark leading-tight">
-            Hello, {firstName} 👋
-          </h1>
-          <p className="text-brown-light/60 text-sm mt-1.5">
-            Welcome to your Hearts by Charming Referral Dashboard
-          </p>
-          <div className="mt-3">
-            <span className="inline-flex items-center gap-1.5 bg-gold/10 text-gold-dark text-xs font-semibold px-3 py-1.5 rounded-full border border-gold/20">
-              <Hash className="h-3 w-3" />
-              {profile.participantId}
-            </span>
-          </div>
+    <div
+      style={{
+        maxWidth: 1200,
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: 32,
+        paddingRight: 32,
+        paddingTop: 40,
+        paddingBottom: 48,
+      }}
+    >
+      {/* ─── Header ─── */}
+      <div style={{ marginBottom: 32 }}>
+        <h1
+          style={{
+            fontSize: 34,
+            fontWeight: 800,
+            color: "#2D2118",
+            lineHeight: 1.2,
+          }}
+        >
+          Hello, {firstName} 👋
+        </h1>
+        <p style={{ color: "#7B5B43", fontSize: 14, marginTop: 6 }}>
+          Welcome to your Hearts by Charming Referral Dashboard
+        </p>
+        <div style={{ marginTop: 12 }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "rgba(200,154,43,0.1)",
+              color: "#B88A22",
+              fontSize: 12,
+              fontWeight: 600,
+              padding: "6px 12px",
+              borderRadius: 999,
+              border: "1px solid rgba(200,154,43,0.2)",
+            }}
+          >
+            <Hash style={{ width: 12, height: 12 }} />
+            {profile.participantId}
+          </span>
         </div>
+      </div>
 
-        {/* ─── Stat Cards ─── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-white rounded-2xl border border-cream-dark p-5 hover:shadow-lg hover:shadow-brown/5 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className={`w-12 h-12 rounded-xl ${stat.bg} border ${stat.borderColor} flex items-center justify-center shrink-0`}>
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} strokeWidth={2} />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] text-brown-light/50 font-semibold uppercase tracking-wider">
-                    {stat.label}
-                  </p>
-                  <p className={`text-[26px] font-extrabold ${stat.color} leading-none mt-0.5`}>
-                    {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
-                  </p>
-                  <p className="text-[11px] text-brown-light/40 mt-1">
-                    {stat.sub}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ─── Referral Link Card ─── */}
-        <div className="bg-white rounded-2xl border border-cream-dark overflow-hidden mb-10">
-          <div className="h-[2px] bg-gradient-to-r from-gold/40 via-gold to-gold/40" />
-          <div className="p-6 sm:p-8">
-            <div className="flex items-center gap-2.5 mb-5">
-              <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
-                <Share2 className="h-[18px] w-[18px] text-gold" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-brown-dark">Your Referral Link</h2>
-                <p className="text-xs text-brown-light/50 mt-0.5">Share this link to invite participants</p>
-              </div>
-            </div>
-
-            {/* Link Input */}
-            <div className="flex items-center gap-3 p-3.5 bg-cream/60 rounded-xl border border-cream-dark mb-3">
-              <code className="flex-1 text-sm text-brown-dark/80 break-all font-mono select-all">
-                {profile.referralLink}
-              </code>
-              <button
-                onClick={() => copyToClipboard(profile.referralLink)}
-                className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                  copied
-                    ? "bg-success/10 text-success"
-                    : "bg-gold/10 text-gold hover:bg-gold/20"
-                }`}
+      {/* ─── Stat Cards ─── */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 16,
+          marginBottom: 40,
+        }}
+      >
+        {[
+          {
+            label: "Total Referrals",
+            value: profile.totalReferrals,
+            sub: "Total invited participants",
+            icon: Users,
+            iconBg: "rgba(200,154,43,0.1)",
+            iconColor: "#C89A2B",
+          },
+          {
+            label: "Verified",
+            value: profile.verifiedReferrals,
+            sub: "Confirmed referrals",
+            icon: CheckCircle,
+            iconBg: "rgba(59,165,92,0.1)",
+            iconColor: "#3BA55C",
+          },
+          {
+            label: "Pending",
+            value: profile.pendingReferrals,
+            sub: "Awaiting verification",
+            icon: Clock,
+            iconBg: "rgba(245,158,11,0.1)",
+            iconColor: "#F59E0B",
+          },
+          {
+            label: "Leaderboard",
+            value: `#${data.leaderboardPosition}`,
+            sub: "Your current rank",
+            icon: Trophy,
+            iconBg: "rgba(139,92,246,0.1)",
+            iconColor: "#8B5CF6",
+          },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            style={{
+              background: "#fff",
+              borderRadius: 16,
+              border: "1px solid #E7D8C6",
+              padding: "20px 16px",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: stat.iconBg,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
               >
-                <Copy className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Code Badge */}
-            <span className="inline-flex items-center text-[11px] text-brown-light/50 font-mono bg-cream-dark/40 px-2.5 py-1 rounded-lg">
-              Code: {profile.referralCode}
-            </span>
-
-            {/* Share Buttons */}
-            <div className="mt-6">
-              <p className="text-[11px] text-brown-light/40 font-semibold uppercase tracking-wider mb-3">
-                Share via
-              </p>
-              <div className="flex flex-wrap gap-2.5">
-                {shareLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={link.name === "TikTok" ? handleTikTok : undefined}
-                    className={`flex items-center gap-2 h-10 px-4 rounded-xl text-[13px] font-semibold text-white ${link.bg} ${link.hoverBg} ${link.shadow} ${link.textColor || ""} hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200`}
-                  >
-                    <link.icon className="h-4 w-4" />
-                    {link.name}
-                  </a>
-                ))}
+                <stat.icon style={{ width: 20, height: 20, color: stat.iconColor }} strokeWidth={2} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <p style={{ fontSize: 11, color: "#7B5B43", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", margin: 0 }}>
+                  {stat.label}
+                </p>
+                <p style={{ fontSize: 26, fontWeight: 800, color: stat.iconColor, lineHeight: 1, marginTop: 2, marginBottom: 0 }}>
+                  {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
+                </p>
+                <p style={{ fontSize: 11, color: "#999", marginTop: 4, marginBottom: 0 }}>
+                  {stat.sub}
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* ─── Follow Hearts by Charming ─── */}
-        <div className="brown-gradient rounded-3xl overflow-hidden mb-10">
-          <div className="px-8 md:px-16 py-12 md:py-14 text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-[42px] font-extrabold text-cream leading-tight mb-4">
-              Follow Hearts by Charming
-            </h2>
-            <p className="text-cream/60 text-[15px] md:text-[17px] leading-relaxed max-w-[580px] mx-auto mb-8">
-              Stay connected with Hearts by Charming for inspiring content and community highlights.
-              Follow us and never miss an update.
+      {/* ─── Referral Link Card ─── */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "1px solid #E7D8C6",
+          overflow: "hidden",
+          marginBottom: 40,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div style={{ height: 2, background: "linear-gradient(to right, rgba(200,154,43,0.4), #C89A2B, rgba(200,154,43,0.4))" }} />
+        <div style={{ padding: "28px 32px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "rgba(200,154,43,0.1)",
+                border: "1px solid rgba(200,154,43,0.2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Share2 style={{ width: 18, height: 18, color: "#C89A2B" }} />
+            </div>
+            <div>
+              <h2 style={{ fontSize: 17, fontWeight: 700, color: "#2D2118", margin: 0 }}>Your Referral Link</h2>
+              <p style={{ fontSize: 12, color: "#999", marginTop: 2, marginBottom: 0 }}>Share this link to invite participants</p>
+            </div>
+          </div>
+
+          {/* Link Input */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "12px 16px",
+              background: "#FCF8F3",
+              borderRadius: 12,
+              border: "1px solid #E7D8C6",
+              marginBottom: 12,
+            }}
+          >
+            <code
+              style={{
+                flex: 1,
+                fontSize: 13,
+                color: "#4A2E1F",
+                fontFamily: "monospace",
+                wordBreak: "break-all",
+                userSelect: "all",
+              }}
+            >
+              {profile.referralLink}
+            </code>
+            <button
+              onClick={() => copyToClipboard(profile.referralLink)}
+              style={{
+                flexShrink: 0,
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: copied ? "rgba(59,165,92,0.1)" : "rgba(200,154,43,0.1)",
+                color: copied ? "#3BA55C" : "#C89A2B",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <Copy style={{ width: 16, height: 16 }} />
+            </button>
+          </div>
+
+          {/* Code Badge */}
+          <span
+            style={{
+              display: "inline-flex",
+              fontSize: 11,
+              color: "#999",
+              fontFamily: "monospace",
+              background: "rgba(247,243,236,0.8)",
+              padding: "4px 10px",
+              borderRadius: 8,
+              border: "1px solid #E7D8C6",
+            }}
+          >
+            Code: {profile.referralCode}
+          </span>
+
+          {/* Share Buttons */}
+          <div style={{ marginTop: 24 }}>
+            <p style={{ fontSize: 11, color: "#999", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 12 }}>
+              Share via
             </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {socials.map((s) => (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+              {shareLinks.map((link) => (
                 <a
-                  key={s.name}
-                  href={s.href}
+                  key={link.name}
+                  href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${s.bg} group flex items-center justify-center gap-3 h-[52px] min-w-[170px] w-full sm:w-[170px] rounded-2xl text-white font-semibold text-[15px] shadow-lg transition-all duration-250 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl hover:brightness-110`}
+                  onClick={link.name === "TikTok" ? handleTikTok : undefined}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    height: 40,
+                    padding: "0 16px",
+                    borderRadius: 10,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "#fff",
+                    background: link.bg.startsWith("bg-") ? undefined : link.bg,
+                    textDecoration: "none",
+                    transition: "all 0.2s",
+                  }}
+                  className={`${link.bg.startsWith("bg-") ? link.bg : ""} ${link.textColor || ""}`}
                 >
-                  <s.icon className="h-5 w-5" />
-                  {s.name}
+                  <link.icon className="w-4 h-4" />
+                  {link.name}
                 </a>
               ))}
             </div>
           </div>
         </div>
+      </div>
 
-        {/* ─── Leaderboard Card ─── */}
-        <div className="bg-white rounded-2xl border border-cream-dark overflow-hidden">
-          <div className="p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
-            <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
-              <Trophy className="h-7 w-7 text-gold" strokeWidth={1.8} />
-            </div>
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-lg font-bold text-brown-dark">Leaderboard</h3>
-              <p className="text-sm text-brown-light/60 mt-1">
-                See where you rank among all participants and track your progress.
-              </p>
-            </div>
-            <Link
-              href="/leaderboard"
-              className="shrink-0 inline-flex items-center gap-2 h-12 rounded-2xl px-7 bg-gold hover:bg-gold-dark text-white font-semibold text-sm shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:shadow-[0_6px_20px_rgba(200,154,43,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-            >
-              <Trophy className="h-4 w-4" />
-              View Leaderboard
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+      {/* ─── Follow Hearts by Charming ─── */}
+      <div
+        className="brown-gradient"
+        style={{
+          borderRadius: 24,
+          overflow: "hidden",
+          marginBottom: 40,
+        }}
+      >
+        <div style={{ padding: "48px 32px", textAlign: "center" }}>
+          <h2
+            style={{
+              fontSize: 36,
+              fontWeight: 800,
+              color: "#FFF8EF",
+              lineHeight: 1.2,
+              marginBottom: 16,
+            }}
+          >
+            Follow Hearts by Charming
+          </h2>
+          <p
+            style={{
+              color: "rgba(255,248,239,0.6)",
+              fontSize: 16,
+              lineHeight: 1.7,
+              maxWidth: 580,
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginBottom: 32,
+            }}
+          >
+            Stay connected with Hearts by Charming for inspiring content and community highlights.
+            Follow us and never miss an update.
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
+            {socials.map((s) => (
+              <a
+                key={s.name}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${s.bg} ${s.hoverShadow}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
+                  height: 52,
+                  minWidth: 170,
+                  width: "100%",
+                  maxWidth: 170,
+                  borderRadius: 16,
+                  color: "#fff",
+                  fontWeight: 600,
+                  fontSize: 15,
+                  textDecoration: "none",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+                  transition: "all 0.25s",
+                }}
+              >
+                <s.icon className="w-5 h-5" />
+                {s.name}
+              </a>
+            ))}
           </div>
         </div>
-
       </div>
+
+      {/* ─── Leaderboard Card ─── */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "1px solid #E7D8C6",
+          overflow: "hidden",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
+            padding: "24px 28px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 16,
+              background: "rgba(200,154,43,0.1)",
+              border: "1px solid rgba(200,154,43,0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Trophy style={{ width: 28, height: 28, color: "#C89A2B" }} strokeWidth={1.8} />
+          </div>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#2D2118", margin: 0 }}>Leaderboard</h3>
+            <p style={{ fontSize: 14, color: "#7B5B43", marginTop: 4, marginBottom: 0 }}>
+              See where you rank among all participants and track your progress.
+            </p>
+          </div>
+          <Link
+            href="/leaderboard"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              height: 48,
+              padding: "0 28px",
+              borderRadius: 16,
+              background: "#C89A2B",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: 14,
+              textDecoration: "none",
+              boxShadow: "0 4px 12px rgba(200,154,43,0.25)",
+              transition: "all 0.2s",
+              flexShrink: 0,
+            }}
+          >
+            <Trophy style={{ width: 16, height: 16 }} />
+            View Leaderboard
+            <ArrowRight style={{ width: 16, height: 16 }} />
+          </Link>
+        </div>
+      </div>
+
+      {/* ─── Responsive Overrides ─── */}
+      <style>{`
+        @media (max-width: 1024px) {
+          div[style*="grid-template-columns: repeat(4"] {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 640px) {
+          div[style*="grid-template-columns: repeat(4"],
+          div[style*="grid-template-columns: repeat(2"] {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
