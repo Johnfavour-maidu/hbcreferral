@@ -1,12 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { Save, Loader2, Settings } from "lucide-react";
+import { Save, Loader2, Settings, Check } from "lucide-react";
 import { toast } from "sonner";
 
 interface CampaignData {
@@ -20,6 +16,28 @@ interface CampaignData {
   goldReward: number;
   silverReward: number;
   bronzeReward: number;
+}
+
+function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
+  return (
+    <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+      <div
+        onClick={() => onChange(!checked)}
+        style={{
+          width: 44, height: 24, borderRadius: 12, position: "relative",
+          background: checked ? "#C89A2B" : "#E7D8C6",
+          cursor: "pointer", transition: "background 0.2s",
+        }}
+      >
+        <div style={{
+          width: 20, height: 20, borderRadius: 10, background: "white",
+          position: "absolute", top: 2, left: checked ? 22 : 2,
+          transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+        }} />
+      </div>
+      <span style={{ fontSize: 14, fontWeight: 500, color: "#2D2118" }}>{label}</span>
+    </label>
+  );
 }
 
 export default function AdminCampaignPage() {
@@ -50,86 +68,134 @@ export default function AdminCampaignPage() {
   };
 
   if (loading || !campaign) {
-    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ width: 40, height: 40, border: "3px solid #F0EBE3", borderTopColor: "#C89A2B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      </div>
+    );
   }
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%", padding: "10px 14px", borderRadius: 10,
+    border: "1.5px solid #E7D8C6", fontSize: 14, color: "#2D2118",
+    background: "white", outline: "none", boxSizing: "border-box",
+  };
 
   return (
     <PageWrapper>
       <FadeIn>
-        <h1 className="text-3xl font-extrabold text-brown-dark flex items-center gap-3 mb-8">
-          <Settings className="h-8 w-8 text-gold" />
-          Campaign Settings
-        </h1>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: "#FEF3C7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Settings style={{ width: 20, height: 20, color: "#D97706" }} />
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: "#2D2118" }}>Campaign Settings</h1>
+        </div>
       </FadeIn>
 
-      <div className="max-w-2xl space-y-6">
+      <div style={{ maxWidth: 640, display: "flex", flexDirection: "column", gap: 20 }}>
         <FadeIn delay={0.1}>
-          <Card>
-            <CardHeader><CardTitle>General</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label>Campaign Name</Label>
-                <Input value={campaign.name} onChange={(e) => setCampaign({ ...campaign, name: e.target.value })} />
+          <div style={{ background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6", overflow: "hidden" }}>
+            <div style={{ padding: "20px 24px", borderBottom: "1.5px solid #F0EBE3" }}>
+              <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118" }}>General</h2>
+            </div>
+            <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: 20 }}>
+              <div>
+                <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#2D2118", marginBottom: 6 }}>Campaign Name</label>
+                <input value={campaign.name} onChange={(e) => setCampaign({ ...campaign, name: e.target.value })} style={inputStyle} />
               </div>
-              <div className="space-y-2">
-                <Label>Status</Label>
-                <div className="flex gap-2">
+
+              <div>
+                <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#2D2118", marginBottom: 8 }}>Status</label>
+                <div style={{ display: "flex", gap: 8 }}>
                   {["DRAFT", "ACTIVE", "PAUSED", "CLOSED"].map((s) => (
-                    <Button key={s} variant={campaign.status === s ? "default" : "outline"} size="sm" onClick={() => setCampaign({ ...campaign, status: s })}>{s}</Button>
+                    <button
+                      key={s}
+                      onClick={() => setCampaign({ ...campaign, status: s })}
+                      style={{
+                        padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+                        cursor: "pointer",
+                        background: campaign.status === s ? "#C89A2B" : "white",
+                        color: campaign.status === s ? "white" : "#4A2E1F",
+                        border: campaign.status === s ? "1.5px solid #C89A2B" : "1.5px solid #E7D8C6",
+                        transition: "all 0.2s",
+                      }}
+                    >
+                      {s}
+                    </button>
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Start Date</Label>
-                  <Input type="date" value={campaign.startDate?.split("T")[0] || ""} onChange={(e) => setCampaign({ ...campaign, startDate: e.target.value })} />
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div>
+                  <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#2D2118", marginBottom: 6 }}>Start Date</label>
+                  <input type="date" value={campaign.startDate?.split("T")[0] || ""} onChange={(e) => setCampaign({ ...campaign, startDate: e.target.value })} style={inputStyle} />
                 </div>
-                <div className="space-y-2">
-                  <Label>End Date</Label>
-                  <Input type="date" value={campaign.endDate?.split("T")[0] || ""} onChange={(e) => setCampaign({ ...campaign, endDate: e.target.value })} />
+                <div>
+                  <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#2D2118", marginBottom: 6 }}>End Date</label>
+                  <input type="date" value={campaign.endDate?.split("T")[0] || ""} onChange={(e) => setCampaign({ ...campaign, endDate: e.target.value })} style={inputStyle} />
                 </div>
               </div>
-              <div className="flex gap-6">
-                <label className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" checked={campaign.registrationEnabled} onChange={(e) => setCampaign({ ...campaign, registrationEnabled: e.target.checked })} className="rounded border-cream-dark text-gold focus:ring-gold" />
-                  Registration Enabled
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" checked={campaign.leaderboardVisible} onChange={(e) => setCampaign({ ...campaign, leaderboardVisible: e.target.checked })} className="rounded border-cream-dark text-gold focus:ring-gold" />
-                  Leaderboard Visible
-                </label>
+
+              <div style={{ display: "flex", gap: 24 }}>
+                <Toggle checked={campaign.registrationEnabled} onChange={(v) => setCampaign({ ...campaign, registrationEnabled: v })} label="Registration Enabled" />
+                <Toggle checked={campaign.leaderboardVisible} onChange={(v) => setCampaign({ ...campaign, leaderboardVisible: v })} label="Leaderboard Visible" />
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <Card>
-            <CardHeader><CardTitle>Reward Values (₦)</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-gold font-semibold">Gold</Label>
-                  <Input type="number" value={campaign.goldReward} onChange={(e) => setCampaign({ ...campaign, goldReward: parseInt(e.target.value) || 0 })} />
+          <div style={{ background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6", overflow: "hidden" }}>
+            <div style={{ padding: "20px 24px", borderBottom: "1.5px solid #F0EBE3" }}>
+              <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118" }}>Reward Values (₦)</h2>
+            </div>
+            <div style={{ padding: "24px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+                <div>
+                  <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#D97706", marginBottom: 6 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: 5, background: "#D97706" }} />
+                    Gold
+                  </label>
+                  <input type="number" value={campaign.goldReward} onChange={(e) => setCampaign({ ...campaign, goldReward: parseInt(e.target.value) || 0 })} style={inputStyle} />
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-gray-400 font-semibold">Silver</Label>
-                  <Input type="number" value={campaign.silverReward} onChange={(e) => setCampaign({ ...campaign, silverReward: parseInt(e.target.value) || 0 })} />
+                <div>
+                  <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#7B5B43", marginBottom: 6 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: 5, background: "#7B5B43" }} />
+                    Silver
+                  </label>
+                  <input type="number" value={campaign.silverReward} onChange={(e) => setCampaign({ ...campaign, silverReward: parseInt(e.target.value) || 0 })} style={inputStyle} />
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-amber-600 font-semibold">Bronze</Label>
-                  <Input type="number" value={campaign.bronzeReward} onChange={(e) => setCampaign({ ...campaign, bronzeReward: parseInt(e.target.value) || 0 })} />
+                <div>
+                  <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#DC2626", marginBottom: 6 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: 5, background: "#DC2626" }} />
+                    Bronze
+                  </label>
+                  <input type="number" value={campaign.bronzeReward} onChange={(e) => setCampaign({ ...campaign, bronzeReward: parseInt(e.target.value) || 0 })} style={inputStyle} />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </FadeIn>
 
         <FadeIn delay={0.3}>
-          <Button onClick={handleSave} disabled={saving} size="lg">
-            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-            Save Changes
-          </Button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "12px 28px", borderRadius: 12, fontSize: 15, fontWeight: 700,
+              background: "#C89A2B", color: "white", border: "none",
+              cursor: saving ? "wait" : "pointer",
+              boxShadow: "0 2px 10px rgba(200,154,43,0.3)",
+              transition: "all 0.2s", opacity: saving ? 0.7 : 1,
+            }}
+            onMouseEnter={(e) => { if (!saving) { e.currentTarget.style.background = "#B88A1B"; e.currentTarget.style.transform = "translateY(-1px)"; }}}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "#C89A2B"; e.currentTarget.style.transform = "none"; }}
+          >
+            {saving ? <Loader2 style={{ width: 18, height: 18, animation: "spin 0.8s linear infinite" }} /> : <Save style={{ width: 18, height: 18 }} />}
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
         </FadeIn>
       </div>
     </PageWrapper>

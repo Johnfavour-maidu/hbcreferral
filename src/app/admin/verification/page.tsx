@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { CheckCircle, Check, X } from "lucide-react";
+import { CheckCircle, Check, X, Clock, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface VerificationItem {
@@ -47,52 +44,112 @@ export default function AdminVerificationPage() {
   const filtered = items.filter((i) => filter === "ALL" || i.status === filter);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ width: 40, height: 40, border: "3px solid #F0EBE3", borderTopColor: "#C89A2B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      </div>
+    );
   }
+
+  const filters = ["PENDING", "VERIFIED", "REJECTED", "ALL"] as const;
 
   return (
     <PageWrapper>
       <FadeIn>
-        <h1 className="text-3xl font-extrabold text-brown-dark mb-8">Verification Queue</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: "#2D2118", marginBottom: 28 }}>Verification Queue</h1>
       </FadeIn>
 
       <FadeIn delay={0.1}>
-        <div className="flex gap-2 mb-6">
-          {["PENDING", "VERIFIED", "REJECTED", "ALL"].map((f) => (
-            <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)}>{f}</Button>
+        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+          {filters.map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                padding: "8px 16px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+                cursor: "pointer",
+                background: filter === f ? "#C89A2B" : "white",
+                color: filter === f ? "white" : "#4A2E1F",
+                border: filter === f ? "1.5px solid #C89A2B" : "1.5px solid #E7D8C6",
+                transition: "all 0.2s",
+              }}
+            >
+              {f}
+            </button>
           ))}
         </div>
       </FadeIn>
 
-      <div className="space-y-3">
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {filtered.map((item, i) => (
           <FadeIn key={item.id} delay={i * 0.03}>
-            <Card>
-              <CardContent className="p-5 flex items-center gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <p className="font-semibold text-brown-dark">{item.referredName}</p>
-                    <Badge variant="default">{item.referredInstagram}</Badge>
-                    <Badge variant={item.status === "PENDING" ? "warning" : item.status === "VERIFIED" ? "success" : "danger"}>{item.status}</Badge>
-                  </div>
-                  <p className="text-sm text-brown-light">Referred by: <strong>{item.referrerName}</strong> · {new Date(item.createdAt).toLocaleDateString()}</p>
+            <div style={{
+              background: "white", borderRadius: 16, border: "1.5px solid #E7D8C6",
+              padding: "20px 24px", display: "flex", alignItems: "center", gap: 16,
+              transition: "all 0.2s",
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 20px rgba(74,46,31,0.06)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
+            >
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: "#2D2118" }}>{item.referredName}</span>
+                  <span style={{ padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#F0EBE3", color: "#7B5B43" }}>
+                    @{item.referredInstagram}
+                  </span>
+                  <span style={{
+                    padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+                    background: item.status === "PENDING" ? "#FEF3C7" : item.status === "VERIFIED" ? "#DCFCE7" : "#FEE2E2",
+                    color: item.status === "PENDING" ? "#D97706" : item.status === "VERIFIED" ? "#16A34A" : "#DC2626",
+                  }}>
+                    {item.status}
+                  </span>
                 </div>
-                {item.status === "PENDING" && (
-                  <div className="flex gap-2">
-                    <Button size="sm" className="bg-success hover:bg-green-700" onClick={() => handleAction(item.id, "approve")}>
-                      <Check className="h-4 w-4 mr-1" /> Approve
-                    </Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleAction(item.id, "reject")}>
-                      <X className="h-4 w-4 mr-1" /> Reject
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                <p style={{ fontSize: 13, color: "#7B5B43" }}>
+                  Referred by: <strong style={{ color: "#2D2118" }}>{item.referrerName}</strong> · {new Date(item.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+              {item.status === "PENDING" && (
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button
+                    onClick={() => handleAction(item.id, "approve")}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 4,
+                      padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+                      background: "#16A34A", color: "white", border: "none",
+                      cursor: "pointer", transition: "all 0.2s",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#15803D"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "#16A34A"; }}
+                  >
+                    <Check style={{ width: 14, height: 14 }} /> Approve
+                  </button>
+                  <button
+                    onClick={() => handleAction(item.id, "reject")}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 4,
+                      padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+                      background: "#FEE2E2", color: "#DC2626", border: "1.5px solid #FECACA",
+                      cursor: "pointer", transition: "all 0.2s",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#FECACA"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "#FEE2E2"; }}
+                  >
+                    <X style={{ width: 14, height: 14 }} /> Reject
+                  </button>
+                </div>
+              )}
+            </div>
           </FadeIn>
         ))}
         {filtered.length === 0 && (
-          <Card><CardContent className="p-8 text-center"><CheckCircle className="h-12 w-12 text-brown-light/20 mx-auto mb-3" /><p className="text-brown-light/50">No items to verify</p></CardContent></Card>
+          <div style={{
+            background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
+            padding: "48px 24px", textAlign: "center",
+          }}>
+            <CheckCircle style={{ width: 48, height: 48, color: "#E7D8C6", margin: "0 auto 12px" }} />
+            <p style={{ fontSize: 14, color: "#A08060" }}>No items to verify</p>
+          </div>
         )}
       </div>
     </PageWrapper>

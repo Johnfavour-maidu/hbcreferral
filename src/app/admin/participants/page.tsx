@@ -61,76 +61,142 @@ export default function AdminParticipantsPage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ width: 40, height: 40, border: "3px solid #F0EBE3", borderTopColor: "#C89A2B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      </div>
+    );
   }
 
   return (
     <PageWrapper>
       <FadeIn>
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-extrabold text-brown-dark">Participants</h1>
-          <Button onClick={exportCSV} variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-1" /> Export CSV
-          </Button>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: "#2D2118" }}>Participants</h1>
+          <button
+            onClick={exportCSV}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "8px 16px", borderRadius: 10, fontSize: 13, fontWeight: 600,
+              background: "white", color: "#4A2E1F",
+              border: "1.5px solid #E7D8C6", cursor: "pointer",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#C89A2B"; e.currentTarget.style.background = "#FFF8EF"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E7D8C6"; e.currentTarget.style.background = "white"; }}
+          >
+            <Download style={{ width: 14, height: 14 }} /> Export CSV
+          </button>
         </div>
       </FadeIn>
 
       <FadeIn delay={0.1}>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4 mb-6">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
-                <Input className="pl-10" placeholder="Search by name, email, Instagram, or Participant ID..." value={search} onChange={(e) => setSearch(e.target.value)} />
-              </div>
-              <div className="flex gap-2">
-                {["all", "active", "inactive"].map((f) => (
-                  <Button key={f} variant={filter === f ? "default" : "outline"} size="sm" onClick={() => setFilter(f)} className="capitalize">{f}</Button>
-                ))}
-              </div>
+        <div style={{
+          background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
+          padding: 24, marginBottom: 24,
+        }}>
+          <div style={{ display: "flex", flexDirection: "row", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
+            <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
+              <Search style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", width: 16, height: 16, color: "#A08060", pointerEvents: "none" }} />
+              <input
+                placeholder="Search by name, email, Instagram, or ID..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  width: "100%", padding: "10px 14px 10px 40px",
+                  borderRadius: 10, border: "1.5px solid #E7D8C6",
+                  fontSize: 13, color: "#2D2118", background: "#FFF8EF",
+                  outline: "none", boxSizing: "border-box",
+                }}
+              />
             </div>
+            <div style={{ display: "flex", gap: 6 }}>
+              {["all", "active", "inactive"].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  style={{
+                    padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+                    textTransform: "capitalize", cursor: "pointer",
+                    background: filter === f ? "#C89A2B" : "white",
+                    color: filter === f ? "white" : "#4A2E1F",
+                    border: filter === f ? "1.5px solid #C89A2B" : "1.5px solid #E7D8C6",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+          </div>
 
-            <div className="overflow-x-auto -mx-6 px-6">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b-2 border-cream-dark">
-                    <th className="text-left py-3 px-3 font-semibold text-brown-light">Participant ID</th>
-                    <th className="text-left py-3 px-3 font-semibold text-brown-light">Name</th>
-                    <th className="text-left py-3 px-3 font-semibold text-brown-light">Email</th>
-                    <th className="text-left py-3 px-3 font-semibold text-brown-light">Instagram</th>
-                    <th className="text-left py-3 px-3 font-semibold text-brown-light">State</th>
-                    <th className="text-center py-3 px-3 font-semibold text-brown-light">Refs</th>
-                    <th className="text-center py-3 px-3 font-semibold text-brown-light">Verified</th>
-                    <th className="text-center py-3 px-3 font-semibold text-brown-light">Status</th>
-                    <th className="text-center py-3 px-3 font-semibold text-brown-light">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((p) => (
-                    <tr key={p.id} className="border-b border-cream-dark/50 hover:bg-cream/50 transition-colors">
-                      <td className="py-3 px-3 font-mono text-xs text-gold font-semibold">{p.participantId}</td>
-                      <td className="py-3 px-3 font-medium text-brown-dark">{p.fullName}</td>
-                      <td className="py-3 px-3 text-brown-light">{p.email}</td>
-                      <td className="py-3 px-3 text-brown-light">{p.instagram}</td>
-                      <td className="py-3 px-3 text-brown-light">{p.state}</td>
-                      <td className="py-3 px-3 text-center font-bold text-gold">{p.totalReferrals}</td>
-                      <td className="py-3 px-3 text-center font-bold text-success">{p.verifiedReferrals}</td>
-                      <td className="py-3 px-3 text-center">
-                        <Badge variant={p.isActive ? "success" : "danger"}>{p.isActive ? "Active" : "Suspended"}</Badge>
-                      </td>
-                      <td className="py-3 px-3 text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8"><Eye className="h-3 w-3" /></Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-error"><Ban className="h-3 w-3" /></Button>
-                        </div>
-                      </td>
-                    </tr>
+          <div style={{ overflowX: "auto", margin: "0 -24px", padding: "0 24px" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
+                  {["ID", "Name", "Email", "Instagram", "State", "Refs", "Verified", "Status", "Actions"].map((h) => (
+                    <th key={h} style={{
+                      padding: "12px 8px", fontSize: 11, fontWeight: 700,
+                      textTransform: "uppercase", letterSpacing: "0.05em",
+                      color: "#A08060", textAlign: h === "Refs" || h === "Verified" || h === "Status" || h === "Actions" ? "center" : "left",
+                    }}>
+                      {h}
+                    </th>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((p) => (
+                  <tr key={p.id} style={{ borderBottom: "1px solid #F0EBE3", transition: "background 0.15s" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#FFF8EF"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                  >
+                    <td style={{ padding: "12px 8px", fontSize: 12, fontFamily: "monospace", fontWeight: 600, color: "#C89A2B" }}>{p.participantId}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, fontWeight: 600, color: "#2D2118" }}>{p.fullName}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.email}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.instagram}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.state}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, fontWeight: 700, color: "#C89A2B", textAlign: "center" }}>{p.totalReferrals}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, fontWeight: 700, color: "#16A34A", textAlign: "center" }}>{p.verifiedReferrals}</td>
+                    <td style={{ padding: "12px 8px", textAlign: "center" }}>
+                      <span style={{
+                        display: "inline-block", padding: "3px 10px", borderRadius: 20,
+                        fontSize: 11, fontWeight: 600,
+                        background: p.isActive ? "#DCFCE7" : "#FEE2E2",
+                        color: p.isActive ? "#16A34A" : "#DC2626",
+                      }}>
+                        {p.isActive ? "Active" : "Suspended"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "12px 8px", textAlign: "center" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
+                        <button style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#7B5B43", transition: "all 0.2s" }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#F0EBE3"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                        >
+                          <Eye style={{ width: 14, height: 14 }} />
+                        </button>
+                        <button style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#DC2626", transition: "all 0.2s" }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#FEE2E2"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                        >
+                          <Ban style={{ width: 14, height: 14 }} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={9} style={{ padding: "40px 8px", textAlign: "center", color: "#A08060", fontSize: 13 }}>
+                      No participants found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </FadeIn>
     </PageWrapper>
   );
