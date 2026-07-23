@@ -100,8 +100,8 @@ export async function POST(request: NextRequest) {
       await prisma.notification.create({
         data: {
           userId: referredById,
-          title: "New Referral!",
-          message: `Someone joined using your referral link!`,
+          title: "New referral received!",
+          message: `Instagram: ${normalizedInstagram}\nStatus: Pending Verification`,
           type: "referral",
         },
       });

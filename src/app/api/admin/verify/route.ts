@@ -81,8 +81,30 @@ export async function PUT(request: NextRequest) {
         await prisma.notification.create({
           data: {
             userId: referral.referrerId,
-            title: "Referral Verified!",
-            message: "One of your referrals has been verified!",
+            title: "Congratulations!",
+            message: `Your referral @${referral.referredInstagram.replace("@", "")} has been approved.`,
+            type: "verification",
+          },
+        });
+      }
+    } else {
+      const profile = await prisma.profile.findFirst({
+        where: { userId: referral.referrerId },
+      });
+
+      if (profile) {
+        await prisma.profile.update({
+          where: { id: profile.id },
+          data: {
+            pendingReferrals: { decrement: 1 },
+          },
+        });
+
+        await prisma.notification.create({
+          data: {
+            userId: referral.referrerId,
+            title: "Referral rejected.",
+            message: `See admin notes for details.`,
             type: "verification",
           },
         });

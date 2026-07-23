@@ -11,18 +11,15 @@ function generateCode(length: number = 6): string {
 }
 
 export async function generateParticipantId(): Promise<string> {
-  const lastProfile = await prisma.profile.findFirst({
-    orderBy: { createdAt: "desc" },
-    select: { participantId: true },
-  });
+  const result = await prisma.$queryRaw<{ max_num: bigint | null }[]>`
+    SELECT CAST(NULLIF(REGEXP_REPLACE("participantId", '[^0-9]', '', 'g'), '') AS BIGINT) as max_num
+    FROM profiles
+    ORDER BY max_num DESC NULLS FIRST
+    LIMIT 1
+  `;
 
-  let nextNumber = 1;
-  if (lastProfile?.participantId) {
-    const match = lastProfile.participantId.match(/HBC(\d+)/);
-    if (match) {
-      nextNumber = parseInt(match[1], 10) + 1;
-    }
-  }
+  const maxNum = result[0]?.max_num;
+  const nextNumber = maxNum ? Number(maxNum) + 1 : 1;
 
   return `HBC${String(nextNumber).padStart(7, "0")}`;
 }

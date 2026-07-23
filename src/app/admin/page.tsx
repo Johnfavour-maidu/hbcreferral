@@ -11,7 +11,6 @@ import {
   Trophy,
   ArrowRight,
   Download,
-  Settings,
   Search,
   Check,
   X,
@@ -133,10 +132,8 @@ export default function AdminDashboard() {
   ];
 
   const quickActions = [
-    { icon: CheckCircle, label: "Approve Referrals", href: "/admin/verification", color: "#16A34A", bg: "#DCFCE7" },
     { icon: Trophy, label: "View Leaderboard", href: "/admin/leaderboard", color: "#D97706", bg: "#FEF3C7" },
     { icon: Download, label: "Export Data", href: "/admin/exports", color: "#7B5B43", bg: "#F0EBE3" },
-    { icon: Settings, label: "Campaign Settings", href: "/admin/campaign", color: "#C89A2B", bg: "#FEF3C7" },
   ];
 
   const tabs = [

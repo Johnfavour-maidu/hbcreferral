@@ -11,6 +11,9 @@ import {
   Share2,
   Hash,
   ArrowRight,
+  Search,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -88,6 +91,12 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [referrals, setReferrals] = useState<
+    { id: string; fullName: string; instagram: string; status: string; createdAt: string }[]
+  >([]);
+  const [refSearch, setRefSearch] = useState("");
+  const [refPage, setRefPage] = useState(1);
+  const REF_PER_PAGE = 10;
 
   useEffect(() => {
     fetch("/api/dashboard")
@@ -95,6 +104,11 @@ export default function DashboardPage() {
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
+
+    fetch("/api/referrals")
+      .then((r) => r.json())
+      .then((d) => setReferrals(d.referrals || []))
+      .catch(console.error);
   }, []);
 
   if (loading) {
@@ -462,6 +476,197 @@ export default function DashboardPage() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ─── Referral History Card ─── */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "1px solid #E7D8C6",
+          overflow: "hidden",
+          marginBottom: 40,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div style={{ height: 2, background: "linear-gradient(to right, rgba(200,154,43,0.4), #C89A2B, rgba(200,154,43,0.4))" }} />
+        <div style={{ padding: "28px 32px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "rgba(200,154,43,0.1)",
+                border: "1px solid rgba(200,154,43,0.2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Clock style={{ width: 18, height: 18, color: "#C89A2B" }} />
+            </div>
+            <div>
+              <h2 style={{ fontSize: 17, fontWeight: 700, color: "#2D2118", margin: 0 }}>Referral History</h2>
+              <p style={{ fontSize: 12, color: "#999", marginTop: 2, marginBottom: 0 }}>Track every participant who joined using your referral link.</p>
+            </div>
+          </div>
+
+          {/* Search */}
+          <div style={{ position: "relative", marginTop: 20, marginBottom: 20 }}>
+            <Search style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", width: 16, height: 16, color: "#999" }} />
+            <input
+              type="text"
+              placeholder="Search by Instagram username..."
+              value={refSearch}
+              onChange={(e) => { setRefSearch(e.target.value); setRefPage(1); }}
+              style={{
+                width: "100%",
+                padding: "12px 14px 12px 40px",
+                borderRadius: 12,
+                border: "1px solid #E7D8C6",
+                background: "#FCF8F3",
+                fontSize: 13,
+                color: "#2D2118",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
+          </div>
+
+          {/* Table or Empty */}
+          {referrals.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 20px" }}>
+              <Users style={{ width: 48, height: 48, color: "#C8A960", marginBottom: 16 }} strokeWidth={1.2} />
+              <p style={{ fontSize: 15, fontWeight: 600, color: "#2D2118", marginBottom: 4 }}>No referrals yet.</p>
+              <p style={{ fontSize: 13, color: "#999" }}>Share your referral link to start inviting friends.</p>
+            </div>
+          ) : (
+            <>
+              {/* Desktop Table */}
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: "left", padding: "10px 12px", fontSize: 11, fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: "0.05em", borderBottom: "1px solid #F0E6D6" }}>Instagram</th>
+                      <th style={{ textAlign: "left", padding: "10px 12px", fontSize: 11, fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: "0.05em", borderBottom: "1px solid #F0E6D6" }}>Date & Time</th>
+                      <th style={{ textAlign: "left", padding: "10px 12px", fontSize: 11, fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: "0.05em", borderBottom: "1px solid #F0E6D6" }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {referrals
+                      .filter((r) => !refSearch || r.instagram.toLowerCase().includes(refSearch.toLowerCase()))
+                      .slice((refPage - 1) * REF_PER_PAGE, refPage * REF_PER_PAGE)
+                      .map((ref) => (
+                        <tr key={ref.id} style={{ borderBottom: "1px solid #F8F2EA" }}>
+                          <td style={{ padding: "12px", color: "#2D2118", fontWeight: 500 }}>{ref.instagram}</td>
+                          <td style={{ padding: "12px", color: "#7B5B43" }}>
+                            {new Date(ref.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}{" • "}{new Date(ref.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true })}
+                          </td>
+                          <td style={{ padding: "12px" }}>
+                            <span
+                              style={{
+                                display: "inline-block",
+                                padding: "4px 12px",
+                                borderRadius: 999,
+                                fontSize: 12,
+                                fontWeight: 600,
+                                background: ref.status === "PENDING" ? "rgba(245,158,11,0.1)" : ref.status === "VERIFIED" ? "rgba(59,165,92,0.1)" : "rgba(239,68,68,0.1)",
+                                color: ref.status === "PENDING" ? "#D97706" : ref.status === "VERIFIED" ? "#16A34A" : "#DC2626",
+                              }}
+                            >
+                              {ref.status === "PENDING" ? "Pending" : ref.status === "VERIFIED" ? "Approved" : "Rejected"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              {(() => {
+                const filtered = referrals.filter((r) => !refSearch || r.instagram.toLowerCase().includes(refSearch.toLowerCase()));
+                const totalPages = Math.ceil(filtered.length / REF_PER_PAGE);
+                if (totalPages <= 1) return null;
+                return (
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 20 }}>
+                    <button
+                      onClick={() => setRefPage((p) => Math.max(1, p - 1))}
+                      disabled={refPage === 1}
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        border: "1px solid #E7D8C6",
+                        background: refPage === 1 ? "#F7F3EC" : "#fff",
+                        color: refPage === 1 ? "#ccc" : "#4A2E1F",
+                        cursor: refPage === 1 ? "not-allowed" : "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ChevronLeft style={{ width: 16, height: 16 }} />
+                    </button>
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum: number;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (refPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (refPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = refPage - 2 + i;
+                      }
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setRefPage(pageNum)}
+                          style={{
+                            width: 36,
+                            height: 36,
+                            borderRadius: 10,
+                            border: refPage === pageNum ? "2px solid #C89A2B" : "1px solid #E7D8C6",
+                            background: refPage === pageNum ? "rgba(200,154,43,0.1)" : "#fff",
+                            color: refPage === pageNum ? "#C89A2B" : "#4A2E1F",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: 13,
+                            fontWeight: refPage === pageNum ? 700 : 500,
+                          }}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                    <button
+                      onClick={() => setRefPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={refPage === totalPages}
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        border: "1px solid #E7D8C6",
+                        background: refPage === totalPages ? "#F7F3EC" : "#fff",
+                        color: refPage === totalPages ? "#ccc" : "#4A2E1F",
+                        cursor: refPage === totalPages ? "not-allowed" : "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ChevronRight style={{ width: 16, height: 16 }} />
+                    </button>
+                  </div>
+                );
+              })()}
+            </>
+          )}
         </div>
       </div>
 
