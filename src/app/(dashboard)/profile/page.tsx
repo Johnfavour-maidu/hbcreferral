@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { User, Save, Loader2, Mail, Phone, MapPin, GraduationCap, Instagram } from "lucide-react";
+import { User, Save, Loader2, Mail, Phone, MapPin, Instagram } from "lucide-react";
 import { toast } from "sonner";
 
 interface ProfileData {
@@ -15,7 +15,6 @@ interface ProfileData {
   email: string;
   phone: string;
   state: string;
-  school: string;
   instagram: string;
   referralCode: string;
 }
@@ -56,7 +55,6 @@ export default function ProfilePage() {
     { key: "fullName", label: "Full Name", icon: User },
     { key: "phone", label: "Phone", icon: Phone },
     { key: "state", label: "State", icon: MapPin },
-    { key: "school", label: "School", icon: GraduationCap },
   ] as const;
 
   return (

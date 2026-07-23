@@ -38,11 +38,6 @@ export async function GET() {
       select: { fullName: true, verifiedReferrals: true },
     });
 
-    const activeSchools = await prisma.profile.findMany({
-      select: { school: true },
-      distinct: ["school"],
-    });
-
     const statesCovered = await prisma.profile.findMany({
       select: { state: true },
       distinct: ["state"],
@@ -99,7 +94,6 @@ export async function GET() {
         participantId: true,
         fullName: true,
         state: true,
-        school: true,
         totalReferrals: true,
         verifiedReferrals: true,
         createdAt: true,
@@ -132,7 +126,6 @@ export async function GET() {
       select: {
         participantId: true,
         fullName: true,
-        school: true,
         verifiedReferrals: true,
       },
     });
@@ -194,7 +187,6 @@ export async function GET() {
       totalReferrals,
       topReferrer: topReferrer?.fullName || "",
       topReferrerCount: topReferrer?.verifiedReferrals || 0,
-      activeSchools: activeSchools.length,
       statesCovered: statesCovered.length,
       dailyRegistrations,
       dailyReferrals,

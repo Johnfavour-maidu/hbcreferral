@@ -33,13 +33,6 @@ export async function GET() {
       select: { fullName: true, verifiedReferrals: true },
     });
 
-    const topSchools = await prisma.profile.groupBy({
-      by: ["school"],
-      _count: { school: true },
-      orderBy: { _count: { school: "desc" } },
-      take: 10,
-    });
-
     const topStates = await prisma.profile.groupBy({
       by: ["state"],
       _count: { state: true },
@@ -54,7 +47,6 @@ export async function GET() {
     return NextResponse.json({
       dailySignups,
       topReferrers: topReferrers.map((r) => ({ name: r.fullName, count: r.verifiedReferrals })),
-      topSchools: topSchools.map((s) => ({ name: s.school, count: s._count.school })),
       topStates: topStates.map((s) => ({ name: s.state, count: s._count.state })),
       referralConversion: totalReferrals > 0 ? Math.round((totalVerified / totalReferrals) * 100) : 0,
       totalSignups,

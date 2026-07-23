@@ -113,9 +113,9 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom, #FFF8EF, #F5EFE4)" }}>
       {/* Header */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #E7D8C6", padding: "4px 20px" }}>
-        <div style={{ maxWidth: 520, margin: "0 auto", display: "flex", alignItems: "center", gap: 10 }}>
-          <Image src="/logo.png" alt="Hearts by Charming" width={120} height={48} style={{ objectFit: "contain" }} />
+      <div style={{ background: "#fff", borderBottom: "1px solid #E7D8C6", padding: "0 20px" }}>
+        <div style={{ maxWidth: 520, margin: "0 auto", display: "flex", alignItems: "center", gap: 10, height: 56 }}>
+          <Image src="/logo.png" alt="Hearts by Charming" width={120} height={120} style={{ objectFit: "contain", height: "100%", width: "auto" }} />
           <span style={{ fontSize: 18, fontWeight: 700, color: "#2D2118" }}>Hearts by Charming</span>
         </div>
       </div>

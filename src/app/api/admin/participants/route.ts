@@ -23,7 +23,6 @@ export async function GET() {
       phone: p.phone,
       instagram: p.profile?.instagram || "",
       state: p.profile?.state || "",
-      school: p.profile?.school || "",
       referralCode: p.profile?.referralCode || "",
       totalReferrals: p.profile?.totalReferrals || 0,
       verifiedReferrals: p.profile?.verifiedReferrals || 0,

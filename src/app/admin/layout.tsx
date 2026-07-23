@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Navbar } from "@/components/shared/navbar";
-import { Footer } from "@/components/shared/footer";
+import { AdminLayoutClient } from "@/components/admin/admin-layout-client";
 
 export default async function AdminLayout({
   children,
@@ -14,11 +13,5 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
-  );
+  return <AdminLayoutClient>{children}</AdminLayoutClient>;
 }
