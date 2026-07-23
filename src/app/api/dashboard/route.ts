@@ -21,17 +21,24 @@ export async function GET() {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
-    const leaderboardEntry = await prisma.leaderboard.findFirst({
-      where: { userId: session.user.id, campaignId: "referral-challenge-2026" },
-    });
-
     const totalParticipants = await prisma.user.count({
       where: { role: "PARTICIPANT", isActive: true },
     });
 
+    let leaderboardPosition: number | null = null;
+    if (user.profile.verifiedReferrals > 0) {
+      const rank = await prisma.profile.count({
+        where: {
+          verifiedReferrals: { gt: user.profile.verifiedReferrals },
+          user: { role: "PARTICIPANT", isActive: true },
+        },
+      });
+      leaderboardPosition = rank + 1;
+    }
+
     return NextResponse.json({
       profile: user.profile,
-      leaderboardPosition: leaderboardEntry?.rank || totalParticipants,
+      leaderboardPosition,
       totalParticipants,
     });
   } catch (error) {

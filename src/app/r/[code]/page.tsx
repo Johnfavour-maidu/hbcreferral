@@ -237,7 +237,7 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
               </div>
               <div style={{ flex: 1 }}>
                 <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2D2118", marginBottom: 4 }}>Submit your Instagram username</h3>
-                <p style={{ fontSize: 13, color: "#999", marginBottom: 14 }}>Enter your Instagram username below</p>
+                <p style={{ fontSize: 13, color: "#999", marginBottom: 14 }}>Enter your Instagram username correctly below</p>
                 <div style={{ display: "flex", gap: 10 }}>
                   <div style={{ flex: 1 }}>
                     <input

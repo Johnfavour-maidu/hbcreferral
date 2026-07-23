@@ -16,6 +16,7 @@ import {
   X,
   Ban,
   Eye,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -95,6 +96,23 @@ export default function AdminDashboard() {
       }
     } catch {
       toast.error("Failed to process");
+    }
+  };
+
+  const handleDeleteParticipant = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this participant? This action cannot be undone.")) return;
+    try {
+      const res = await fetch(`/api/admin/participants?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setParticipants((prev) => prev.filter((p) => p.id !== id));
+        setStats((prev) => prev ? { ...prev, totalParticipants: prev.totalParticipants - 1 } : prev);
+        toast.success("Participant deleted successfully");
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Failed to delete participant");
+      }
+    } catch {
+      toast.error("Failed to delete participant");
     }
   };
 
@@ -285,11 +303,11 @@ export default function AdminDashboard() {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                  {["ID", "Full Name", "Email", "Phone", "Instagram", "State", "School", "Refs", "Verified", "Status"].map((h) => (
+                  {["ID", "Full Name", "Email", "Phone", "Instagram", "State", "School", "Refs", "Verified", "Status", "Actions"].map((h) => (
                     <th key={h} style={{
                       padding: "12px 14px", fontSize: 11, fontWeight: 700,
                       textTransform: "uppercase" as const, letterSpacing: "0.05em",
-                      color: "#A08060", textAlign: ["Refs", "Verified", "Status"].includes(h) ? "center" : "left",
+                      color: "#A08060", textAlign: ["Refs", "Verified", "Status", "Actions"].includes(h) ? "center" : "left",
                       position: "sticky" as const, top: 0, background: "white",
                     }}>{h}</th>
                   ))}
@@ -317,10 +335,19 @@ export default function AdminDashboard() {
                         {p.isActive ? "Active" : "Suspended"}
                       </span>
                     </td>
+                    <td style={{ padding: "12px 14px", textAlign: "center" }}>
+                      <button
+                        onClick={() => handleDeleteParticipant(p.id)}
+                        style={{ width: 32, height: 32, borderRadius: 8, border: "none", background: "#FEE2E2", color: "#DC2626", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                        title="Delete participant"
+                      >
+                        <Trash2 style={{ width: 14, height: 14 }} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 {filteredParticipants.length === 0 && (
-                  <tr><td colSpan={10} style={{ padding: "40px 14px", textAlign: "center", color: "#A08060", fontSize: 13 }}>No participants found</td></tr>
+                  <tr><td colSpan={11} style={{ padding: "40px 14px", textAlign: "center", color: "#A08060", fontSize: 13 }}>No participants found</td></tr>
                 )}
               </tbody>
             </table>

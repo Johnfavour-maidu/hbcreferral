@@ -14,6 +14,8 @@ export function Navbar() {
   const pathname = usePathname();
 
   const isDashboard = pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
+  const isLeaderboard = pathname.startsWith("/leaderboard");
+  const hideButtons = isDashboard || isLeaderboard;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -39,7 +41,7 @@ export function Navbar() {
       >
         <Logo size="sm" />
         <div className="hidden md:flex items-center gap-4">
-          {isDashboard ? null : (
+          {!hideButtons && (
             <>
               <Button variant="outline" size="default" className="min-w-[170px] h-12 rounded-xl px-6 text-[15px]" asChild>
                 <Link href="/login">Login</Link>
@@ -70,16 +72,20 @@ export function Navbar() {
             className="md:hidden border-t border-border overflow-hidden"
           >
             <div className="py-4 space-y-2 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
-              <Button variant="outline" className="w-full h-12 rounded-xl text-[15px]" asChild>
-                <Link href="/login" onClick={() => setMobileOpen(false)}>
-                  Login
-                </Link>
-              </Button>
-              <Button className="w-full h-12 rounded-xl text-[15px]" asChild>
-                <Link href="/register" onClick={() => setMobileOpen(false)}>
-                  Register Now
-                </Link>
-              </Button>
+              {!hideButtons && (
+                <>
+                  <Button variant="outline" className="w-full h-12 rounded-xl text-[15px]" asChild>
+                    <Link href="/login" onClick={() => setMobileOpen(false)}>
+                      Login
+                    </Link>
+                  </Button>
+                  <Button className="w-full h-12 rounded-xl text-[15px]" asChild>
+                    <Link href="/register" onClick={() => setMobileOpen(false)}>
+                      Register Now
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </motion.div>
         )}

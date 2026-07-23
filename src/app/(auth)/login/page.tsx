@@ -84,22 +84,6 @@ export default function LoginPage() {
               {...register("password")}
             />
 
-            <div className="flex items-center justify-between pt-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="h-[15px] w-[15px] rounded border-border text-gold focus:ring-gold/20 cursor-pointer"
-                />
-                <span className="text-[13px] text-brown-light/60">Remember me</span>
-              </label>
-              <Link
-                href="/forgot-password"
-                className="text-[13px] text-gold hover:text-gold-dark font-medium transition-colors"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
             <div style={{ paddingTop: 24 }}>
               <AuthButton type="submit" isLoading={isLoading} loadingText="Signing in...">
                 Sign In

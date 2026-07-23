@@ -28,7 +28,7 @@ interface DashboardData {
     verifiedReferrals: number;
     pendingReferrals: number;
   };
-  leaderboardPosition: number;
+  leaderboardPosition: number | null;
   totalParticipants: number;
 }
 
@@ -215,7 +215,7 @@ export default function DashboardPage() {
           },
           {
             label: "Leaderboard",
-            value: `#${data.leaderboardPosition}`,
+            value: data.leaderboardPosition != null ? `#${data.leaderboardPosition}` : "-",
             sub: "Your current rank",
             icon: Trophy,
             iconBg: "rgba(139,92,246,0.1)",
