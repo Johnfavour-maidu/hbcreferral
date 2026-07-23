@@ -42,18 +42,9 @@ export default function LoginPage() {
         redirect: false,
       });
       if (result?.error) throw new Error("Invalid email or password");
-      const token = result?.url ? null : null;
-      const sessionRes = await fetch("/api/auth/session", { cache: "no-store" });
-      const session = await sessionRes.json();
-      const role = session?.user?.role;
-      if (role === "ADMIN" || role === "MODERATOR") {
-        router.push("/admin");
-      } else {
-        router.push("/dashboard");
-      }
+      window.location.href = "/dashboard";
     } catch (error: any) {
       toast.error("Login failed", { description: error.message });
-    } finally {
       setIsLoading(false);
     }
   };
