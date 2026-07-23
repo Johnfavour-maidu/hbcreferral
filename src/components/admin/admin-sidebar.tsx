@@ -19,6 +19,9 @@ const navItems = [
   { label: "Participants", href: "/admin/participants", icon: Users },
   { label: "Verification", href: "/admin/verification", icon: CheckCircle },
   { label: "Leaderboard", href: "/admin/leaderboard", icon: Trophy },
+  { label: "Analytics", href: "/admin/analytics", icon: LayoutDashboard },
+  { label: "Campaign", href: "/admin/campaign", icon: LayoutDashboard },
+  { label: "Exports", href: "/admin/exports", icon: LayoutDashboard },
 ];
 
 interface AdminSidebarProps {

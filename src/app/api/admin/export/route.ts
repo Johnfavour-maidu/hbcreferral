@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
           phone: u.phone,
           instagram: u.profile?.instagram || "",
           state: u.profile?.state || "",
-          school: u.profile?.school || "",
           referrals: u.profile?.totalReferrals || 0,
           verified: u.profile?.verifiedReferrals || 0,
           status: u.isActive ? "Active" : "Suspended",
