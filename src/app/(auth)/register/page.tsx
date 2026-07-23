@@ -139,7 +139,7 @@ function RegisterForm() {
               <div className="relative">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-[16px] w-[16px] text-brown-light/30 pointer-events-none" />
                 <select
-                  className={`flex h-[50px] w-full rounded-xl border border-border bg-white/80 pl-[42px] pr-4 text-[14px] text-brown-dark shadow-[0_1px_2px_rgba(74,46,31,0.04)] focus:shadow-[0_0_0_3px_rgba(200,154,43,0.1)] focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${errors.state ? "border-error/60" : ""}`}
+                  className={`flex h-[50px] w-full rounded-xl border-2 border-cream-dark bg-white/80 pl-[48px] pr-4 text-[14px] text-brown-dark shadow-[0_1px_2px_rgba(74,46,31,0.04)] focus:shadow-[0_0_0_3px_rgba(200,154,43,0.1)] focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${errors.state ? "border-error/60" : ""}`}
                   {...register("state")}
                 >
                   <option value="">Select state</option>
