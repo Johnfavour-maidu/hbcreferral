@@ -2,21 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { Trophy, Medal, Crown } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 interface LeaderboardEntry {
   rank: number;
+  userId: string;
   fullName: string;
-  totalReferrals: number;
+  instagram: string;
   verifiedReferrals: number;
-  state: string;
-}
-
-function getRankStyle(rank: number) {
-  if (rank === 1) return { icon: Crown, bg: "#FEF3C7", color: "#D97706", border: "#FDE68A", badge: "Gold" };
-  if (rank === 2) return { icon: Medal, bg: "#F0EBE3", color: "#7B5B43", border: "#E7D8C6", badge: "Silver" };
-  if (rank === 3) return { icon: Medal, bg: "#FEE2E2", color: "#DC2626", border: "#FECACA", badge: "Bronze" };
-  return { icon: null, bg: "#F9FAFB", color: "#6B7280", border: "#E5E7EB", badge: "—" };
 }
 
 export default function AdminLeaderboardPage() {
@@ -63,11 +56,11 @@ export default function AdminLeaderboardPage() {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                  {["Rank", "Name", "State", "Total", "Verified", "Tier"].map((h) => (
+                  {["Rank", "Name", "Username", "Verified Referrals"].map((h) => (
                     <th key={h} style={{
-                      padding: "12px 16px", fontSize: 11, fontWeight: 700,
+                      padding: "14px 20px", fontSize: 11, fontWeight: 700,
                       textTransform: "uppercase", letterSpacing: "0.05em",
-                      color: "#A08060", textAlign: h === "Total" || h === "Verified" || h === "Tier" ? "center" : "left",
+                      color: "#A08060", textAlign: h === "Verified Referrals" ? "center" : "left",
                     }}>
                       {h}
                     </th>
@@ -75,46 +68,55 @@ export default function AdminLeaderboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {entries.map((e) => {
-                  const rankStyle = getRankStyle(e.rank);
+                {entries.map((entry) => {
+                  const rankBg = entry.rank === 1 ? "#FEF3C7" : entry.rank === 2 ? "#F0EBE3" : entry.rank === 3 ? "#FEE2E2" : "transparent";
+                  const rankColor = entry.rank === 1 ? "#D97706" : entry.rank === 2 ? "#7B5B43" : entry.rank === 3 ? "#DC2626" : "#7B5B43";
+
                   return (
-                    <tr key={e.rank} style={{ borderBottom: "1px solid #F0EBE3", transition: "background 0.15s" }}
+                    <tr
+                      key={entry.userId}
+                      style={{ borderBottom: "1px solid #F0EBE3", transition: "background 0.15s" }}
                       onMouseEnter={(ev) => { ev.currentTarget.style.background = "#FFF8EF"; }}
                       onMouseLeave={(ev) => { ev.currentTarget.style.background = "transparent"; }}
                     >
-                      <td style={{ padding: "14px 16px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <div style={{
-                            width: 32, height: 32, borderRadius: 10,
-                            background: rankStyle.bg, color: rankStyle.color,
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            fontSize: 13, fontWeight: 800,
-                            border: `1.5px solid ${rankStyle.border}`,
-                          }}>
-                            #{e.rank}
-                          </div>
-                        </div>
-                      </td>
-                      <td style={{ padding: "14px 16px", fontSize: 14, fontWeight: 600, color: "#2D2118" }}>{e.fullName}</td>
-                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{e.state}</td>
-                      <td style={{ padding: "14px 16px", textAlign: "center", fontSize: 14, fontWeight: 700, color: "#C89A2B" }}>{e.totalReferrals}</td>
-                      <td style={{ padding: "14px 16px", textAlign: "center" }}>
+                      <td style={{ padding: "14px 20px" }}>
                         <span style={{
-                          display: "inline-block", padding: "3px 10px", borderRadius: 20,
-                          fontSize: 12, fontWeight: 700,
-                          background: "#DCFCE7", color: "#16A34A",
+                          display: "inline-flex", alignItems: "center", justifyContent: "center",
+                          width: 36, height: 36, borderRadius: 10,
+                          background: rankBg, color: rankColor,
+                          fontSize: 13, fontWeight: 800,
+                          border: entry.rank <= 3 ? `1.5px solid ${rankColor}20` : "none",
                         }}>
-                          {e.verifiedReferrals}
+                          {entry.rank <= 3 ? (entry.rank === 1 ? "🥇" : entry.rank === 2 ? "🥈" : "🥉") : `#${entry.rank}`}
                         </span>
                       </td>
-                      <td style={{ padding: "14px 16px", textAlign: "center" }}>
+                      <td style={{ padding: "14px 20px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div style={{
+                            width: 36, height: 36, borderRadius: 18,
+                            background: "#F0EBE3",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 12, fontWeight: 700, color: "#7B5B43",
+                            flexShrink: 0,
+                          }}>
+                            {entry.fullName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}
+                          </div>
+                          <span style={{ fontSize: 14, fontWeight: 600, color: "#2D2118" }}>
+                            {entry.fullName}
+                          </span>
+                        </div>
+                      </td>
+                      <td style={{ padding: "14px 20px", fontSize: 13, color: "#7B5B43" }}>
+                        {entry.instagram}
+                      </td>
+                      <td style={{ padding: "14px 20px", textAlign: "center" }}>
                         <span style={{
-                          display: "inline-block", padding: "3px 12px", borderRadius: 20,
-                          fontSize: 11, fontWeight: 700,
-                          background: rankStyle.bg, color: rankStyle.color,
-                          border: `1px solid ${rankStyle.border}`,
+                          display: "inline-flex", alignItems: "center", gap: 4,
+                          background: "#DCFCE7", color: "#16A34A",
+                          padding: "4px 12px", borderRadius: 20,
+                          fontSize: 13, fontWeight: 700,
                         }}>
-                          {rankStyle.badge}
+                          {entry.verifiedReferrals}
                         </span>
                       </td>
                     </tr>
@@ -122,7 +124,7 @@ export default function AdminLeaderboardPage() {
                 })}
                 {entries.length === 0 && (
                   <tr>
-                    <td colSpan={6} style={{ padding: "48px 16px", textAlign: "center", color: "#A08060", fontSize: 14 }}>
+                    <td colSpan={4} style={{ padding: "48px 20px", textAlign: "center", color: "#A08060", fontSize: 14 }}>
                       No leaderboard data yet
                     </td>
                   </tr>

@@ -45,9 +45,9 @@ export function Navbar() {
           {hideButtons ? (
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="inline-flex items-center gap-2 h-12 px-7 rounded-xl bg-[#C89A2B] text-white font-semibold text-[15px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:shadow-[0_6px_16px_rgba(200,154,43,0.35)] hover:-translate-y-[2px] active:translate-y-0 active:shadow-[0_2px_8px_rgba(200,154,43,0.2)] transition-all duration-200"
+              className="inline-flex items-center justify-center gap-3 h-11 min-w-[140px] px-6 rounded-xl bg-gold text-white font-semibold text-[14px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
             >
-              <LogOut className="h-4 w-4" strokeWidth={2} />
+              <LogOut className="h-4 w-4" />
               Logout
             </button>
           ) : (
@@ -83,13 +83,13 @@ export function Navbar() {
             <div className="py-4 space-y-2 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
               {hideButtons ? (
                 <button
-                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-[#C89A2B] text-white font-semibold text-[15px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:shadow-[0_6px_16px_rgba(200,154,43,0.35)] hover:-translate-y-[2px] active:translate-y-0 active:shadow-[0_2px_8px_rgba(200,154,43,0.2)] transition-all duration-200"
+                  className="w-full inline-flex items-center justify-center gap-3 h-11 min-w-[140px] px-6 rounded-xl bg-gold text-white font-semibold text-[14px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
                   onClick={() => {
                     setMobileOpen(false);
                     signOut({ callbackUrl: "/" });
                   }}
                 >
-                  <LogOut className="h-4 w-4" strokeWidth={2} />
+                  <LogOut className="h-4 w-4" />
                   Logout
                 </button>
               ) : (

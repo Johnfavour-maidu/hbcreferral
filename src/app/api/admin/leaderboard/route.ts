@@ -10,19 +10,25 @@ export async function GET() {
     }
 
     const profiles = await prisma.profile.findMany({
-      orderBy: { verifiedReferrals: "desc" },
-      include: { user: { select: { isActive: true } } },
+      where: {
+        user: { role: "PARTICIPANT", isActive: true },
+      },
+      select: {
+        userId: true,
+        fullName: true,
+        instagram: true,
+        verifiedReferrals: true,
+      },
+      orderBy: [{ verifiedReferrals: "desc" }, { createdAt: "asc" }],
     });
 
-    const leaderboard = profiles
-      .filter((p) => p.user.isActive)
-      .map((p, index) => ({
-        rank: index + 1,
-        fullName: p.fullName,
-        totalReferrals: p.totalReferrals,
-        verifiedReferrals: p.verifiedReferrals,
-        state: p.state,
-      }));
+    const leaderboard = profiles.map((p, index) => ({
+      rank: index + 1,
+      userId: p.userId,
+      fullName: p.fullName,
+      instagram: p.instagram,
+      verifiedReferrals: p.verifiedReferrals,
+    }));
 
     return NextResponse.json({ leaderboard });
   } catch (error) {

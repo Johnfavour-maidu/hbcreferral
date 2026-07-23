@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
   Users,
   CheckCircle,
@@ -17,6 +17,7 @@ import {
   Ban,
   Eye,
   Trash2,
+  LogOut,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -160,7 +161,30 @@ export default function AdminDashboard() {
   ] as const;
 
   return (
-    <div style={{ paddingLeft: 32, paddingRight: 32, paddingTop: 32, paddingBottom: 48 }}>
+    <div style={{ minHeight: "100vh", background: "#FFF8EF" }}>
+      {/* Top Navigation Bar */}
+      <header style={{
+        height: 72, background: "white", borderBottom: "1.5px solid #E7D8C6",
+        padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        position: "sticky", top: 0, zIndex: 40, boxSizing: "border-box",
+      }}>
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, height: "100%" }}>
+          <img src="/logo.png" alt="Hearts by Charming" style={{ height: 48, width: "auto" }} />
+        </div>
+        {/* Logout Button */}
+        <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="inline-flex items-center gap-3 h-11 min-w-[140px] px-6 rounded-xl bg-gold text-white font-semibold text-[14px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
+          >
+            <LogOut style={{ width: 16, height: 16 }} />
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <div style={{ paddingLeft: 32, paddingRight: 32, paddingTop: 32, paddingBottom: 48 }}>
       {/* ─── Header ─── */}
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: 34, fontWeight: 800, color: "#2D2118", lineHeight: 1.2, margin: 0 }}>
@@ -411,6 +435,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

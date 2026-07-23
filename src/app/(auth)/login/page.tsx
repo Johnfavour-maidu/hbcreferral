@@ -42,7 +42,14 @@ export default function LoginPage() {
         redirect: false,
       });
       if (result?.error) throw new Error("Invalid email or password");
-      window.location.href = "/dashboard";
+      const res = await fetch("/api/auth/session");
+      const session = await res.json();
+      const role = session?.user?.role;
+      if (role === "ADMIN" || role === "MODERATOR") {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = "/dashboard";
+      }
     } catch (error: any) {
       toast.error("Login failed", { description: error.message });
       setIsLoading(false);

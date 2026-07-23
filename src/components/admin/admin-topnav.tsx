@@ -93,7 +93,7 @@ export function AdminTopNav({ onMenuToggle }: AdminTopNavProps) {
         {/* Logout Button */}
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="inline-flex items-center gap-2 h-10 px-5 rounded-xl bg-gold text-white font-semibold text-[13px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
+          className="inline-flex items-center gap-3 h-11 min-w-[140px] px-6 rounded-xl bg-gold text-white font-semibold text-[14px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
         >
           <LogOut className="h-4 w-4" />
           Logout
