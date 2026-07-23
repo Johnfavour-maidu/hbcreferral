@@ -35,14 +35,14 @@ const tiers = [
 export function RewardsPreview() {
   return (
     <section id="rewards" className="bg-white">
-      <div style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div style={{ paddingTop: 48, paddingBottom: 48 }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center"
-            style={{ marginBottom: 48 }}
+            style={{ marginBottom: 32 }}
           >
             <span className="inline-block text-gold text-sm font-semibold uppercase tracking-widest mb-3">
               Prizes
