@@ -42,10 +42,10 @@ export default function LoginPage() {
         redirect: false,
       });
       if (result?.error) throw new Error("Invalid email or password");
-      const sessionRes = await fetch("/api/auth/session");
+      const token = result?.url ? null : null;
+      const sessionRes = await fetch("/api/auth/session", { cache: "no-store" });
       const session = await sessionRes.json();
       const role = session?.user?.role;
-      toast.success("Welcome back!");
       if (role === "ADMIN" || role === "MODERATOR") {
         router.push("/admin");
       } else {

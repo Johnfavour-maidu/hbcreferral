@@ -25,6 +25,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "You cannot refer yourself" }, { status: 400 });
     }
 
+    const existingParticipant = await prisma.profile.findFirst({
+      where: {
+        instagram: {
+          equals: normalizedInstagram,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    if (existingParticipant) {
+      return NextResponse.json({ error: "This user is already a registered participant" }, { status: 400 });
+    }
+
     const existing = await prisma.referral.findFirst({
       where: {
         referredInstagram: normalizedInstagram,

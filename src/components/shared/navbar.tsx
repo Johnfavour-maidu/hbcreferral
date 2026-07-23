@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/shared/logo";
 
@@ -41,7 +42,15 @@ export function Navbar() {
       >
         <Logo size="sm" />
         <div className="hidden md:flex items-center gap-4">
-          {!hideButtons && (
+          {hideButtons ? (
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-xl bg-gold text-white font-semibold text-[15px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </button>
+          ) : (
             <>
               <Button variant="outline" size="default" className="min-w-[170px] h-12 rounded-xl px-6 text-[15px]" asChild>
                 <Link href="/login">Login</Link>
@@ -72,7 +81,18 @@ export function Navbar() {
             className="md:hidden border-t border-border overflow-hidden"
           >
             <div className="py-4 space-y-2 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
-              {!hideButtons && (
+              {hideButtons ? (
+                <button
+                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-gold text-white font-semibold text-[15px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    signOut({ callbackUrl: "/" });
+                  }}
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              ) : (
                 <>
                   <Button variant="outline" className="w-full h-12 rounded-xl text-[15px]" asChild>
                     <Link href="/login" onClick={() => setMobileOpen(false)}>
