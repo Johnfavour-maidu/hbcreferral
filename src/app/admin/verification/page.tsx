@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { CheckCircle, Check, X, Clock, AlertCircle } from "lucide-react";
+import { CheckCircle, Check, X, Clock, Instagram, Heart, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface VerificationItem {
   id: string;
   referrerName: string;
-  referredName: string;
   referredInstagram: string;
+  followsPage: boolean;
+  likedPost: boolean;
+  commentedPost: boolean;
+  commentText: string | null;
   status: string;
   createdAt: string;
 }
@@ -27,131 +29,191 @@ export default function AdminVerificationPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleAction = async (id: string, action: "approve" | "reject") => {
+  const handleAction = async (id: string, action: "approve" | "reject", checks?: { followsPage: boolean; likedPost: boolean; commentedPost: boolean }) => {
     try {
+      const body: Record<string, unknown> = { id, action };
+      if (checks) {
+        body.followsPage = checks.followsPage;
+        body.likedPost = checks.likedPost;
+        body.commentedPost = checks.commentedPost;
+      }
       const res = await fetch("/api/admin/verify", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, action }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
-        setItems((prev) => prev.filter((i) => i.id !== id));
+        setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: action === "approve" ? "VERIFIED" : "REJECTED", ...(checks || {}) } : i));
         toast.success(action === "approve" ? "Referral approved!" : "Referral rejected");
       }
-    } catch { toast.error("Failed to process"); }
+    } catch {
+      toast.error("Failed to process");
+    }
   };
 
   const filtered = items.filter((i) => filter === "ALL" || i.status === filter);
 
   if (loading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
-        <div style={{ width: 40, height: 40, border: "3px solid #F0EBE3", borderTopColor: "#C89A2B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-10 h-10 border-3 border-gold/20 border-t-gold rounded-full animate-spin" />
       </div>
     );
   }
 
-  const filters = ["PENDING", "VERIFIED", "REJECTED", "ALL"] as const;
-
   return (
-    <PageWrapper>
-      <FadeIn>
-        <h1 style={{ fontSize: 28, fontWeight: 800, color: "#2D2118", marginBottom: 28 }}>Verification Queue</h1>
-      </FadeIn>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-brown-dark">Verification Queue</h1>
 
-      <FadeIn delay={0.1}>
-        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              style={{
-                padding: "8px 16px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-                cursor: "pointer",
-                background: filter === f ? "#C89A2B" : "white",
-                color: filter === f ? "white" : "#4A2E1F",
-                border: filter === f ? "1.5px solid #C89A2B" : "1.5px solid #E7D8C6",
-                transition: "all 0.2s",
-              }}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </FadeIn>
+      {/* Filters */}
+      <div className="flex gap-2">
+        {["PENDING", "VERIFIED", "REJECTED", "ALL"].map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-4 py-2 rounded-lg text-[12px] font-semibold transition-colors ${
+              filter === f
+                ? "bg-gold text-white"
+                : "bg-white text-brown-dark border border-cream-dark hover:border-gold/30"
+            }`}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {filtered.map((item, i) => (
-          <FadeIn key={item.id} delay={i * 0.03}>
-            <div style={{
-              background: "white", borderRadius: 16, border: "1.5px solid #E7D8C6",
-              padding: "20px 24px", display: "flex", alignItems: "center", gap: 16,
-              transition: "all 0.2s",
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 20px rgba(74,46,31,0.06)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: "#2D2118" }}>{item.referredName}</span>
-                  <span style={{ padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#F0EBE3", color: "#7B5B43" }}>
-                    @{item.referredInstagram}
-                  </span>
-                  <span style={{
-                    padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
-                    background: item.status === "PENDING" ? "#FEF3C7" : item.status === "VERIFIED" ? "#DCFCE7" : "#FEE2E2",
-                    color: item.status === "PENDING" ? "#D97706" : item.status === "VERIFIED" ? "#16A34A" : "#DC2626",
-                  }}>
-                    {item.status}
-                  </span>
-                </div>
-                <p style={{ fontSize: 13, color: "#7B5B43" }}>
-                  Referred by: <strong style={{ color: "#2D2118" }}>{item.referrerName}</strong> · {new Date(item.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              {item.status === "PENDING" && (
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button
-                    onClick={() => handleAction(item.id, "approve")}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 4,
-                      padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-                      background: "#16A34A", color: "white", border: "none",
-                      cursor: "pointer", transition: "all 0.2s",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "#15803D"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "#16A34A"; }}
-                  >
-                    <Check style={{ width: 14, height: 14 }} /> Approve
-                  </button>
-                  <button
-                    onClick={() => handleAction(item.id, "reject")}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 4,
-                      padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
-                      background: "#FEE2E2", color: "#DC2626", border: "1.5px solid #FECACA",
-                      cursor: "pointer", transition: "all 0.2s",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "#FECACA"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "#FEE2E2"; }}
-                  >
-                    <X style={{ width: 14, height: 14 }} /> Reject
-                  </button>
-                </div>
-              )}
-            </div>
-          </FadeIn>
+      {/* Items */}
+      <div className="space-y-3">
+        {filtered.map((item) => (
+          <VerificationCard
+            key={item.id}
+            item={item}
+            onAction={handleAction}
+          />
         ))}
         {filtered.length === 0 && (
-          <div style={{
-            background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
-            padding: "48px 24px", textAlign: "center",
-          }}>
-            <CheckCircle style={{ width: 48, height: 48, color: "#E7D8C6", margin: "0 auto 12px" }} />
-            <p style={{ fontSize: 14, color: "#A08060" }}>No items to verify</p>
+          <div className="bg-white rounded-2xl border border-cream-dark p-12 text-center">
+            <CheckCircle className="h-12 w-12 text-cream-dark mx-auto mb-3" />
+            <p className="text-brown-light/50 text-sm">No items to verify</p>
           </div>
         )}
       </div>
-    </PageWrapper>
+    </div>
+  );
+}
+
+function VerificationCard({
+  item,
+  onAction,
+}: {
+  item: VerificationItem;
+  onAction: (id: string, action: "approve" | "reject", checks?: { followsPage: boolean; likedPost: boolean; commentedPost: boolean }) => void;
+}) {
+  const [follows, setFollows] = useState(item.followsPage);
+  const [liked, setLiked] = useState(item.likedPost);
+  const [commented, setCommented] = useState(item.commentedPost);
+
+  const allChecked = follows && liked && commented;
+
+  return (
+    <div className="bg-white rounded-2xl border border-cream-dark p-5 hover:shadow-md transition-shadow">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+            <Instagram className="h-5 w-5 text-gold" />
+          </div>
+          <div>
+            <p className="text-[15px] font-bold text-brown-dark">{item.referredInstagram}</p>
+            <p className="text-[12px] text-brown-light/50">
+              Referred by {item.referrerName} · {new Date(item.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+        <span
+          className="px-3 py-1 rounded-full text-[11px] font-semibold"
+          style={{
+            background: item.status === "PENDING" ? "#FEF3C7" : item.status === "VERIFIED" ? "#DCFCE7" : "#FEE2E2",
+            color: item.status === "PENDING" ? "#D97706" : item.status === "VERIFIED" ? "#16A34A" : "#DC2626",
+          }}
+        >
+          {item.status}
+        </span>
+      </div>
+
+      {/* Challenge Checks */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <label className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${
+          follows ? "bg-success/5 border-success/20" : "bg-cream/30 border-cream-dark"
+        }`}>
+          <input
+            type="checkbox"
+            checked={follows}
+            onChange={(e) => setFollows(e.target.checked)}
+            className="w-4 h-4 rounded accent-success"
+          />
+          <div>
+            <p className="text-[12px] font-semibold text-brown-dark">Follows Page</p>
+            <Heart className="h-3.5 w-3.5 text-brown-light/40 mt-0.5" />
+          </div>
+        </label>
+
+        <label className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${
+          liked ? "bg-success/5 border-success/20" : "bg-cream/30 border-cream-dark"
+        }`}>
+          <input
+            type="checkbox"
+            checked={liked}
+            onChange={(e) => setLiked(e.target.checked)}
+            className="w-4 h-4 rounded accent-success"
+          />
+          <div>
+            <p className="text-[12px] font-semibold text-brown-dark">Liked Post</p>
+            <Heart className="h-3.5 w-3.5 text-brown-light/40 mt-0.5" />
+          </div>
+        </label>
+
+        <label className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${
+          commented ? "bg-success/5 border-success/20" : "bg-cream/30 border-cream-dark"
+        }`}>
+          <input
+            type="checkbox"
+            checked={commented}
+            onChange={(e) => setCommented(e.target.checked)}
+            className="w-4 h-4 rounded accent-success"
+          />
+          <div>
+            <p className="text-[12px] font-semibold text-brown-dark">Commented</p>
+            <MessageCircle className="h-3.5 w-3.5 text-brown-light/40 mt-0.5" />
+          </div>
+        </label>
+      </div>
+
+      {/* Comment Preview */}
+      {item.commentText && (
+        <div className="bg-cream/40 rounded-xl px-4 py-2.5 mb-4 border border-cream-dark">
+          <p className="text-[12px] text-brown-light/50 mb-0.5">Comment:</p>
+          <p className="text-[13px] text-brown-dark font-medium">{item.commentText}</p>
+        </div>
+      )}
+
+      {/* Actions */}
+      {item.status === "PENDING" && (
+        <div className="flex gap-2">
+          <button
+            onClick={() => onAction(item.id, "approve", { followsPage: follows, likedPost: liked, commentedPost: commented })}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-semibold bg-success text-white hover:bg-green-700 transition-colors"
+          >
+            <Check className="h-3.5 w-3.5" /> Approve
+          </button>
+          <button
+            onClick={() => onAction(item.id, "reject", { followsPage: follows, likedPost: liked, commentedPost: commented })}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-semibold bg-error/10 text-error border border-error/20 hover:bg-error/20 transition-colors"
+          >
+            <X className="h-3.5 w-3.5" /> Reject
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

@@ -14,6 +14,7 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -31,14 +32,6 @@ interface DashboardData {
   totalParticipants: number;
 }
 
-function WhatsAppIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
-  );
-}
-
 function FacebookIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -47,34 +40,10 @@ function FacebookIcon({ className }: { className?: string }) {
   );
 }
 
-function TelegramIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-    </svg>
-  );
-}
-
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-    </svg>
-  );
-}
-
-function SnapchatIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12.925-.214.093-.04.195-.06.3-.06.337 0 .659.135.889.373.18.195.27.449.24.718-.03.3-.18.585-.42.795-.15.135-.33.24-.525.315l-.03.015c.15.075.285.165.405.27.24.225.375.54.375.885 0 .375-.165.72-.465.96-.165.135-.36.225-.57.285-.21.06-.435.09-.66.09-.105 0-.21-.015-.315-.03-.195 1.035-.72 1.995-1.455 2.7-.375.36-.81.645-1.29.825-.465.18-.96.255-1.455.255h-.3c-.495 0-1.005-.075-1.47-.255-.465-.18-.9-.465-1.275-.825-.72-.705-1.245-1.665-1.455-2.7-.105.015-.21.03-.315.03-.225 0-.45-.03-.66-.09-.21-.06-.405-.15-.57-.285-.3-.24-.465-.585-.465-.96 0-.345.135-.66.375-.885.12-.105.255-.195.405-.27l-.03-.015c-.195-.06-.375-.165-.525-.315-.24-.21-.39-.495-.42-.795-.03-.27.06-.525.24-.715.225-.24.54-.375.87-.375.105 0 .21.015.3.06.27.09.615.21.93.215.195 0 .33-.045.4-.09-.01-.165-.02-.33-.03-.51l-.003-.06c-.105-1.628-.228-3.654.3-4.847C7.354 1.07 10.716.794 11.706.794h.5z" />
-    </svg>
-  );
-}
-
-function XIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
 }
@@ -96,6 +65,7 @@ export default function DashboardPage() {
   >([]);
   const [refSearch, setRefSearch] = useState("");
   const [refPage, setRefPage] = useState(1);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const REF_PER_PAGE = 10;
 
   useEffect(() => {
@@ -129,81 +99,12 @@ export default function DashboardPage() {
 
   const { profile } = data;
   const firstName = profile.fullName.split(" ")[0];
-  const referralMessage = `Join Hearts by Charming Referral Challenge! Use my link: ${profile.referralLink}`;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     toast.success("Referral link copied!");
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const shareLinks = [
-    {
-      name: "WhatsApp",
-      icon: WhatsAppIcon,
-      url: `https://wa.me/?text=${encodeURIComponent(referralMessage)}`,
-      bg: "bg-[#25D366]",
-      hoverBg: "hover:bg-[#20BD5A]",
-      shadow: "hover:shadow-[0_8px_20px_rgba(37,211,102,0.3)]",
-    },
-    {
-      name: "Facebook",
-      icon: FacebookIcon,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(profile.referralLink)}`,
-      bg: "bg-[#1877F2]",
-      hoverBg: "hover:bg-[#1565C0]",
-      shadow: "hover:shadow-[0_8px_20px_rgba(24,119,242,0.3)]",
-    },
-    {
-      name: "Telegram",
-      icon: TelegramIcon,
-      url: `https://t.me/share/url?url=${encodeURIComponent(profile.referralLink)}&text=${encodeURIComponent("Join Hearts by Charming Referral Challenge!")}`,
-      bg: "bg-[#0088CC]",
-      hoverBg: "hover:bg-[#0077B3]",
-      shadow: "hover:shadow-[0_8px_20px_rgba(0,136,204,0.3)]",
-    },
-    {
-      name: "Instagram",
-      icon: InstagramIcon,
-      url: "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr",
-      bg: "bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737]",
-      hoverBg: "hover:opacity-90",
-      shadow: "hover:shadow-[0_8px_20px_rgba(225,48,108,0.3)]",
-    },
-    {
-      name: "TikTok",
-      icon: TikTokIcon,
-      url: "#",
-      bg: "bg-[#010101]",
-      hoverBg: "hover:bg-[#1a1a1a]",
-      shadow: "hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)]",
-    },
-    {
-      name: "Snapchat",
-      icon: SnapchatIcon,
-      url: `https://www.snapchat.com/scan?attachmentUrl=${encodeURIComponent(profile.referralLink)}`,
-      bg: "bg-[#FFFC00]",
-      hoverBg: "hover:bg-[#E6E300]",
-      shadow: "hover:shadow-[0_8px_20px_rgba(255,252,0,0.3)]",
-      textColor: "text-black",
-    },
-    {
-      name: "X",
-      icon: XIcon,
-      url: `https://x.com/intent/post?text=${encodeURIComponent(referralMessage)}`,
-      bg: "bg-[#000000]",
-      hoverBg: "hover:bg-[#1a1a1a]",
-      shadow: "hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)]",
-    },
-  ];
-
-  const handleTikTok = (e: React.MouseEvent) => {
-    e.preventDefault();
-    copyToClipboard(profile.referralLink);
-    toast.info("Link copied! Open TikTok and paste it in your bio or story.", {
-      duration: 5000,
-    });
   };
 
   const socials = [
@@ -441,41 +342,6 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          {/* Share Buttons */}
-          <div style={{ marginTop: 24 }}>
-            <p style={{ fontSize: 11, color: "#999", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 12 }}>
-              Share via
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-              {shareLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={link.name === "TikTok" ? handleTikTok : undefined}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    height: 40,
-                    padding: "0 16px",
-                    borderRadius: 10,
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: "#fff",
-                    background: link.bg.startsWith("bg-") ? undefined : link.bg,
-                    textDecoration: "none",
-                    transition: "all 0.2s",
-                  }}
-                  className={`${link.bg.startsWith("bg-") ? link.bg : ""} ${link.textColor || ""}`}
-                >
-                  <link.icon className="w-4 h-4" />
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -491,49 +357,72 @@ export default function DashboardPage() {
         }}
       >
         <div style={{ height: 2, background: "linear-gradient(to right, rgba(200,154,43,0.4), #C89A2B, rgba(200,154,43,0.4))" }} />
-        <div style={{ padding: "28px 32px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: "rgba(200,154,43,0.1)",
-                border: "1px solid rgba(200,154,43,0.2)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Clock style={{ width: 18, height: 18, color: "#C89A2B" }} />
-            </div>
-            <div>
-              <h2 style={{ fontSize: 17, fontWeight: 700, color: "#2D2118", margin: 0 }}>Referral History</h2>
-              <p style={{ fontSize: 12, color: "#999", marginTop: 2, marginBottom: 0 }}>Track every participant who joined using your referral link.</p>
-            </div>
+        <button
+          onClick={() => setHistoryOpen(!historyOpen)}
+          style={{
+            width: "100%",
+            padding: "28px 32px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            textAlign: "left",
+          }}
+        >
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              background: "rgba(200,154,43,0.1)",
+              border: "1px solid rgba(200,154,43,0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Clock style={{ width: 18, height: 18, color: "#C89A2B" }} />
           </div>
+          <div style={{ flex: 1 }}>
+            <h2 style={{ fontSize: 17, fontWeight: 700, color: "#2D2118", margin: 0 }}>Referral History</h2>
+            <p style={{ fontSize: 12, color: "#999", marginTop: 2, marginBottom: 0 }}>Track every participant who joined using your referral link.</p>
+          </div>
+          <ChevronDown
+            style={{
+              width: 20,
+              height: 20,
+              color: "#999",
+              transition: "transform 0.2s",
+              transform: historyOpen ? "rotate(180deg)" : "rotate(0deg)",
+            }}
+          />
+        </button>
 
-          {/* Search */}
-          <div style={{ position: "relative", marginTop: 20, marginBottom: 20 }}>
-            <Search style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", width: 16, height: 16, color: "#999" }} />
-            <input
-              type="text"
-              placeholder="Search by Instagram username..."
-              value={refSearch}
-              onChange={(e) => { setRefSearch(e.target.value); setRefPage(1); }}
-              style={{
-                width: "100%",
-                padding: "12px 14px 12px 40px",
-                borderRadius: 12,
-                border: "1px solid #E7D8C6",
-                background: "#FCF8F3",
-                fontSize: 13,
-                color: "#2D2118",
-                outline: "none",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
+        {historyOpen && (
+          <div style={{ padding: "0 32px 28px" }}>
+            {/* Search */}
+            <div style={{ position: "relative", marginBottom: 20 }}>
+              <Search style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", width: 16, height: 16, color: "#999" }} />
+              <input
+                type="text"
+                placeholder="Search by Instagram username..."
+                value={refSearch}
+                onChange={(e) => { setRefSearch(e.target.value); setRefPage(1); }}
+                style={{
+                  width: "100%",
+                  padding: "12px 14px 12px 40px",
+                  borderRadius: 12,
+                  border: "1px solid #E7D8C6",
+                  background: "#FCF8F3",
+                  fontSize: 13,
+                  color: "#2D2118",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
 
           {/* Table or Empty */}
           {referrals.length === 0 ? (
@@ -667,7 +556,8 @@ export default function DashboardPage() {
               })()}
             </>
           )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* ─── Leaderboard Card ─── */}

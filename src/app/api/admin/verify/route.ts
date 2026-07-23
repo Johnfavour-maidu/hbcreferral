@@ -24,8 +24,11 @@ export async function GET() {
     const formatted = verifications.map((v) => ({
       id: v.id,
       referrerName: v.referrer.profile?.fullName || "Unknown",
-      referredName: v.referredUser?.profile?.fullName || "Unknown",
-      referredInstagram: v.referredUser?.profile?.instagram || v.referredInstagram,
+      referredInstagram: v.referredInstagram,
+      followsPage: v.followsPage,
+      likedPost: v.likedPost,
+      commentedPost: v.commentedPost,
+      commentText: v.commentText,
       status: v.status,
       createdAt: v.createdAt.toISOString(),
     }));
@@ -48,20 +51,26 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, action } = body;
+    const { id, action, followsPage, likedPost, commentedPost } = body;
 
     const referral = await prisma.referral.findUnique({ where: { id } });
     if (!referral) {
       return NextResponse.json({ error: "Referral not found" }, { status: 404 });
     }
 
+    const updateData: Record<string, unknown> = {
+      status: action === "approve" ? "VERIFIED" : "REJECTED",
+      verifiedAt: action === "approve" ? new Date() : null,
+      verifiedBy: session.user.id,
+    };
+
+    if (followsPage !== undefined) updateData.followsPage = followsPage;
+    if (likedPost !== undefined) updateData.likedPost = likedPost;
+    if (commentedPost !== undefined) updateData.commentedPost = commentedPost;
+
     const updated = await prisma.referral.update({
       where: { id },
-      data: {
-        status: action === "approve" ? "VERIFIED" : "REJECTED",
-        verifiedAt: action === "approve" ? new Date() : null,
-        verifiedBy: session.user.id,
-      },
+      data: updateData,
     });
 
     if (action === "approve") {

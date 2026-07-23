@@ -73,10 +73,14 @@ model Referral {
   id                String         @id @default(cuid())
   campaignId        String         @default("referral-challenge-2026")
   referrerId        String
-  referredById      String         @unique
-  referredEmail     String         @unique
-  referredPhone     String         @unique
-  referredInstagram String         @unique
+  referredById      String?        @unique
+  referredEmail     String?
+  referredPhone     String?
+  referredInstagram String
+  followsPage       Boolean        @default(false)
+  likedPost         Boolean        @default(false)
+  commentedPost     Boolean        @default(false)
+  commentText       String?
   status            ReferralStatus @default(PENDING)
   verifiedAt        DateTime?
   verifiedBy        String?
@@ -88,6 +92,7 @@ model Referral {
   referredUser  User?     @relation("ReferredUser", fields: [referredById], references: [id])
   campaign      Campaign  @relation(fields: [campaignId], references: [id])
 
+  @@unique([referredInstagram, campaignId])
   @@map("referrals")
 }
 
