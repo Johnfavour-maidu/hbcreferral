@@ -8,27 +8,22 @@ const faqs = [
   {
     question: "How do I participate?",
     answer:
-      "Simply register on the platform, get your unique referral code, and share it with friends. When they sign up using your link, you earn referrals.",
+      "Simply register on the platform, get your unique referral code, and share it with friends. When they perform all tasks using your link, you earn referrals.",
   },
   {
     question: "How are referrals verified?",
     answer:
-      "Each referred person must follow Hearts by Charming on Instagram and confirm their username. Our team then verifies every referral to ensure authenticity.",
-  },
-  {
-    question: "What prizes can I win?",
-    answer:
-      "Gold tier: ₦20,000 (Highest referrals), Silver tier: ₦15,000 (2nd highest referrals), Bronze tier: ₦10,000 (3rd highest referrals).",
+      "Each referred person would be counted as a pending referral until our team verifies every referral to ensure authenticity.",
   },
   {
     question: "Can I refer myself or use multiple accounts?",
     answer:
-      "No. Self-referral, duplicate emails, phones, and Instagram accounts are automatically detected and blocked.",
+      "No. Self-referral, duplicate emails, phones, and Instagram accounts are not permitted. Failure to adhere may result in permanent deletion of participant's data.",
   },
   {
     question: "When will I receive my reward?",
     answer:
-      "Rewards are distributed within 2 weeks after the campaign ends. We'll contact you via email and Instagram.",
+      "Rewards are distributed immediately after the campaign ends. We'll contact you via Phone number, Email or Instagram.",
   },
 ];
 

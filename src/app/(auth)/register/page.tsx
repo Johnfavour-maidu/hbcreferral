@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterInput } from "@/lib/validations";
 import { NIGERIAN_STATES } from "@/config/site";
 import { signIn } from "next-auth/react";
-import { User, Mail, Phone, MapPin, GraduationCap, Instagram, CheckCircle2, Loader2 } from "lucide-react";
+import { User, Mail, Phone, MapPin, Instagram, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { PasswordStrength } from "@/components/ui/password-strength";
 import {
@@ -134,37 +134,26 @@ function RegisterForm() {
               {...register("phone")}
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-[6px]">
-                <label className="text-[13px] font-medium text-brown-dark/80">State</label>
-                <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-[16px] w-[16px] text-brown-light/30 pointer-events-none" />
-                  <select
-                    className={`flex h-[50px] w-full rounded-xl border border-border bg-white/80 pl-[42px] pr-4 text-[14px] text-brown-dark shadow-[0_1px_2px_rgba(74,46,31,0.04)] focus:shadow-[0_0_0_3px_rgba(200,154,43,0.1)] focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${errors.state ? "border-error/60" : ""}`}
-                    {...register("state")}
-                  >
-                    <option value="">Select state</option>
-                    {NIGERIAN_STATES.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="h-4 w-4 text-brown-light/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
+            <div className="space-y-[6px]">
+              <label className="text-[13px] font-medium text-brown-dark/80">State</label>
+              <div className="relative">
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-[16px] w-[16px] text-brown-light/30 pointer-events-none" />
+                <select
+                  className={`flex h-[50px] w-full rounded-xl border border-border bg-white/80 pl-[42px] pr-4 text-[14px] text-brown-dark shadow-[0_1px_2px_rgba(74,46,31,0.04)] focus:shadow-[0_0_0_3px_rgba(200,154,43,0.1)] focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${errors.state ? "border-error/60" : ""}`}
+                  {...register("state")}
+                >
+                  <option value="">Select state</option>
+                  {NIGERIAN_STATES.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <svg className="h-4 w-4 text-brown-light/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </div>
-                {errors.state && <p className="text-error text-[12px]">{errors.state.message}</p>}
               </div>
-
-              <AuthInput
-                id="school"
-                label="School"
-                placeholder="School name"
-                icon={GraduationCap}
-                error={errors.school?.message}
-                {...register("school")}
-              />
+              {errors.state && <p className="text-error text-[12px]">{errors.state.message}</p>}
             </div>
 
             <AuthInput

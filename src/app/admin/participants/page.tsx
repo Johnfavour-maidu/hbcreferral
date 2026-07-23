@@ -17,7 +17,6 @@ interface Participant {
   phone: string;
   instagram: string;
   state: string;
-  school: string;
   referralCode: string;
   totalReferrals: number;
   verifiedReferrals: number;
@@ -48,8 +47,8 @@ export default function AdminParticipantsPage() {
   });
 
   const exportCSV = () => {
-    const headers = ["Participant ID", "Name", "Email", "Phone", "Instagram", "State", "School", "Referrals", "Verified"];
-    const rows = filtered.map((p) => [p.participantId, p.fullName, p.email, p.phone, p.instagram, p.state, p.school, p.totalReferrals, p.verifiedReferrals]);
+    const headers = ["Participant ID", "Name", "Email", "Phone", "Instagram", "State", "Referrals", "Verified"];
+    const rows = filtered.map((p) => [p.participantId, p.fullName, p.email, p.phone, p.instagram, p.state, p.totalReferrals, p.verifiedReferrals]);
     const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);

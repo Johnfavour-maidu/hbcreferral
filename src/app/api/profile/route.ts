@@ -10,7 +10,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { fullName, phone, state, school } = body;
+    const { fullName, phone, state } = body;
 
     await prisma.user.update({
       where: { id: session.user.id },
@@ -19,7 +19,7 @@ export async function PUT(request: NextRequest) {
 
     await prisma.profile.update({
       where: { userId: session.user.id },
-      data: { fullName, state, school },
+      data: { fullName, state },
     });
 
     return NextResponse.json({ success: true });

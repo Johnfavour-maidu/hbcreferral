@@ -13,7 +13,6 @@ export const registerSchema = z
       .max(15, "Phone number is too long")
       .regex(/^(\+234|0)[0-9]{10}$/, "Enter a valid Nigerian phone number (e.g. 08012345678)"),
     state: z.string().optional().default(""),
-    school: z.string().optional().default(""),
     instagram: z
       .string()
       .min(1, "Instagram username is required")
@@ -37,7 +36,7 @@ export const registerSchema = z
   });
 
 export const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().min(1, "Email or Instagram username is required"),
   password: z.string().min(1, "Password is required"),
 });
 
@@ -45,7 +44,6 @@ export const profileSchema = z.object({
   fullName: z.string().min(2).max(100),
   phone: z.string().min(10).max(15),
   state: z.string().min(2),
-  school: z.string().min(2),
   instagram: z.string().regex(/^@?[A-Za-z0-9_.]+$/),
 });
 

@@ -13,14 +13,19 @@ export const {
     Credentials({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: { label: "Email or Instagram", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
+        const identifier = credentials.email as string;
+        const isEmail = identifier.includes("@");
+
+        const user = await prisma.user.findFirst({
+          where: isEmail
+            ? { email: identifier }
+            : { profile: { instagram: identifier.startsWith("@") ? identifier : `@${identifier}` } },
           include: { profile: true },
         });
 

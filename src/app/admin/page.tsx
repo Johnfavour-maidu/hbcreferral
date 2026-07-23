@@ -37,7 +37,6 @@ interface Participant {
   phone: string;
   instagram: string;
   state: string;
-  school: string;
   referralCode: string;
   totalReferrals: number;
   verifiedReferrals: number;
@@ -303,7 +302,7 @@ export default function AdminDashboard() {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                  {["ID", "Full Name", "Email", "Phone", "Instagram", "State", "School", "Refs", "Verified", "Status", "Actions"].map((h) => (
+                  {["ID", "Full Name", "Email", "Phone", "Instagram", "State", "Refs", "Verified", "Status", "Actions"].map((h) => (
                     <th key={h} style={{
                       padding: "12px 14px", fontSize: 11, fontWeight: 700,
                       textTransform: "uppercase" as const, letterSpacing: "0.05em",
@@ -325,7 +324,6 @@ export default function AdminDashboard() {
                     <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.phone}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>@{p.instagram}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.state}</td>
-                    <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.school}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, fontWeight: 700, color: "#C89A2B", textAlign: "center" }}>{p.totalReferrals}</td>
                     <td style={{ padding: "12px 14px", textAlign: "center" }}>
                       <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "#DCFCE7", color: "#16A34A" }}>{p.verifiedReferrals}</span>

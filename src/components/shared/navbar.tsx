@@ -45,7 +45,7 @@ export function Navbar() {
           {hideButtons ? (
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="inline-flex items-center gap-2 h-12 px-6 rounded-xl bg-gold text-white font-semibold text-[15px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
+              className="inline-flex items-center gap-2 h-12 px-8 rounded-xl border-2 border-[#4A2E1F] bg-transparent text-[#4A2E1F] font-semibold text-[15px] hover:bg-[#4A2E1F] hover:text-white transition-all"
             >
               <LogOut className="h-4 w-4" />
               Logout
@@ -83,7 +83,7 @@ export function Navbar() {
             <div className="py-4 space-y-2 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
               {hideButtons ? (
                 <button
-                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-gold text-white font-semibold text-[15px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
+                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl border-2 border-[#4A2E1F] bg-transparent text-[#4A2E1F] font-semibold text-[15px] hover:bg-[#4A2E1F] hover:text-white transition-all"
                   onClick={() => {
                     setMobileOpen(false);
                     signOut({ callbackUrl: "/" });

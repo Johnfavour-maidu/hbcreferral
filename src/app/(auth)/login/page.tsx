@@ -59,9 +59,8 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-[18px]">
             <AuthInput
               id="email"
-              label="Email Address"
-              type="email"
-              placeholder="you@example.com"
+              label="Email or Instagram Username"
+              placeholder="you@example.com or @username"
               icon={Mail}
               error={errors.email?.message}
               {...register("email")}
