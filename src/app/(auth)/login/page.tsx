@@ -42,9 +42,23 @@ export default function LoginPage() {
         redirect: false,
       });
       if (result?.error) throw new Error("Invalid email or password");
-      const res = await fetch("/api/auth/session");
-      const session = await res.json();
-      const role = session?.user?.role;
+
+      // Decode JWT from cookie to get role (avoids extra /api/auth/session fetch)
+      const cookieName = process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.session-token"
+        : "next-auth.session-token";
+      const token = document.cookie
+        .split("; ")
+        .find((c) => c.startsWith(`${cookieName}=`))
+        ?.split("=")[1];
+      let role: string | undefined;
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          role = payload.role;
+        } catch {}
+      }
+
       if (role === "ADMIN" || role === "MODERATOR") {
         window.location.href = "/admin";
       } else {

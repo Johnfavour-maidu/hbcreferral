@@ -26,7 +26,14 @@ export const {
           where: isEmail
             ? { email: identifier }
             : { profile: { instagram: identifier.startsWith("@") ? identifier : `@${identifier}` } },
-          include: { profile: true },
+          select: {
+            id: true,
+            email: true,
+            passwordHash: true,
+            role: true,
+            isActive: true,
+            profile: { select: { fullName: true } },
+          },
         });
 
         if (!user || !user.isActive) return null;
