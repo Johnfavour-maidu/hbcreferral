@@ -32,7 +32,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 16 }}>
+    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 24 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -111,7 +111,7 @@ export function HowItWorks() {
 
         {/* Mobile vertical stepper */}
         <div className="md:hidden relative">
-          <div className="space-y-8">
+          <div className="space-y-10">
             {steps.map((step, i) => (
               <motion.div
                 key={step.number}

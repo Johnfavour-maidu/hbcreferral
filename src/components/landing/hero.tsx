@@ -34,7 +34,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1, ease }}
-              className="text-[46px] sm:text-[52px] lg:text-[72px] font-extrabold text-brown-dark leading-[1.1] tracking-tight mb-6 sm:mb-5"
+              className="text-[54px] sm:text-[52px] lg:text-[72px] font-extrabold text-brown-dark leading-[1.1] tracking-tight mb-6 sm:mb-5"
             >
               Join the Hearts by Charming{" "}
               <span className="text-gradient-gold">Referral Challenge</span>
