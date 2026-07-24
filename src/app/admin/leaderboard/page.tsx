@@ -8,8 +8,9 @@ interface LeaderboardEntry {
   rank: number;
   userId: string;
   fullName: string;
-  instagram: string;
+  totalReferrals: number;
   verifiedReferrals: number;
+  status: string;
 }
 
 export default function AdminLeaderboardPage() {
@@ -23,6 +24,12 @@ export default function AdminLeaderboardPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  const statusBadge = (status: string) => {
+    if (status === "ACTIVE") return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#DCFCE7", color: "#16A34A" }}>Active</span>;
+    if (status === "SUSPENDED") return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#FEF3C7", color: "#D97706" }}>Suspended</span>;
+    return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#FEE2E2", color: "#DC2626" }}>Deleted</span>;
+  };
 
   if (loading) {
     return (
@@ -84,34 +91,15 @@ export default function AdminLeaderboardPage() {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                  <th style={{
-                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
-                    textTransform: "uppercase", letterSpacing: "0.05em",
-                    color: "#A08060", textAlign: "center", width: 60,
-                  }}>
-                    Rank
-                  </th>
-                  <th style={{
-                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
-                    textTransform: "uppercase", letterSpacing: "0.05em",
-                    color: "#A08060", textAlign: "left",
-                  }}>
-                    Name
-                  </th>
-                  <th style={{
-                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
-                    textTransform: "uppercase", letterSpacing: "0.05em",
-                    color: "#A08060", textAlign: "left",
-                  }}>
-                    Username
-                  </th>
-                  <th style={{
-                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
-                    textTransform: "uppercase", letterSpacing: "0.05em",
-                    color: "#A08060", textAlign: "center",
-                  }}>
-                    Verified Referrals
-                  </th>
+                  {["Rank", "Participant", "Total Referrals", "Verified Referrals", "Status"].map((h) => (
+                    <th key={h} style={{
+                      padding: "14px 20px", fontSize: 11, fontWeight: 700,
+                      textTransform: "uppercase", letterSpacing: "0.05em",
+                      color: "#A08060", textAlign: h === "Rank" ? "center" : h === "Total Referrals" || h === "Verified Referrals" ? "center" : "left",
+                    }}>
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
@@ -156,8 +144,15 @@ export default function AdminLeaderboardPage() {
                           </span>
                         </div>
                       </td>
-                      <td style={{ padding: "14px 20px", fontSize: 13, color: "#7B5B43" }}>
-                        {entry.instagram}
+                      <td style={{ padding: "14px 20px", textAlign: "center" }}>
+                        <span style={{
+                          display: "inline-flex", alignItems: "center", gap: 4,
+                          background: "#FFF8EF", color: "#C89A2B",
+                          padding: "4px 12px", borderRadius: 20,
+                          fontSize: 13, fontWeight: 700,
+                        }}>
+                          {entry.totalReferrals}
+                        </span>
                       </td>
                       <td style={{ padding: "14px 20px", textAlign: "center" }}>
                         <span style={{
@@ -168,6 +163,9 @@ export default function AdminLeaderboardPage() {
                         }}>
                           {entry.verifiedReferrals}
                         </span>
+                      </td>
+                      <td style={{ padding: "14px 20px", textAlign: "center" }}>
+                        {statusBadge(entry.status)}
                       </td>
                     </tr>
                   );

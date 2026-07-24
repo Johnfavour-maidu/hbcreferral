@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Mail, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -15,6 +16,7 @@ import {
 } from "@/components/auth";
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
@@ -23,11 +25,22 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await new Promise((r) => setTimeout(r, 1500));
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send verification code");
+      }
+
+      sessionStorage.setItem("reset-email", email.trim().toLowerCase());
       setSent(true);
-      toast.success("Reset link sent!");
-    } catch {
-      toast.error("Failed to send reset link");
+      toast.success("Verification code sent!");
+    } catch (error: any) {
+      toast.error("Failed to send code", { description: error.message });
     } finally {
       setIsLoading(false);
     }
@@ -41,8 +54,8 @@ export default function ForgotPasswordPage() {
           title={sent ? "Check Your Email" : "Forgot Password?"}
           subtitle={
             sent
-              ? "We've sent a password reset link to your email."
-              : "Enter your email and we'll send you a reset link."
+              ? "We've sent a verification code to your email."
+              : "Enter your registered email address and we'll send you a verification code."
           }
         />
 
@@ -53,18 +66,28 @@ export default function ForgotPasswordPage() {
                 <CheckCircle2 className="h-7 w-7 text-success" />
               </div>
               <p className="text-[14px] text-brown-light/60 text-center">
-                Didn&apos;t receive the email? Check your spam folder or try again.
+                Didn&apos;t receive the code? Check your spam folder or try again.
               </p>
-              <AuthButton
-                type="button"
-                isLoading={false}
-                onClick={() => {
-                  setSent(false);
-                  setEmail("");
-                }}
-              >
-                Try Again
-              </AuthButton>
+              <div className="flex flex-col gap-3 w-full">
+                <AuthButton
+                  type="button"
+                  isLoading={false}
+                  onClick={() => router.push("/verify-otp")}
+                >
+                  Enter Verification Code
+                </AuthButton>
+                <AuthButton
+                  type="button"
+                  isLoading={false}
+                  variant="outline"
+                  onClick={() => {
+                    setSent(false);
+                    setEmail("");
+                  }}
+                >
+                  Try Again
+                </AuthButton>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-[18px]">
@@ -80,7 +103,7 @@ export default function ForgotPasswordPage() {
               />
               <div style={{ paddingTop: 24 }}>
                 <AuthButton type="submit" isLoading={isLoading} loadingText="Sending...">
-                  Send Reset Link
+                  Send Verification Code
                 </AuthButton>
               </div>
             </form>

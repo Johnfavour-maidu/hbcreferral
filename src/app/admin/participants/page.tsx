@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { Search, Download, Eye, Ban } from "lucide-react";
+import { Search, Download, Eye, Ban, RotateCcw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface Participant {
@@ -21,6 +21,7 @@ interface Participant {
   totalReferrals: number;
   verifiedReferrals: number;
   isActive: boolean;
+  participantStatus: string;
   createdAt: string;
 }
 
@@ -29,6 +30,7 @@ export default function AdminParticipantsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/participants")
@@ -38,17 +40,101 @@ export default function AdminParticipantsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const normalize = (s: string) => s.replace(/^@+/, "").toLowerCase();
+
   const filtered = participants.filter((p) => {
-    const q = search.toLowerCase();
-    const match = p.participantId.toLowerCase().includes(q) || p.fullName.toLowerCase().includes(q) || p.email.toLowerCase().includes(q) || p.instagram.toLowerCase().includes(q);
-    if (filter === "active") return match && p.isActive;
-    if (filter === "inactive") return match && !p.isActive;
+    const q = normalize(search);
+    const match =
+      normalize(p.participantId).includes(q) ||
+      normalize(p.fullName).includes(q) ||
+      normalize(p.email).includes(q) ||
+      normalize(p.instagram).includes(q);
+    if (filter === "active") return match && p.participantStatus === "ACTIVE";
+    if (filter === "suspended") return match && p.participantStatus === "SUSPENDED";
+    if (filter === "deleted") return match && p.participantStatus === "DELETED";
     return match;
   });
 
+  const handleSuspend = async (p: Participant) => {
+    if (!confirm(`Suspend ${p.fullName}? They will lose access.`)) return;
+    setActionLoading(p.id);
+    try {
+      const res = await fetch("/api/admin/participants", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: p.id, action: "suspend" }),
+      });
+      if (res.ok) {
+        setParticipants((prev) =>
+          prev.map((x) => (x.id === p.id ? { ...x, isActive: false, participantStatus: "SUSPENDED" } : x))
+        );
+        toast.success(`${p.fullName} suspended`);
+      } else {
+        toast.error("Failed to suspend participant");
+      }
+    } catch {
+      toast.error("Failed to suspend participant");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleRestore = async (p: Participant) => {
+    setActionLoading(p.id);
+    try {
+      const res = await fetch("/api/admin/participants", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: p.id, action: "restore" }),
+      });
+      if (res.ok) {
+        setParticipants((prev) =>
+          prev.map((x) => (x.id === p.id ? { ...x, isActive: true, participantStatus: "ACTIVE" } : x))
+        );
+        toast.success(`${p.fullName} restored`);
+      } else {
+        toast.error("Failed to restore participant");
+      }
+    } catch {
+      toast.error("Failed to restore participant");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleDelete = async (p: Participant) => {
+    if (!confirm(`Delete ${p.fullName}? They will be moved to recycle bin.`)) return;
+    setActionLoading(p.id);
+    try {
+      const res = await fetch("/api/admin/participants", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: p.id, action: "softDelete" }),
+      });
+      if (res.ok) {
+        setParticipants((prev) =>
+          prev.map((x) => (x.id === p.id ? { ...x, isActive: false, participantStatus: "DELETED" } : x))
+        );
+        toast.success(`${p.fullName} moved to recycle bin`);
+      } else {
+        toast.error("Failed to delete participant");
+      }
+    } catch {
+      toast.error("Failed to delete participant");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const statusBadge = (status: string) => {
+    if (status === "ACTIVE") return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#DCFCE7", color: "#16A34A" }}>Active</span>;
+    if (status === "SUSPENDED") return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#FEF3C7", color: "#D97706" }}>Suspended</span>;
+    return <span style={{ display: "inline-block", padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: "#FEE2E2", color: "#DC2626" }}>Deleted</span>;
+  };
+
   const exportCSV = () => {
-    const headers = ["Participant ID", "Name", "Email", "Phone", "Instagram", "State", "Referrals", "Verified"];
-    const rows = filtered.map((p) => [p.participantId, p.fullName, p.email, p.phone, p.instagram, p.state, p.totalReferrals, p.verifiedReferrals]);
+    const headers = ["Participant ID", "Name", "Email", "Phone", "Instagram", "State", "Refs", "Verified", "Status"];
+    const rows = filtered.map((p) => [p.participantId, p.fullName, p.email, p.phone, p.instagram, p.state, p.totalReferrals, p.verifiedReferrals, p.participantStatus]);
     const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -110,7 +196,7 @@ export default function AdminParticipantsPage() {
               />
             </div>
             <div style={{ display: "flex", gap: 6 }}>
-              {["all", "active", "inactive"].map((f) => (
+              {["all", "active", "suspended", "deleted"].map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
@@ -153,34 +239,49 @@ export default function AdminParticipantsPage() {
                     <td style={{ padding: "12px 8px", fontSize: 12, fontFamily: "monospace", fontWeight: 600, color: "#C89A2B" }}>{p.participantId}</td>
                     <td style={{ padding: "12px 8px", fontSize: 13, fontWeight: 600, color: "#2D2118" }}>{p.fullName}</td>
                     <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.email}</td>
-                    <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.instagram}</td>
+                    <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.instagram.replace(/^@+/, "")}</td>
                     <td style={{ padding: "12px 8px", fontSize: 13, color: "#7B5B43" }}>{p.state}</td>
                     <td style={{ padding: "12px 8px", fontSize: 13, fontWeight: 700, color: "#C89A2B", textAlign: "center" }}>{p.totalReferrals}</td>
                     <td style={{ padding: "12px 8px", fontSize: 13, fontWeight: 700, color: "#16A34A", textAlign: "center" }}>{p.verifiedReferrals}</td>
-                    <td style={{ padding: "12px 8px", textAlign: "center" }}>
-                      <span style={{
-                        display: "inline-block", padding: "3px 10px", borderRadius: 20,
-                        fontSize: 11, fontWeight: 600,
-                        background: p.isActive ? "#DCFCE7" : "#FEE2E2",
-                        color: p.isActive ? "#16A34A" : "#DC2626",
-                      }}>
-                        {p.isActive ? "Active" : "Suspended"}
-                      </span>
-                    </td>
+                    <td style={{ padding: "12px 8px", textAlign: "center" }}>{statusBadge(p.participantStatus)}</td>
                     <td style={{ padding: "12px 8px", textAlign: "center" }}>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
-                        <button style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#7B5B43", transition: "all 0.2s" }}
-                          onMouseEnter={(e) => { e.currentTarget.style.background = "#F0EBE3"; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-                        >
-                          <Eye style={{ width: 14, height: 14 }} />
-                        </button>
-                        <button style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#DC2626", transition: "all 0.2s" }}
-                          onMouseEnter={(e) => { e.currentTarget.style.background = "#FEE2E2"; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-                        >
-                          <Ban style={{ width: 14, height: 14 }} />
-                        </button>
+                        {p.participantStatus === "ACTIVE" && (
+                          <>
+                            <button
+                              disabled={actionLoading === p.id}
+                              onClick={() => handleSuspend(p)}
+                              title="Suspend"
+                              style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#D97706", transition: "all 0.2s" }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = "#FEF3C7"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                            >
+                              <Ban style={{ width: 14, height: 14 }} />
+                            </button>
+                            <button
+                              disabled={actionLoading === p.id}
+                              onClick={() => handleDelete(p)}
+                              title="Delete"
+                              style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#DC2626", transition: "all 0.2s" }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = "#FEE2E2"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                            >
+                              <Trash2 style={{ width: 14, height: 14 }} />
+                            </button>
+                          </>
+                        )}
+                        {(p.participantStatus === "SUSPENDED" || p.participantStatus === "DELETED") && (
+                          <button
+                            disabled={actionLoading === p.id}
+                            onClick={() => handleRestore(p)}
+                            title="Restore"
+                            style={{ width: 30, height: 30, borderRadius: 8, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#16A34A", transition: "all 0.2s" }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = "#DCFCE7"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+                          >
+                            <RotateCcw style={{ width: 14, height: 14 }} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

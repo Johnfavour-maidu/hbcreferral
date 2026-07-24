@@ -2,107 +2,167 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-interface EmailOptions {
-  to: string;
-  subject: string;
-  html: string;
-}
+const FROM_EMAIL = "Hearts by Charming <onboarding@resend.dev>";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://hbcreferral.vercel.app";
 
-async function sendEmail({ to, subject, html }: EmailOptions) {
+export async function sendWelcomeEmail({
+  email,
+  fullName,
+  participantId,
+  referralCode,
+}: {
+  email: string;
+  fullName: string;
+  participantId: string;
+  referralCode: string;
+}) {
   try {
     await resend.emails.send({
-      from: "Hearts by Charming <noreply@heartsbycharming.org>",
-      to,
-      subject,
-      html,
+      from: FROM_EMAIL,
+      to: email,
+      subject: "Welcome to Hearts by Charming Referral Campaign!",
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: Arial, sans-serif; background: #FFF8EF; margin: 0; padding: 40px 20px;">
+          <div style="max-width: 520px; margin: 0 auto; background: white; border-radius: 16px; border: 1px solid #E7D8C6; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #4A2E1F, #6B3F2A); padding: 32px; text-align: center;">
+              <h1 style="color: #FFF8EF; font-size: 22px; margin: 0;">Hearts by Charming</h1>
+              <p style="color: #C89A2B; font-size: 13px; margin: 6px 0 0;">Referral Campaign 2026</p>
+            </div>
+            <div style="padding: 32px;">
+              <h2 style="color: #2D2118; font-size: 20px; margin: 0 0 16px;">Welcome, ${fullName}! 👋</h2>
+              <p style="color: #7B5B43; font-size: 14px; line-height: 1.7; margin: 0 0 20px;">
+                Thank you for joining the Hearts by Charming Referral Campaign. You're now part of an exclusive community competing to win amazing cash prizes.
+              </p>
+              <div style="background: #FFF8EF; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                <p style="color: #7B5B43; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px;">Your Participant ID</p>
+                <p style="color: #C89A2B; font-size: 18px; font-weight: 800; margin: 0;">${participantId}</p>
+              </div>
+              <div style="background: #FFF8EF; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                <p style="color: #7B5B43; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px;">Your Referral Code</p>
+                <p style="color: #C89A2B; font-size: 18px; font-weight: 800; margin: 0;">${referralCode}</p>
+              </div>
+              <a href="${APP_URL}/dashboard" style="display: block; text-align: center; background: #C89A2B; color: white; text-decoration: none; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 14px;">
+                Go to Dashboard
+              </a>
+            </div>
+            <div style="padding: 16px 32px; border-top: 1px solid #F0EBE3; text-align: center;">
+              <p style="color: #A08060; font-size: 11px; margin: 0;">© 2026 Hearts by Charming. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
     });
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error("Failed to send welcome email:", error);
   }
 }
 
-export async function sendWelcomeEmail(name: string, email: string, referralCode: string, referralLink: string) {
-  await sendEmail({
-    to: email,
-    subject: "Welcome to Hearts by Charming Referral Challenge!",
-    html: `
-      <div style="font-family: 'Poppins', sans-serif; max-width: 600px; margin: 0 auto; background: #FFF8EF; padding: 40px;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #5B2D90; font-size: 28px;">Welcome to Hearts by Charming! 💜</h1>
-        </div>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">Hi ${name},</p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">
-          You've successfully joined the Hearts by Charming Referral Challenge 2026! We're thrilled to have you on board.
-        </p>
-        <div style="background: #5B2D90; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
-          <p style="color: #C89A2B; font-size: 14px; margin-bottom: 8px;">YOUR REFERRAL CODE</p>
-          <p style="color: #FFF8EF; font-size: 32px; font-weight: bold; letter-spacing: 4px;">${referralCode}</p>
-        </div>
-        <div style="background: #F5E6D0; border-radius: 12px; padding: 24px; margin: 24px 0;">
-          <p style="color: #4A2E1F; font-size: 14px; margin-bottom: 8px;">SHARE YOUR LINK</p>
-          <p style="color: #5B2D90; font-size: 16px; font-weight: 600; word-break: break-all;">${referralLink}</p>
-        </div>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">
-          Share your unique link with friends and earn rewards for every verified referral!
-        </p>
-        <div style="text-align: center; margin-top: 30px;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #5B2D90; color: #FFF8EF; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">Go to Dashboard</a>
-        </div>
-      </div>
-    `,
-  });
+export async function sendReferralApprovedEmail({
+  email,
+  fullName,
+  referredInstagram,
+}: {
+  email: string;
+  fullName: string;
+  referredInstagram: string;
+}) {
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: "Your Referral Has Been Approved! 🎉",
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: Arial, sans-serif; background: #FFF8EF; margin: 0; padding: 40px 20px;">
+          <div style="max-width: 520px; margin: 0 auto; background: white; border-radius: 16px; border: 1px solid #E7D8C6; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #4A2E1F, #6B3F2A); padding: 32px; text-align: center;">
+              <h1 style="color: #FFF8EF; font-size: 22px; margin: 0;">Hearts by Charming</h1>
+              <p style="color: #C89A2B; font-size: 13px; margin: 6px 0 0;">Referral Campaign 2026</p>
+            </div>
+            <div style="padding: 32px;">
+              <h2 style="color: #2D2118; font-size: 20px; margin: 0 0 16px;">Congratulations, ${fullName}! 🎉</h2>
+              <p style="color: #7B5B43; font-size: 14px; line-height: 1.7; margin: 0 0 20px;">
+                Great news! Your referral <strong>@${referredInstagram.replace("@", "")}</strong> has been verified and approved by our team.
+              </p>
+              <div style="background: #DCFCE7; border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
+                <p style="color: #16A34A; font-size: 14px; font-weight: 700; margin: 0;">+1 Verified Referral</p>
+              </div>
+              <p style="color: #7B5B43; font-size: 14px; line-height: 1.7; margin: 0 0 24px;">
+                Keep sharing your referral link to climb the leaderboard and win bigger prizes!
+              </p>
+              <a href="${APP_URL}/dashboard" style="display: block; text-align: center; background: #C89A2B; color: white; text-decoration: none; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 14px;">
+                View Dashboard
+              </a>
+            </div>
+            <div style="padding: 16px 32px; border-top: 1px solid #F0EBE3; text-align: center;">
+              <p style="color: #A08060; font-size: 11px; margin: 0;">© 2026 Hearts by Charming. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    });
+  } catch (error) {
+    console.error("Failed to send referral approved email:", error);
+  }
 }
 
-export async function sendReferralVerifiedEmail(name: string, email: string, count: number) {
-  await sendEmail({
-    to: email,
-    subject: "Your Referral Has Been Verified! 🎉",
-    html: `
-      <div style="font-family: 'Poppins', sans-serif; max-width: 600px; margin: 0 auto; background: #FFF8EF; padding: 40px;">
-        <h1 style="color: #5B2D90; font-size: 28px; text-align: center;">Referral Verified! 🎉</h1>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">Hi ${name},</p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">
-          Great news! One of your referrals has been verified. You now have <strong>${count}</strong> verified referral${count !== 1 ? "s" : ""}.
-        </p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">Keep sharing to earn more rewards!</p>
-        <div style="text-align: center; margin-top: 30px;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="background: #C89A2B; color: #FFF8EF; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">View Dashboard</a>
-        </div>
-      </div>
-    `,
-  });
-}
-
-export async function sendLeaderboardUpdateEmail(name: string, email: string, position: number) {
-  await sendEmail({
-    to: email,
-    subject: `You've moved to Position #${position}! 🏆`,
-    html: `
-      <div style="font-family: 'Poppins', sans-serif; max-width: 600px; margin: 0 auto; background: #FFF8EF; padding: 40px;">
-        <h1 style="color: #5B2D90; font-size: 28px; text-align: center;">Leaderboard Update 🏆</h1>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">Hi ${name},</p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">
-          Amazing! You've moved to <strong>Position #${position}</strong> on the leaderboard!
-        </p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">Keep it up!</p>
-      </div>
-    `,
-  });
-}
-
-export async function sendRewardWinnerEmail(name: string, email: string, reward: string, amount: number) {
-  await sendEmail({
-    to: email,
-    subject: `Congratulations! You've Won ${reward}! 🏅`,
-    html: `
-      <div style="font-family: 'Poppins', sans-serif; max-width: 600px; margin: 0 auto; background: #FFF8EF; padding: 40px;">
-        <h1 style="color: #C89A2B; font-size: 28px; text-align: center;">Congratulations! 🏅</h1>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">Hi ${name},</p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">
-          You've earned the <strong>${reward}</strong> reward worth <strong>₦${amount.toLocaleString()}</strong>!
-        </p>
-        <p style="color: #4A2E1F; font-size: 16px; line-height: 1.8;">We'll be in touch with details on how to claim your reward.</p>
-      </div>
-    `,
-  });
+export async function sendReferralRejectedEmail({
+  email,
+  fullName,
+  referredInstagram,
+}: {
+  email: string;
+  fullName: string;
+  referredInstagram: string;
+}) {
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: "Referral Update - Action Required",
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="utf-8"></head>
+        <body style="font-family: Arial, sans-serif; background: #FFF8EF; margin: 0; padding: 40px 20px;">
+          <div style="max-width: 520px; margin: 0 auto; background: white; border-radius: 16px; border: 1px solid #E7D8C6; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #4A2E1F, #6B3F2A); padding: 32px; text-align: center;">
+              <h1 style="color: #FFF8EF; font-size: 22px; margin: 0;">Hearts by Charming</h1>
+              <p style="color: #C89A2B; font-size: 13px; margin: 6px 0 0;">Referral Campaign 2026</p>
+            </div>
+            <div style="padding: 32px;">
+              <h2 style="color: #2D2118; font-size: 20px; margin: 0 0 16px;">Referral Update</h2>
+              <p style="color: #7B5B43; font-size: 14px; line-height: 1.7; margin: 0 0 20px;">
+                Hi ${fullName}, your referral <strong>@${referredInstagram.replace("@", "")}</strong> was not approved. This may be because the challenge steps were not completed correctly.
+              </p>
+              <div style="background: #FEE2E2; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                <p style="color: #DC2626; font-size: 13px; font-weight: 600; margin: 0;">Please ensure your referrals:</p>
+                <ul style="color: #7B5B43; font-size: 13px; margin: 8px 0 0; padding-left: 20px; line-height: 1.8;">
+                  <li>Follow @heartsbycharming on Instagram</li>
+                  <li>Like the specified post</li>
+                  <li>Comment with "Referred by @yourusername"</li>
+                </ul>
+              </div>
+              <a href="${APP_URL}/dashboard" style="display: block; text-align: center; background: #C89A2B; color: white; text-decoration: none; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 14px;">
+                View Dashboard
+              </a>
+            </div>
+            <div style="padding: 16px 32px; border-top: 1px solid #F0EBE3; text-align: center;">
+              <p style="color: #A08060; font-size: 11px; margin: 0;">© 2026 Hearts by Charming. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    });
+  } catch (error) {
+    console.error("Failed to send referral rejected email:", error);
+  }
 }

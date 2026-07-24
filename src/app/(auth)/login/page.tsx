@@ -24,6 +24,7 @@ import {
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const {
     register,
@@ -43,21 +44,9 @@ export default function LoginPage() {
       });
       if (result?.error) throw new Error("Invalid email or password");
 
-      // Decode JWT from cookie to get role (avoids extra /api/auth/session fetch)
-      const cookieName = process.env.NODE_ENV === "production"
-        ? "__Secure-next-auth.session-token"
-        : "next-auth.session-token";
-      const token = document.cookie
-        .split("; ")
-        .find((c) => c.startsWith(`${cookieName}=`))
-        ?.split("=")[1];
-      let role: string | undefined;
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split(".")[1]));
-          role = payload.role;
-        } catch {}
-      }
+      const res = await fetch("/api/auth/session");
+      const session = await res.json();
+      const role = session?.user?.role;
 
       if (role === "ADMIN" || role === "MODERATOR") {
         window.location.href = "/admin";
@@ -95,7 +84,25 @@ export default function LoginPage() {
               {...register("password")}
             />
 
-            <div style={{ paddingTop: 24 }}>
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-border text-gold focus:ring-gold/30 accent-gold"
+                />
+                <span className="text-[13px] text-brown-light/70">Remember Me</span>
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-[13px] text-gold hover:text-gold-dark font-medium transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
+
+            <div style={{ paddingTop: 16 }}>
               <AuthButton type="submit" isLoading={isLoading} loadingText="Signing in...">
                 Sign In
               </AuthButton>

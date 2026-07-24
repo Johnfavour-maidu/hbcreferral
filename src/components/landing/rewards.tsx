@@ -34,8 +34,8 @@ const tiers = [
 
 export function RewardsPreview() {
   return (
-    <section id="rewards" className="bg-white">
-      <div className="pt-14 md:pt-4 pb-28 md:pb-32">
+    <section id="rewards" className="bg-white" style={{ paddingBottom: 80 }}>
+      <div className="pt-14 md:pt-4">
         <div style={{ maxWidth: 1000, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

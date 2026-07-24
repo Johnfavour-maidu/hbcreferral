@@ -1,21 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { AdminSidebar } from "./admin-sidebar";
-import { AdminTopNav } from "./admin-topnav";
+import { Navbar } from "@/components/shared/navbar";
 
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
   return (
-    <div className="flex h-screen overflow-hidden bg-bg">
-      <AdminSidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <AdminTopNav onMenuToggle={() => setMobileOpen(!mobileOpen)} />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          {children}
-        </main>
-      </div>
+    <div className="min-h-screen flex flex-col bg-bg">
+      <Navbar />
+      <main className="flex-1">{children}</main>
     </div>
   );
 }

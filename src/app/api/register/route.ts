@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { generateReferralCode, generateReferralLink, generateParticipantId } from "@/lib/referral";
 import { registerSchema } from "@/lib/validations";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -105,6 +106,13 @@ export async function POST(request: NextRequest) {
         },
       });
     }
+
+    sendWelcomeEmail({
+      email: validated.email,
+      fullName: validated.fullName,
+      participantId,
+      referralCode,
+    }).catch(console.error);
 
     return NextResponse.json({
       success: true,

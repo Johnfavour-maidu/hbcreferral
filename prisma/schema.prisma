@@ -26,15 +26,22 @@ enum CampaignStatus {
   CLOSED
 }
 
+enum ParticipantStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  phone         String    @unique
-  passwordHash  String
-  role          Role      @default(PARTICIPANT)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                String            @id @default(cuid())
+  email             String            @unique
+  phone             String            @unique
+  passwordHash      String
+  role              Role              @default(PARTICIPANT)
+  isActive          Boolean           @default(true)
+  participantStatus ParticipantStatus @default(ACTIVE)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
   profile            Profile?
   referrals          Referral[] @relation("ReferrerReferrals")
@@ -204,4 +211,43 @@ model Setting {
 
   @@unique([campaignId, key])
   @@map("settings")
+}
+
+model PasswordResetOTP {
+  id           String   @id @default(cuid())
+  email        String
+  otp          String
+  expiresAt    DateTime
+  used         Boolean  @default(false)
+  attemptCount Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([email])
+  @@map("password_reset_otps")
+}
+
+model ProfileAuditLog {
+  id            String   @id @default(cuid())
+  participantId String
+  changedFields String
+  oldValue      String
+  newValue      String
+  createdAt     DateTime @default(now())
+
+  @@map("profile_audit_logs")
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  adminEmail String
+  action     String
+  targetType String
+  targetId   String
+  details    String?
+  createdAt  DateTime @default(now())
+
+  @@index([adminId])
+  @@index([targetId])
+  @@map("admin_audit_logs")
 }

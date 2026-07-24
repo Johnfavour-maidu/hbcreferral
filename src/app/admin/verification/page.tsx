@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle, Check, X, Clock, Instagram, Heart, MessageCircle } from "lucide-react";
+import { CheckCircle, Check, X, RotateCcw, Instagram, Heart, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface VerificationItem {
@@ -29,7 +29,7 @@ export default function AdminVerificationPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleAction = async (id: string, action: "approve" | "reject", checks?: { followsPage: boolean; likedPost: boolean; commentedPost: boolean }) => {
+  const handleAction = async (id: string, action: "approve" | "reject" | "revoke", checks?: { followsPage: boolean; likedPost: boolean; commentedPost: boolean }) => {
     try {
       const body: Record<string, unknown> = { id, action };
       if (checks) {
@@ -43,8 +43,13 @@ export default function AdminVerificationPage() {
         body: JSON.stringify(body),
       });
       if (res.ok) {
-        setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: action === "approve" ? "VERIFIED" : "REJECTED", ...(checks || {}) } : i));
-        toast.success(action === "approve" ? "Referral approved!" : "Referral rejected");
+        if (action === "revoke") {
+          setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: "REJECTED" } : i));
+          toast.success("Approval revoked");
+        } else {
+          setItems((prev) => prev.map((i) => i.id === id ? { ...i, status: action === "approve" ? "VERIFIED" : "REJECTED", ...(checks || {}) } : i));
+          toast.success(action === "approve" ? "Referral approved!" : "Referral rejected");
+        }
       }
     } catch {
       toast.error("Failed to process");
@@ -52,6 +57,8 @@ export default function AdminVerificationPage() {
   };
 
   const filtered = items.filter((i) => filter === "ALL" || i.status === filter);
+
+  const normalize = (s: string) => s.replace(/^@+/, "");
 
   if (loading) {
     return (
@@ -65,7 +72,6 @@ export default function AdminVerificationPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-brown-dark">Verification Queue</h1>
 
-      {/* Filters */}
       <div className="flex gap-2">
         {["PENDING", "VERIFIED", "REJECTED", "ALL"].map((f) => (
           <button
@@ -82,7 +88,6 @@ export default function AdminVerificationPage() {
         ))}
       </div>
 
-      {/* Items */}
       <div className="space-y-3">
         {filtered.map((item) => (
           <VerificationCard
@@ -107,26 +112,25 @@ function VerificationCard({
   onAction,
 }: {
   item: VerificationItem;
-  onAction: (id: string, action: "approve" | "reject", checks?: { followsPage: boolean; likedPost: boolean; commentedPost: boolean }) => void;
+  onAction: (id: string, action: "approve" | "reject" | "revoke", checks?: { followsPage: boolean; likedPost: boolean; commentedPost: boolean }) => void;
 }) {
   const [follows, setFollows] = useState(item.followsPage);
   const [liked, setLiked] = useState(item.likedPost);
   const [commented, setCommented] = useState(item.commentedPost);
 
-  const allChecked = follows && liked && commented;
+  const normalize = (s: string) => s.replace(/^@+/, "");
 
   return (
     <div className="bg-white rounded-2xl border border-cream-dark p-5 hover:shadow-md transition-shadow">
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
             <Instagram className="h-5 w-5 text-gold" />
           </div>
           <div>
-            <p className="text-[15px] font-bold text-brown-dark">{item.referredInstagram}</p>
+            <p className="text-[15px] font-bold text-brown-dark">{normalize(item.referredInstagram)}</p>
             <p className="text-[12px] text-brown-light/50">
-              Referred by {item.referrerName} · {new Date(item.createdAt).toLocaleDateString()}
+              Referred by {normalize(item.referrerName)} · {new Date(item.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -141,7 +145,6 @@ function VerificationCard({
         </span>
       </div>
 
-      {/* Challenge Checks */}
       <div className="grid grid-cols-3 gap-3 mb-4">
         <label className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${
           follows ? "bg-success/5 border-success/20" : "bg-cream/30 border-cream-dark"
@@ -189,7 +192,6 @@ function VerificationCard({
         </label>
       </div>
 
-      {/* Comment Preview */}
       {item.commentText && (
         <div className="bg-cream/40 rounded-xl px-4 py-2.5 mb-4 border border-cream-dark">
           <p className="text-[12px] text-brown-light/50 mb-0.5">Comment:</p>
@@ -197,23 +199,32 @@ function VerificationCard({
         </div>
       )}
 
-      {/* Actions */}
-      {item.status === "PENDING" && (
-        <div className="flex gap-2">
+      <div className="flex gap-2">
+        {item.status === "PENDING" && (
+          <>
+            <button
+              onClick={() => onAction(item.id, "approve", { followsPage: follows, likedPost: liked, commentedPost: commented })}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-semibold bg-success text-white hover:bg-green-700 transition-colors"
+            >
+              <Check className="h-3.5 w-3.5" /> Approve
+            </button>
+            <button
+              onClick={() => onAction(item.id, "reject", { followsPage: follows, likedPost: liked, commentedPost: commented })}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-semibold bg-error/10 text-error border border-error/20 hover:bg-error/20 transition-colors"
+            >
+              <X className="h-3.5 w-3.5" /> Reject
+            </button>
+          </>
+        )}
+        {item.status === "VERIFIED" && (
           <button
-            onClick={() => onAction(item.id, "approve", { followsPage: follows, likedPost: liked, commentedPost: commented })}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-semibold bg-success text-white hover:bg-green-700 transition-colors"
-          >
-            <Check className="h-3.5 w-3.5" /> Approve
-          </button>
-          <button
-            onClick={() => onAction(item.id, "reject", { followsPage: follows, likedPost: liked, commentedPost: commented })}
+            onClick={() => onAction(item.id, "revoke")}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-semibold bg-error/10 text-error border border-error/20 hover:bg-error/20 transition-colors"
           >
-            <X className="h-3.5 w-3.5" /> Reject
+            <RotateCcw className="h-3.5 w-3.5" /> Revoke Approval
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

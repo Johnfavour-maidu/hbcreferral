@@ -112,8 +112,8 @@ export function HowItWorks() {
         </div>
 
         {/* Mobile vertical stepper */}
-        <div className="md:hidden relative">
-          <div className="space-y-16">
+        <div className="md:hidden relative" style={{ paddingTop: 16 }}>
+          <div className="relative" style={{ display: "flex", flexDirection: "column", gap: 56 }}>
             {steps.map((step, i) => (
                 <motion.div
                 key={step.number}
@@ -128,8 +128,8 @@ export function HowItWorks() {
                   <div
                     className="relative z-10 shrink-0 bg-white flex items-center justify-center"
                     style={{
-                      width: 44,
-                      height: 44,
+                      width: 52,
+                      height: 52,
                       borderRadius: "50%",
                       border: "2px solid #E7D8C6",
                       boxShadow: "0 2px 12px rgba(200,154,43,0.1)",
@@ -142,8 +142,8 @@ export function HowItWorks() {
                     <div
                       style={{
                         position: "absolute",
-                        top: 44,
-                        bottom: -32,
+                        top: 52,
+                        height: 56,
                         width: 2,
                         background: "linear-gradient(180deg, #C89A2B, #E7D8C6)",
                         borderRadius: 1,
@@ -153,14 +153,14 @@ export function HowItWorks() {
                 </div>
 
                 {/* Content */}
-                <div className="pt-2 pb-4">
+                <div style={{ paddingTop: 8, paddingBottom: 8 }}>
                   <span className="text-gold text-xs font-bold uppercase tracking-widest">
                     Step {step.number}
                   </span>
-                  <h3 className="text-lg font-bold text-brown-dark mt-1 mb-2">
+                  <h3 className="text-lg font-bold text-brown-dark" style={{ marginTop: 6, marginBottom: 8 }}>
                     {step.title}
                   </h3>
-                  <p className="text-brown-light text-sm leading-relaxed">
+                  <p className="text-brown-light text-sm" style={{ lineHeight: 1.7 }}>
                     {step.description}
                   </p>
                 </div>

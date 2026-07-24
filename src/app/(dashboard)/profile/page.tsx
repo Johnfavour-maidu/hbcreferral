@@ -1,13 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { User, Save, Loader2, Mail, Phone, MapPin, Instagram } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import {
+  User,
+  Save,
+  Loader2,
+  Mail,
+  Phone,
+  MapPin,
+  Instagram,
+  Hash,
+  Calendar,
+  Copy,
+  ArrowLeft,
+  School,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface ProfileData {
@@ -15,11 +24,18 @@ interface ProfileData {
   email: string;
   phone: string;
   state: string;
+  school: string;
   instagram: string;
   referralCode: string;
+  referralLink: string;
+  participantId: string;
+  createdAt: string;
+  totalReferrals: number;
+  verifiedReferrals: number;
 }
 
 export default function ProfilePage() {
+  const { data: session } = useSession();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -34,88 +50,245 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     if (!profile) return;
+
+    // Client-side validation
+    if (profile.fullName.trim().length < 3) {
+      toast.error("Full name must be at least 3 characters");
+      return;
+    }
+    if (profile.phone.trim().length < 10) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+    if (!profile.state.trim()) {
+      toast.error("State is required");
+      return;
+    }
+    if (!profile.instagram.trim()) {
+      toast.error("Instagram username is required");
+      return;
+    }
+
     setSaving(true);
     try {
       const res = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile),
+        body: JSON.stringify({
+          fullName: profile.fullName.trim(),
+          phone: profile.phone.trim(),
+          state: profile.state.trim(),
+          school: profile.school.trim(),
+          instagram: profile.instagram.trim(),
+        }),
       });
-      if (res.ok) toast.success("Profile updated!");
-      else throw new Error("Failed");
-    } catch { toast.error("Failed to update profile"); }
-    finally { setSaving(false); }
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Profile updated successfully");
+      } else {
+        toast.error(data.error || "Failed to update profile");
+      }
+    } catch {
+      toast.error("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  if (loading || !profile) {
-    return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
+  if (loading) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ width: 40, height: 40, border: "3px solid #F0EBE3", borderTopColor: "#C89A2B", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      </div>
+    );
   }
 
-  const fields = [
-    { key: "fullName", label: "Full Name", icon: User },
-    { key: "phone", label: "Phone", icon: Phone },
-    { key: "state", label: "State", icon: MapPin },
-  ] as const;
+  if (!profile) {
+    return (
+      <div style={{ textAlign: "center", padding: "80px 0", color: "#7B5B43" }}>
+        Failed to load profile data.
+      </div>
+    );
+  }
 
   return (
-    <PageWrapper>
-      <div className="max-w-2xl mx-auto px-5 sm:px-10 lg:px-20 py-8 lg:py-12">
-        <FadeIn>
-          <h1 className="text-3xl font-extrabold text-brown-dark flex items-center gap-3 mb-8">
-            <User className="h-8 w-8 text-gold" />
-            Profile
-          </h1>
-        </FadeIn>
-
-        <FadeIn delay={0.1}>
-          <Card>
-            <CardHeader>
-              <CardTitle>Your Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <Badge variant="default" className="font-mono">{profile.referralCode}</Badge>
-                <span className="text-sm text-brown-light">Your referral code</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {fields.map(({ key, label, icon: Icon }) => (
-                  <div key={key} className="space-y-2">
-                    <Label>{label}</Label>
-                    <div className="relative">
-                      <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
-                      <Input
-                        className="pl-10"
-                        value={profile[key]}
-                        onChange={(e) => setProfile({ ...profile, [key]: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <div className="space-y-2">
-                  <Label>Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
-                    <Input className="pl-10" value={profile.email} disabled />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Instagram</Label>
-                  <div className="relative">
-                    <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brown-light/50" />
-                    <Input className="pl-10" value={profile.instagram} disabled />
-                  </div>
-                </div>
-              </div>
-
-              <Button onClick={handleSave} disabled={saving} className="mt-4">
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                Save Changes
-              </Button>
-            </CardContent>
-          </Card>
-        </FadeIn>
+    <div style={{ maxWidth: 720, margin: "0 auto", paddingLeft: 32, paddingRight: 32, paddingTop: 40, paddingBottom: 64 }}>
+      {/* Back Link */}
+      <div style={{ marginBottom: 32 }}>
+        <Link
+          href="/dashboard"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            fontSize: 14, fontWeight: 600, color: "#7B5B43", textDecoration: "none",
+            padding: "8px 16px", borderRadius: 10, border: "1px solid #E7D8C6",
+            background: "#fff", transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#C89A2B"; e.currentTarget.style.color = "#C89A2B"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E7D8C6"; e.currentTarget.style.color = "#7B5B43"; }}
+        >
+          <ArrowLeft style={{ width: 16, height: 16 }} />
+          Back to Dashboard
+        </Link>
       </div>
-    </PageWrapper>
+
+      {/* Header */}
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 800, color: "#2D2118", margin: 0 }}>
+          Update Profile
+        </h1>
+        <p style={{ color: "#7B5B43", fontSize: 14, marginTop: 8, marginBottom: 0 }}>
+          Manage your account information and preferences.
+        </p>
+      </div>
+
+      {/* Read-only Info Card */}
+      <div style={{
+        background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
+        overflow: "hidden", marginBottom: 24,
+      }}>
+        <div style={{ padding: "20px 24px", borderBottom: "1px solid #F0EBE3" }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118", margin: 0 }}>Account Information</h3>
+          <p style={{ fontSize: 12, color: "#999", marginTop: 4, marginBottom: 0 }}>These fields cannot be edited</p>
+        </div>
+        <div style={{ padding: "20px 24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+            {/* Participant ID */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Participant ID</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F9F6F1", borderRadius: 10, border: "1px solid #E7D8C6" }}>
+                <Hash style={{ width: 14, height: 14, color: "#A08060" }} />
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#C89A2B", fontFamily: "monospace" }}>{profile.participantId}</span>
+              </div>
+            </div>
+            {/* Referral Code */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Referral Code</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F9F6F1", borderRadius: 10, border: "1px solid #E7D8C6" }}>
+                <Hash style={{ width: 14, height: 14, color: "#A08060" }} />
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#C89A2B", fontFamily: "monospace", flex: 1 }}>{profile.referralCode}</span>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(profile.referralCode); toast.success("Referral code copied!"); }}
+                  style={{ width: 28, height: 28, borderRadius: 6, border: "none", background: "rgba(200,154,43,0.1)", color: "#C89A2B", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+                >
+                  <Copy style={{ width: 12, height: 12 }} />
+                </button>
+              </div>
+            </div>
+            {/* Email */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Email Address</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F9F6F1", borderRadius: 10, border: "1px solid #E7D8C6" }}>
+                <Mail style={{ width: 14, height: 14, color: "#A08060" }} />
+                <span style={{ fontSize: 13, color: "#7B5B43" }}>{profile.email}</span>
+              </div>
+            </div>
+            {/* Registration Date */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Registration Date</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F9F6F1", borderRadius: 10, border: "1px solid #E7D8C6" }}>
+                <Calendar style={{ width: 14, height: 14, color: "#A08060" }} />
+                <span style={{ fontSize: 13, color: "#7B5B43" }}>{profile.createdAt ? new Date(profile.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Editable Fields Card */}
+      <div style={{
+        background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
+        overflow: "hidden", marginBottom: 24,
+      }}>
+        <div style={{ padding: "20px 24px", borderBottom: "1px solid #F0EBE3" }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118", margin: 0 }}>Personal Information</h3>
+          <p style={{ fontSize: 12, color: "#999", marginTop: 4, marginBottom: 0 }}>Update your personal details below</p>
+        </div>
+        <div style={{ padding: "20px 24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
+            {/* Full Name */}
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Full Name *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
+                <User style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
+                <input
+                  value={profile.fullName}
+                  onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
+                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
+                />
+              </div>
+            </div>
+            {/* Phone */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Phone Number *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
+                <Phone style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
+                <input
+                  value={profile.phone}
+                  onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
+                />
+              </div>
+            </div>
+            {/* Instagram */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Instagram Username *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
+                <Instagram style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
+                <span style={{ fontSize: 14, color: "#A08060", flexShrink: 0 }}>@</span>
+                <input
+                  value={profile.instagram}
+                  onChange={(e) => setProfile({ ...profile, instagram: e.target.value.replace(/^@/, "").replace(/\s/g, "") })}
+                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
+                />
+              </div>
+            </div>
+            {/* State */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>State *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
+                <MapPin style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
+                <input
+                  value={profile.state}
+                  onChange={(e) => setProfile({ ...profile, state: e.target.value })}
+                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
+                />
+              </div>
+            </div>
+            {/* School */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>School</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
+                <School style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
+                <input
+                  value={profile.school}
+                  onChange={(e) => setProfile({ ...profile, school: e.target.value })}
+                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div style={{ marginTop: 28, display: "flex", justifyContent: "flex-end" }}>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10,
+                height: 48, padding: "0 32px", borderRadius: 12,
+                background: saving ? "#D4B76A" : "#C89A2B",
+                color: "white", fontSize: 15, fontWeight: 600,
+                border: "none", cursor: saving ? "not-allowed" : "pointer",
+                boxShadow: "0 4px 12px rgba(200,154,43,0.25)",
+                transition: "all 0.2s",
+              }}
+            >
+              {saving ? <Loader2 style={{ width: 18, height: 18, animation: "spin 1s linear infinite" }} /> : <Save style={{ width: 18, height: 18 }} />}
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
