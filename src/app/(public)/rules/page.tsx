@@ -80,7 +80,7 @@ export default function RulesPage() {
               <p>For a referral to qualify, the referred participant must:</p>
               <ol style={{ margin: "8px 0 0 20px", padding: 0 }}>
                 <li>Follow the official <strong>Hearts by Charming Instagram page</strong>.</li>
-                <li>Like <strong>at least two (2)</strong> posts on the Hearts by Charming Instagram page.</li>
+                <li>Like the official Referral Challenge post on the Hearts by Charming Instagram page.</li>
                 <li>
                   Comment on the official Referral Challenge post using:
                   <div style={{

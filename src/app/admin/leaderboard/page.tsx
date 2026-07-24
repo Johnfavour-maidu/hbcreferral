@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { Trophy } from "lucide-react";
+import Link from "next/link";
+import { Trophy, ArrowLeft } from "lucide-react";
 
 interface LeaderboardEntry {
   rank: number;
@@ -33,38 +33,85 @@ export default function AdminLeaderboardPage() {
   }
 
   return (
-    <PageWrapper>
-      <FadeIn>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
-          <div style={{ width: 40, height: 40, borderRadius: 12, background: "#FEF3C7", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Trophy style={{ width: 20, height: 20, color: "#D97706" }} />
-          </div>
-          <h1 style={{ fontSize: 28, fontWeight: 800, color: "#2D2118" }}>Leaderboard Management</h1>
-        </div>
-      </FadeIn>
+    <div style={{ maxWidth: 900, margin: "0 auto", paddingLeft: 32, paddingRight: 32, paddingTop: 48, paddingBottom: 64 }}>
+      <div style={{ marginBottom: 32 }}>
+        <Link
+          href="/admin"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            fontSize: 14,
+            fontWeight: 600,
+            color: "#7B5B43",
+            textDecoration: "none",
+            padding: "8px 16px",
+            borderRadius: 10,
+            border: "1px solid #E7D8C6",
+            background: "#fff",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#C89A2B"; e.currentTarget.style.color = "#C89A2B"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E7D8C6"; e.currentTarget.style.color = "#7B5B43"; }}
+        >
+          <ArrowLeft style={{ width: 16, height: 16 }} />
+          Back to Admin Dashboard
+        </Link>
+      </div>
 
-      <FadeIn delay={0.1}>
+      <div style={{ textAlign: "center", marginBottom: 40 }}>
         <div style={{
-          background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
-          overflow: "hidden",
+          width: 64, height: 64, borderRadius: 20, background: "#FEF3C7",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          margin: "0 auto 20px", border: "2px solid #FDE68A",
         }}>
-          <div style={{ padding: "20px 24px", borderBottom: "1.5px solid #F0EBE3" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118" }}>All Rankings</h2>
-          </div>
+          <Trophy style={{ width: 32, height: 32, color: "#D97706" }} />
+        </div>
+        <h1 style={{ fontSize: 32, fontWeight: 800, color: "#2D2118", margin: "0 0 8px" }}>
+          Leaderboard
+        </h1>
+        <p style={{ fontSize: 15, color: "#7B5B43", margin: 0 }}>
+          See where participants rank based on verified referrals.
+        </p>
+      </div>
 
+      <div style={{
+        background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
+        overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+      }}>
+        {entries.length > 0 ? (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                  {["Rank", "Name", "Username", "Verified Referrals"].map((h) => (
-                    <th key={h} style={{
-                      padding: "14px 20px", fontSize: 11, fontWeight: 700,
-                      textTransform: "uppercase", letterSpacing: "0.05em",
-                      color: "#A08060", textAlign: h === "Verified Referrals" ? "center" : "left",
-                    }}>
-                      {h}
-                    </th>
-                  ))}
+                  <th style={{
+                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.05em",
+                    color: "#A08060", textAlign: "center", width: 60,
+                  }}>
+                    Rank
+                  </th>
+                  <th style={{
+                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.05em",
+                    color: "#A08060", textAlign: "left",
+                  }}>
+                    Name
+                  </th>
+                  <th style={{
+                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.05em",
+                    color: "#A08060", textAlign: "left",
+                  }}>
+                    Username
+                  </th>
+                  <th style={{
+                    padding: "14px 20px", fontSize: 11, fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.05em",
+                    color: "#A08060", textAlign: "center",
+                  }}>
+                    Verified Referrals
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -75,11 +122,14 @@ export default function AdminLeaderboardPage() {
                   return (
                     <tr
                       key={entry.userId}
-                      style={{ borderBottom: "1px solid #F0EBE3", transition: "background 0.15s" }}
-                      onMouseEnter={(ev) => { ev.currentTarget.style.background = "#FFF8EF"; }}
-                      onMouseLeave={(ev) => { ev.currentTarget.style.background = "transparent"; }}
+                      style={{
+                        borderBottom: "1px solid #F0EBE3",
+                        transition: "background 0.15s",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = "#FFF8EF"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                     >
-                      <td style={{ padding: "14px 20px" }}>
+                      <td style={{ padding: "14px 20px", textAlign: "center" }}>
                         <span style={{
                           display: "inline-flex", alignItems: "center", justifyContent: "center",
                           width: 36, height: 36, borderRadius: 10,
@@ -107,7 +157,7 @@ export default function AdminLeaderboardPage() {
                         </div>
                       </td>
                       <td style={{ padding: "14px 20px", fontSize: 13, color: "#7B5B43" }}>
-                        {entry.instagram}
+                        @{entry.instagram}
                       </td>
                       <td style={{ padding: "14px 20px", textAlign: "center" }}>
                         <span style={{
@@ -122,18 +172,27 @@ export default function AdminLeaderboardPage() {
                     </tr>
                   );
                 })}
-                {entries.length === 0 && (
-                  <tr>
-                    <td colSpan={4} style={{ padding: "48px 20px", textAlign: "center", color: "#A08060", fontSize: 14 }}>
-                      No leaderboard data yet
-                    </td>
-                  </tr>
-                )}
               </tbody>
             </table>
           </div>
-        </div>
-      </FadeIn>
-    </PageWrapper>
+        ) : (
+          <div style={{ padding: "64px 32px", textAlign: "center" }}>
+            <div style={{
+              width: 80, height: 80, borderRadius: 24, background: "#FEF3C7",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 20px", border: "2px solid #FDE68A",
+            }}>
+              <Trophy style={{ width: 40, height: 40, color: "#D97706" }} />
+            </div>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#2D2118", margin: "0 0 8px" }}>
+              Leaderboard Coming Soon
+            </h3>
+            <p style={{ fontSize: 14, color: "#7B5B43", maxWidth: 400, margin: "0 auto" }}>
+              No verified referrals yet. Be the first participant to earn a verified referral and claim the top spot!
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
