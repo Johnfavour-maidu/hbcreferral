@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,8 @@ import {
   AuthFooter,
 } from "@/components/auth";
 
+const REMEMBER_EMAIL_KEY = "hbc_remember_email";
+
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -29,14 +31,29 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem(REMEMBER_EMAIL_KEY);
+    if (savedEmail) {
+      setValue("email", savedEmail);
+      setRememberMe(true);
+    }
+  }, [setValue]);
+
   const onSubmit = async (data: LoginInput) => {
     setIsLoading(true);
     try {
+      if (rememberMe) {
+        localStorage.setItem(REMEMBER_EMAIL_KEY, data.email);
+      } else {
+        localStorage.removeItem(REMEMBER_EMAIL_KEY);
+      }
+
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,

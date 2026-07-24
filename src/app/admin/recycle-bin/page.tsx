@@ -27,7 +27,7 @@ export default function RecycleBinPage() {
       .then((r) => r.json())
       .then((d) => {
         const deleted = (d.participants || []).filter(
-          (p: DeletedParticipant) => p.participantStatus === "SUSPENDED" || p.participantStatus === "DELETED"
+          (p: DeletedParticipant) => p.participantStatus === "DELETED"
         );
         setParticipants(deleted);
       })

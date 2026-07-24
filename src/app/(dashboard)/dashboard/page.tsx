@@ -412,7 +412,7 @@ export default function DashboardPage() {
           ) : (
             <>
               {/* Mobile Card View */}
-              <div className="block md:hidden" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div className="referral-mobile-cards" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {referrals
                   .slice((refPage - 1) * REF_PER_PAGE, refPage * REF_PER_PAGE)
                   .map((ref) => (
@@ -570,6 +570,9 @@ export default function DashboardPage() {
         @media (max-width: 640px) {
           .leaderboard-card-flex { justify-content: center !important; }
           .leaderboard-card-btn { margin-left: auto !important; margin-right: auto !important; }
+        }
+        @media (min-width: 768px) {
+          .referral-mobile-cards { display: none !important; }
         }
       `}</style>
       <div

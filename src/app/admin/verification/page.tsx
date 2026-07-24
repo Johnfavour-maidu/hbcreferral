@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 interface VerificationItem {
   id: string;
-  referrerName: string;
   referredInstagram: string;
   followsPage: boolean;
   likedPost: boolean;
@@ -130,7 +129,7 @@ function VerificationCard({
           <div>
             <p className="text-[15px] font-bold text-brown-dark">{normalize(item.referredInstagram)}</p>
             <p className="text-[12px] text-brown-light/50">
-              Referred by {normalize(item.referrerName)} · {new Date(item.createdAt).toLocaleDateString()}
+              {new Date(item.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>

@@ -46,7 +46,6 @@ interface Participant {
 interface VerificationItem {
   id: string;
   referrerName: string;
-  referredName: string;
   referredInstagram: string;
   status: string;
   createdAt: string;
@@ -98,13 +97,16 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteParticipant = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this participant? This action cannot be undone.")) return;
+    if (!confirm("Move this participant to recycle bin?")) return;
     try {
-      const res = await fetch(`/api/admin/participants?id=${id}`, { method: "DELETE" });
+      const res = await fetch("/api/admin/participants", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action: "softDelete" }),
+      });
       if (res.ok) {
-        setParticipants((prev) => prev.filter((p) => p.id !== id));
-        setStats((prev) => prev ? { ...prev, totalParticipants: prev.totalParticipants - 1 } : prev);
-        toast.success("Participant deleted successfully");
+        setParticipants((prev) => prev.map((p) => p.id === id ? { ...p, isActive: false } : p));
+        toast.success("Participant moved to recycle bin");
       } else {
         const data = await res.json();
         toast.error(data.error || "Failed to delete participant");
@@ -261,8 +263,8 @@ export default function AdminDashboard() {
                   {pendingVerifications.slice(0, 5).map((v) => (
                     <div key={v.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0", borderBottom: "1px solid #F0EBE3" }}>
                       <div style={{ minWidth: 0 }}>
-                        <p style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", margin: 0 }}>{v.referredName}</p>
-                        <p style={{ fontSize: 12, color: "#7B5B43", margin: "4px 0 0" }}>by {v.referrerName} · @{v.referredInstagram}</p>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", margin: 0 }}>{v.referredInstagram.replace(/^@+/, "")}</p>
+                        <p style={{ fontSize: 12, color: "#7B5B43", margin: "4px 0 0" }}>by {v.referrerName}</p>
                       </div>
                       <div style={{ display: "flex", gap: 8 }}>
                         <button onClick={() => handleVerify(v.id, "approve")} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "#DCFCE7", color: "#16A34A", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -322,7 +324,7 @@ export default function AdminDashboard() {
                       <td style={{ padding: "14px 16px", fontSize: 13, fontWeight: 600, color: "#2D2118" }}>{p.fullName}</td>
                       <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{p.email}</td>
                       <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{p.phone}</td>
-                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{p.instagram}</td>
+                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{p.instagram.replace(/^@+/, "")}</td>
                       <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{p.state}</td>
                       <td style={{ padding: "14px 16px", fontSize: 13, fontWeight: 700, color: "#C89A2B", textAlign: "center" }}>{p.totalReferrals}</td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
@@ -363,7 +365,7 @@ export default function AdminDashboard() {
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                    {["Referred Name", "Instagram", "Referred By", "Status", "Date", "Actions"].map((h) => (
+                    {["Instagram", "Referred By", "Status", "Date", "Actions"].map((h) => (
                       <th key={h} style={{
                         padding: "14px 16px", fontSize: 11, fontWeight: 700,
                         textTransform: "uppercase" as const, letterSpacing: "0.05em",
@@ -378,8 +380,7 @@ export default function AdminDashboard() {
                       onMouseEnter={(e) => { e.currentTarget.style.background = "#FFF8EF"; }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                     >
-                      <td style={{ padding: "14px 16px", fontSize: 13, fontWeight: 600, color: "#2D2118" }}>{v.referredName}</td>
-                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>@{v.referredInstagram}</td>
+                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{v.referredInstagram.replace(/^@+/, "")}</td>
                       <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{v.referrerName}</td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
                         <span style={{

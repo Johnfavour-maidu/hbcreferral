@@ -46,7 +46,7 @@ export function Navbar() {
             <>
               <Link
                 href="/profile"
-                className="inline-flex items-center justify-center gap-2 h-11 min-w-[140px] px-5 rounded-xl border-2 border-cream-dark bg-white text-brown-dark font-semibold text-[14px] hover:border-gold hover:text-gold transition-colors"
+                className="inline-flex items-center justify-center gap-2 h-11 min-w-[140px] px-5 rounded-xl border-2 border-black bg-white text-brown-dark font-semibold text-[14px] hover:border-gold hover:text-gold transition-colors"
               >
                 <UserCog className="h-4 w-4" />
                 Update Profile

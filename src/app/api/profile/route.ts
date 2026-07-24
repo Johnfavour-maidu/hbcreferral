@@ -10,7 +10,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { fullName, phone, state, school, instagram } = body;
+    const { fullName, phone, state, instagram, email } = body;
 
     // Validate required fields
     if (!fullName || fullName.trim().length < 3) {
@@ -18,6 +18,9 @@ export async function PUT(request: NextRequest) {
     }
     if (!phone || phone.trim().length < 10) {
       return NextResponse.json({ error: "Please enter a valid phone number" }, { status: 400 });
+    }
+    if (!email || !email.includes("@")) {
+      return NextResponse.json({ error: "Please enter a valid email address" }, { status: 400 });
     }
     if (!state || state.trim().length === 0) {
       return NextResponse.json({ error: "State is required" }, { status: 400 });
@@ -35,6 +38,14 @@ export async function PUT(request: NextRequest) {
     });
     if (existingPhone) {
       return NextResponse.json({ error: "This phone number is already in use" }, { status: 400 });
+    }
+
+    // Check email duplicate
+    const existingEmail = await prisma.user.findFirst({
+      where: { email: email.trim().toLowerCase(), id: { not: session.user.id } },
+    });
+    if (existingEmail) {
+      return NextResponse.json({ error: "This email address is already in use" }, { status: 400 });
     }
 
     // Check instagram duplicate
@@ -58,12 +69,18 @@ export async function PUT(request: NextRequest) {
     if (fullName.trim() !== currentProfile.fullName) changes.push({ field: "fullName", old: currentProfile.fullName, new: fullName.trim() });
     if (cleanInstagram !== currentProfile.instagram) changes.push({ field: "instagram", old: currentProfile.instagram, new: cleanInstagram });
     if ((state || "").trim() !== currentProfile.state) changes.push({ field: "state", old: currentProfile.state, new: (state || "").trim() });
-    if ((school || "").trim() !== currentProfile.school) changes.push({ field: "school", old: currentProfile.school, new: (school || "").trim() });
+    if (phone.trim() !== phone) changes.push({ field: "phone", old: phone, new: phone.trim() });
 
-    // Update user phone
+    // Fetch current user for email comparison
+    const currentUser = await prisma.user.findUnique({ where: { id: session.user.id }, select: { email: true } });
+    if (currentUser && email.trim().toLowerCase() !== currentUser.email) {
+      changes.push({ field: "email", old: currentUser.email, new: email.trim().toLowerCase() });
+    }
+
+    // Update user email and phone
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { phone: phone.trim() },
+      data: { phone: phone.trim(), email: email.trim().toLowerCase() },
     });
 
     // Update profile
@@ -73,7 +90,6 @@ export async function PUT(request: NextRequest) {
         fullName: fullName.trim(),
         instagram: cleanInstagram,
         state: (state || "").trim(),
-        school: (school || "").trim(),
       },
     });
 

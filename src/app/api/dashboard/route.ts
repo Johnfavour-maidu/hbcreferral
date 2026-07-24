@@ -13,6 +13,8 @@ export async function GET() {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
+        email: true,
+        phone: true,
         profile: true,
       },
     });
@@ -37,7 +39,11 @@ export async function GET() {
     }
 
     return NextResponse.json({
-      profile: user.profile,
+      profile: {
+        ...user.profile,
+        email: user.email,
+        phone: user.phone,
+      },
       leaderboardPosition,
       totalParticipants,
     });

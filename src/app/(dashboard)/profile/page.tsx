@@ -13,9 +13,7 @@ import {
   Instagram,
   Hash,
   Calendar,
-  Copy,
   ArrowLeft,
-  School,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -24,7 +22,6 @@ interface ProfileData {
   email: string;
   phone: string;
   state: string;
-  school: string;
   instagram: string;
   referralCode: string;
   referralLink: string;
@@ -51,13 +48,16 @@ export default function ProfilePage() {
   const handleSave = async () => {
     if (!profile) return;
 
-    // Client-side validation
     if (profile.fullName.trim().length < 3) {
       toast.error("Full name must be at least 3 characters");
       return;
     }
     if (profile.phone.trim().length < 10) {
       toast.error("Please enter a valid phone number");
+      return;
+    }
+    if (!profile.email.trim() || !profile.email.includes("@")) {
+      toast.error("Please enter a valid email address");
       return;
     }
     if (!profile.state.trim()) {
@@ -77,8 +77,8 @@ export default function ProfilePage() {
         body: JSON.stringify({
           fullName: profile.fullName.trim(),
           phone: profile.phone.trim(),
+          email: profile.email.trim(),
           state: profile.state.trim(),
-          school: profile.school.trim(),
           instagram: profile.instagram.trim(),
         }),
       });
@@ -160,28 +160,6 @@ export default function ProfilePage() {
                 <span style={{ fontSize: 13, fontWeight: 600, color: "#C89A2B", fontFamily: "monospace" }}>{profile.participantId}</span>
               </div>
             </div>
-            {/* Referral Code */}
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Referral Code</label>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F9F6F1", borderRadius: 10, border: "1px solid #E7D8C6" }}>
-                <Hash style={{ width: 14, height: 14, color: "#A08060" }} />
-                <span style={{ fontSize: 13, fontWeight: 600, color: "#C89A2B", fontFamily: "monospace", flex: 1 }}>{profile.referralCode}</span>
-                <button
-                  onClick={() => { navigator.clipboard.writeText(profile.referralCode); toast.success("Referral code copied!"); }}
-                  style={{ width: 28, height: 28, borderRadius: 6, border: "none", background: "rgba(200,154,43,0.1)", color: "#C89A2B", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-                >
-                  <Copy style={{ width: 12, height: 12 }} />
-                </button>
-              </div>
-            </div>
-            {/* Email */}
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Email Address</label>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", background: "#F9F6F1", borderRadius: 10, border: "1px solid #E7D8C6" }}>
-                <Mail style={{ width: 14, height: 14, color: "#A08060" }} />
-                <span style={{ fontSize: 13, color: "#7B5B43" }}>{profile.email}</span>
-              </div>
-            </div>
             {/* Registration Date */}
             <div>
               <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Registration Date</label>
@@ -229,6 +207,18 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
+            {/* Email */}
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Email Address *</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
+                <Mail style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
+                <input
+                  value={profile.email}
+                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
+                />
+              </div>
+            </div>
             {/* Instagram */}
             <div>
               <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>Instagram Username *</label>
@@ -250,18 +240,6 @@ export default function ProfilePage() {
                 <input
                   value={profile.state}
                   onChange={(e) => setProfile({ ...profile, state: e.target.value })}
-                  style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
-                />
-              </div>
-            </div>
-            {/* School */}
-            <div>
-              <label style={{ fontSize: 11, fontWeight: 600, color: "#7B5B43", textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 6 }}>School</label>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 14px", background: "#FFF8EF", borderRadius: 10, border: "1.5px solid #E7D8C6", transition: "border-color 0.2s" }}>
-                <School style={{ width: 16, height: 16, color: "#A08060", flexShrink: 0 }} />
-                <input
-                  value={profile.school}
-                  onChange={(e) => setProfile({ ...profile, school: e.target.value })}
                   style={{ width: "100%", padding: "12px 0", border: "none", background: "transparent", fontSize: 14, color: "#2D2118", outline: "none" }}
                 />
               </div>
