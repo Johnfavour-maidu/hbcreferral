@@ -33,8 +33,8 @@ const steps = [
 export function HowItWorks() {
   return (
     <>
-      <style>{`@media (min-width: 1024px) { .how-it-works-section { padding-bottom: 80px !important; } }`}</style>
-      <section className="bg-white how-it-works-section pb-26 md:pb-6" style={{ paddingTop: 80 }}>
+      <style>{`@media (min-width: 768px) { .how-it-works-section { padding-bottom: 24px !important; background-color: white !important; } }`}</style>
+      <section className="bg-bg how-it-works-section" style={{ paddingTop: 80, paddingBottom: 24 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
