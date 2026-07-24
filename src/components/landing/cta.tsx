@@ -50,7 +50,7 @@ export function CTASection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="brown-gradient rounded-3xl overflow-hidden text-center"
-          style={{ marginBottom: 44, border: "1px solid rgba(200,154,43,0.2)" }}
+          style={{ marginBottom: 44, border: "1.5px solid rgba(200,154,43,0.35)" }}
         >
           <div className="px-8 md:px-16" style={{ paddingTop: 32, paddingBottom: 28, textAlign: "center" as const }}>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-cream leading-tight" style={{ marginBottom: 16 }}>
@@ -110,7 +110,7 @@ export function CTASection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="relative brown-gradient rounded-3xl overflow-hidden"
-          style={{ border: "1px solid rgba(200,154,43,0.2)" }}
+          style={{ border: "1.5px solid rgba(200,154,43,0.35)" }}
         >
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-0 left-1/4 w-80 h-80 bg-gold rounded-full blur-[100px]" />

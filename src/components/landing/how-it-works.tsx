@@ -7,7 +7,7 @@ const steps = [
   {
     icon: UserPlus,
     title: "Register",
-    description: "Create your Hearts by Charming account.",
+    description: "Create your Hearts by Charming referral account.",
     number: "01",
   },
   {
@@ -47,7 +47,7 @@ export function HowItWorks() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brown-dark mb-4">
             Start Referring in Four Simple Steps
           </h2>
-          <p className="text-brown-light text-lg leading-[1.75] text-center" style={{ maxWidth: 520, margin: "0 auto" }}>
+          <p className="hidden md:block text-brown-light text-lg leading-[1.75] text-center" style={{ maxWidth: 520, margin: "0 auto" }}>
             From sign-up to rewards, the process is quick and straightforward.
           </p>
         </motion.div>
@@ -77,7 +77,6 @@ export function HowItWorks() {
                 transition={{ delay: i * 0.15, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="flex flex-col items-center text-center relative"
               >
-                {/* Step number circle */}
                 <div
                   className="relative z-10 bg-white flex items-center justify-center mb-6"
                   style={{
@@ -96,17 +95,12 @@ export function HowItWorks() {
                   </div>
                 </div>
 
-                {/* Step number */}
                 <span className="text-gold text-xs font-bold uppercase tracking-widest mb-2">
                   Step {step.number}
                 </span>
-
-                {/* Title */}
                 <h3 className="text-lg font-bold text-brown-dark mb-2">
                   {step.title}
                 </h3>
-
-                {/* Description */}
                 <p className="text-brown-light text-sm leading-relaxed" style={{ maxWidth: 200 }}>
                   {step.description}
                 </p>
@@ -116,21 +110,8 @@ export function HowItWorks() {
         </div>
 
         {/* Mobile vertical stepper */}
-        <div className="md:hidden relative" style={{ paddingLeft: 24 }}>
-          {/* Vertical connector line */}
-          <div
-            className="absolute"
-            style={{
-              top: 44,
-              bottom: 44,
-              left: 23,
-              width: 2,
-              background: "linear-gradient(180deg, #E7D8C6, #C89A2B, #E7D8C6)",
-              borderRadius: 1,
-            }}
-          />
-
-          <div className="space-y-10">
+        <div className="md:hidden relative">
+          <div className="space-y-8">
             {steps.map((step, i) => (
               <motion.div
                 key={step.number}
@@ -138,24 +119,39 @@ export function HowItWorks() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="flex gap-5 relative"
+                className="flex gap-4 relative"
               >
-                {/* Step number circle */}
-                <div
-                  className="relative z-10 shrink-0 bg-white flex items-center justify-center"
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "50%",
-                    border: "2px solid #E7D8C6",
-                    boxShadow: "0 2px 12px rgba(200,154,43,0.1)",
-                  }}
-                >
-                  <step.icon className="h-5 w-5 text-gold" />
+                {/* Step number circle with centered line */}
+                <div className="relative flex flex-col items-center">
+                  <div
+                    className="relative z-10 shrink-0 bg-white flex items-center justify-center"
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: "50%",
+                      border: "2px solid #E7D8C6",
+                      boxShadow: "0 2px 12px rgba(200,154,43,0.1)",
+                    }}
+                  >
+                    <step.icon className="h-5 w-5 text-gold" />
+                  </div>
+                  {/* Connector line between circles - only between items */}
+                  {i < steps.length - 1 && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 44,
+                        bottom: -32,
+                        width: 2,
+                        background: "linear-gradient(180deg, #C89A2B, #E7D8C6)",
+                        borderRadius: 1,
+                      }}
+                    />
+                  )}
                 </div>
 
                 {/* Content */}
-                <div className="pt-2">
+                <div className="pt-2 pb-2">
                   <span className="text-gold text-xs font-bold uppercase tracking-widest">
                     Step {step.number}
                   </span>
