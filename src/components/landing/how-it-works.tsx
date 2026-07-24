@@ -34,7 +34,7 @@ export function HowItWorks() {
   return (
     <>
       <style>{`@media (min-width: 768px) { .how-it-works-section { padding-bottom: 24px !important; background-color: white !important; } }`}</style>
-      <section className="bg-bg how-it-works-section" style={{ paddingTop: 80, paddingBottom: 24 }}>
+      <section className="bg-bg how-it-works-section" style={{ paddingTop: 80, paddingBottom: 48 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
