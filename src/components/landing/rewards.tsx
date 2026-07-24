@@ -35,14 +35,14 @@ const tiers = [
 export function RewardsPreview() {
   return (
     <section id="rewards" className="bg-white">
-      <div style={{ paddingTop: 48, paddingBottom: 48 }}>
+      <div style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center"
-            style={{ marginBottom: 32 }}
+            style={{ marginBottom: 48 }}
           >
             <span className="inline-block text-gold text-sm font-semibold uppercase tracking-widest mb-3">
               Prizes
@@ -50,9 +50,7 @@ export function RewardsPreview() {
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brown-dark mb-4">
               Earn Amazing Rewards
             </h2>
-            <p
-              className="text-brown-light text-lg leading-[1.75] text-center"
-            >
+            <p className="text-brown-light text-lg leading-[1.75] text-center">
               The more referrals you make, the bigger the reward. Start today!
             </p>
           </motion.div>
@@ -65,7 +63,9 @@ export function RewardsPreview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.5 }}
+                whileHover={{ y: -6, scale: 1.02, boxShadow: "0 20px 40px rgba(200,154,43,0.15)" }}
                 className={`reward-card ${tier.cardClass}`}
+                style={{ cursor: "default" }}
               >
                 <div className={`tier-badge ${tier.badgeClass} mb-4`}>
                   ★ {tier.name} TIER ★

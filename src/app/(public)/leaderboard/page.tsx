@@ -87,7 +87,7 @@ export default function LeaderboardPage() {
         {entries.length > 0 ? (
           <>
             {/* Mobile Card View */}
-            <div className="block md:hidden" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            <div className="md:hidden flex flex-col">
               {entries.map((entry) => {
                 const isCurrentUser = entry.userId === currentUserId;
                 const rankBg = entry.rank === 1 ? "#FEF3C7" : entry.rank === 2 ? "#F0EBE3" : entry.rank === 3 ? "#FEE2E2" : "transparent";

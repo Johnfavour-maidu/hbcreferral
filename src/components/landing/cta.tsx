@@ -64,13 +64,19 @@ export function CTASection() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
-              {socials.map((s) => (
-                <a
+              {socials.map((s, i) => (
+                <motion.a
                   key={s.name}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${s.bg} group`}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.4 }}
+                  whileHover={{ y: -3, scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -86,12 +92,12 @@ export function CTASection() {
                     fontSize: 15,
                     textDecoration: "none",
                     boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
-                    transition: "all 0.25s",
+                    transition: "box-shadow 0.25s",
                   }}
                 >
                   <span className="flex items-center justify-center">{s.icon}</span>
                   <span>{s.name}</span>
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>
@@ -115,20 +121,26 @@ export function CTASection() {
               Ready to Get Started Today?
             </h2>
             <div style={{ maxWidth: 520, marginBottom: 20, marginLeft: "auto", marginRight: "auto" }}>
-              <p className="text-cream/65 text-lg leading-[1.8]">
+              <p className="text-cream/65 text-base md:text-lg leading-[1.7]">
                 Join the challenge today and compete to win amazing cash prizes
               </p>
             </div>
-            <Button
-              size="default"
-              className="group min-w-[220px] h-[50px] rounded-[22px] px-8 text-[15px] font-semibold bg-gold hover:bg-gold-dark"
-              asChild
+            <motion.div
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-block"
             >
-              <Link href="/register">
-                Start Referring Today
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+              <Button
+                size="default"
+                className="group min-w-[220px] h-[50px] rounded-[22px] px-8 text-[15px] font-semibold bg-gold hover:bg-gold-dark transition-all duration-300 hover:shadow-lg"
+                asChild
+              >
+                <Link href="/register">
+                  Start Referring Today
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
         </motion.div>
 

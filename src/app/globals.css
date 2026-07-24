@@ -296,3 +296,12 @@ body {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-pulse,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+}
