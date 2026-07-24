@@ -63,9 +63,8 @@ export default function DashboardPage() {
   const [referrals, setReferrals] = useState<
     { id: string; fullName: string; instagram: string; status: string; createdAt: string }[]
   >([]);
-  const [historyOpen, setHistoryOpen] = useState(true);
-  const [refPage, setRefPage] = useState(1);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [refPage, setRefPage] = useState(1);
   const REF_PER_PAGE = 10;
 
   useEffect(() => {
@@ -412,8 +411,37 @@ export default function DashboardPage() {
             </div>
           ) : (
             <>
+              {/* Mobile Card View */}
+              <div className="block md:hidden" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {referrals
+                  .slice((refPage - 1) * REF_PER_PAGE, refPage * REF_PER_PAGE)
+                  .map((ref) => (
+                    <div key={ref.id} style={{ background: "#FCF8F3", borderRadius: 12, border: "1px solid #F0E6D6", padding: "14px 16px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: "#2D2118" }}>{ref.instagram}</span>
+                        <span
+                          style={{
+                            display: "inline-block",
+                            padding: "3px 10px",
+                            borderRadius: 999,
+                            fontSize: 11,
+                            fontWeight: 600,
+                            background: ref.status === "PENDING" ? "rgba(245,158,11,0.1)" : ref.status === "VERIFIED" ? "rgba(59,165,92,0.1)" : "rgba(239,68,68,0.1)",
+                            color: ref.status === "PENDING" ? "#D97706" : ref.status === "VERIFIED" ? "#16A34A" : "#DC2626",
+                          }}
+                        >
+                          {ref.status === "PENDING" ? "Pending" : ref.status === "VERIFIED" ? "Approved" : "Rejected"}
+                        </span>
+                      </div>
+                      <span style={{ fontSize: 12, color: "#999" }}>
+                        {new Date(ref.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}{" • "}{new Date(ref.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true })}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+
               {/* Desktop Table */}
-              <div style={{ overflowX: "auto" }}>
+              <div className="hidden md:block" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                   <thead>
                     <tr>
@@ -538,6 +566,12 @@ export default function DashboardPage() {
       </div>
 
       {/* ─── Leaderboard Card ─── */}
+      <style>{`
+        @media (max-width: 640px) {
+          .leaderboard-card-flex { justify-content: center !important; }
+          .leaderboard-card-btn { margin-left: auto !important; margin-right: auto !important; }
+        }
+      `}</style>
       <div
         style={{
           background: "#fff",
@@ -549,6 +583,7 @@ export default function DashboardPage() {
         }}
       >
         <div
+          className="leaderboard-card-flex"
           style={{
             display: "flex",
             alignItems: "center",
@@ -580,6 +615,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/leaderboard"
+            className="leaderboard-card-btn"
             style={{
               display: "inline-flex",
               alignItems: "center",

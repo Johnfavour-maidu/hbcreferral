@@ -323,7 +323,7 @@ export default function AdminDashboard() {
                     <td style={{ padding: "12px 14px", fontSize: 13, fontWeight: 600, color: "#2D2118" }}>{p.fullName}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.email}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.phone}</td>
-                    <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>@{p.instagram}</td>
+                    <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.instagram}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, color: "#7B5B43" }}>{p.state}</td>
                     <td style={{ padding: "12px 14px", fontSize: 13, fontWeight: 700, color: "#C89A2B", textAlign: "center" }}>{p.totalReferrals}</td>
                     <td style={{ padding: "12px 14px", textAlign: "center" }}>

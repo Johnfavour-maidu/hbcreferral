@@ -157,7 +157,7 @@ export default function AdminLeaderboardPage() {
                         </div>
                       </td>
                       <td style={{ padding: "14px 20px", fontSize: 13, color: "#7B5B43" }}>
-                        @{entry.instagram}
+                        {entry.instagram}
                       </td>
                       <td style={{ padding: "14px 20px", textAlign: "center" }}>
                         <span style={{

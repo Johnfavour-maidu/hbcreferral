@@ -85,8 +85,7 @@ export function SocialSection() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`group inline-flex items-center justify-center gap-2.5 ${social.bg} text-white rounded-2xl h-[50px] text-[15px] font-semibold transition-all duration-300 hover:-translate-y-1 hover:scale-[1.03] ${social.hoverShadow}`}
-                    style={{ width: "100%", maxWidth: 170 }}
+                    className={`group inline-flex items-center justify-center gap-2.5 ${social.bg} text-white rounded-2xl px-6 h-[50px] text-[15px] font-semibold transition-all duration-300 hover:-translate-y-1 hover:scale-[1.03] ${social.hoverShadow}`}
                   >
                     <social.icon className="h-5 w-5" />
                     {social.name}
