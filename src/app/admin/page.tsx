@@ -160,8 +160,8 @@ export default function AdminDashboard() {
   ] as const;
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FFF8EF" }}>
-      <div style={{ paddingLeft: 32, paddingRight: 32, paddingTop: 32, paddingBottom: 48 }}>
+    <div>
+      <div>
       {/* ─── Header ─── */}
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: 34, fontWeight: 800, color: "#2D2118", lineHeight: 1.2, margin: 0 }}>

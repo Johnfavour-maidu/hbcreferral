@@ -39,7 +39,7 @@ export function HowItWorks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center"
-          style={{ marginBottom: 64 }}
+          style={{ marginBottom: 0 }}
         >
           <span className="inline-block text-gold text-sm font-semibold uppercase tracking-widest mb-3">
             How It Works
@@ -119,7 +119,7 @@ export function HowItWorks() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="flex gap-4 relative"
+                className="flex gap-4 items-center relative"
               >
                 {/* Step number circle with centered line */}
                 <div className="relative flex flex-col items-center">
