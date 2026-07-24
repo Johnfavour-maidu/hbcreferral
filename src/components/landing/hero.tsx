@@ -57,13 +57,13 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.3, ease }}
               className="flex flex-col sm:flex-row items-center justify-center gap-5"
             >
-              <Button size="default" className="group min-w-[180px] h-12 rounded-xl px-7 text-[15px] font-semibold" asChild>
+              <Button size="default" className="group min-w-[200px] h-14 rounded-xl px-8 text-[16px] font-semibold" asChild>
                 <Link href="/register">
                   Register Now
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button size="default" variant="outline" className="min-w-[180px] h-12 rounded-xl px-7 text-[15px] font-semibold" asChild>
+              <Button size="default" variant="outline" className="min-w-[200px] h-14 rounded-xl px-8 text-[16px] font-semibold" asChild>
                 <Link href="/login">Login</Link>
               </Button>
             </motion.div>

@@ -33,8 +33,8 @@ const steps = [
 export function HowItWorks() {
   return (
     <>
-      <style>{`@media (min-width: 768px) { .how-it-works-section { padding-bottom: 24px !important; background-color: white !important; } }`}</style>
-      <section className="bg-bg how-it-works-section" style={{ paddingTop: 80, paddingBottom: 48 }}>
+      <style>{`@media (min-width: 768px) { .how-it-works-section { padding-bottom: 24px !important; } }`}</style>
+      <section className="bg-white how-it-works-section" style={{ paddingTop: 80, paddingBottom: 48 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -113,15 +113,15 @@ export function HowItWorks() {
 
         {/* Mobile vertical stepper */}
         <div className="md:hidden relative">
-          <div className="space-y-10">
+          <div className="space-y-16">
             {steps.map((step, i) => (
-              <motion.div
+                <motion.div
                 key={step.number}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="flex gap-4 items-center relative"
+                className="flex gap-5 items-start relative"
               >
                 {/* Step number circle with centered line */}
                 <div className="relative flex flex-col items-center">
@@ -153,11 +153,11 @@ export function HowItWorks() {
                 </div>
 
                 {/* Content */}
-                <div className="pt-2 pb-2">
+                <div className="pt-2 pb-4">
                   <span className="text-gold text-xs font-bold uppercase tracking-widest">
                     Step {step.number}
                   </span>
-                  <h3 className="text-lg font-bold text-brown-dark mt-1 mb-1">
+                  <h3 className="text-lg font-bold text-brown-dark mt-1 mb-2">
                     {step.title}
                   </h3>
                   <p className="text-brown-light text-sm leading-relaxed">
