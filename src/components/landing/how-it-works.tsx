@@ -18,8 +18,8 @@ const steps = [
   },
   {
     icon: Users,
-    title: "Friends Complete the Requirements",
-    description: "Friends register and complete the required Instagram actions.",
+    title: "Invite Friends",
+    description: "Friends complete the required steps and are verified.",
     number: "03",
   },
   {
@@ -32,7 +32,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 16 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

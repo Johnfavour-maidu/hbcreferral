@@ -35,7 +35,7 @@ const tiers = [
 export function RewardsPreview() {
   return (
     <section id="rewards" className="bg-white">
-      <div style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div style={{ paddingTop: 16, paddingBottom: 80 }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", paddingLeft: 32, paddingRight: 32 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,11 +59,23 @@ export function RewardsPreview() {
             {tiers.map((tier, i) => (
               <motion.div
                 key={tier.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.5 }}
-                whileHover={{ y: -6, scale: 1.02, boxShadow: "0 20px 40px rgba(200,154,43,0.15)" }}
+                initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  delay: i * 0.15,
+                  duration: 0.6,
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.04,
+                  boxShadow: "0 24px 48px rgba(200,154,43,0.18), 0 8px 16px rgba(0,0,0,0.06)",
+                  transition: { duration: 0.25, type: "spring", stiffness: 300, damping: 20 },
+                }}
+                whileTap={{ scale: 0.98 }}
                 className={`reward-card ${tier.cardClass}`}
                 style={{ cursor: "default" }}
               >
