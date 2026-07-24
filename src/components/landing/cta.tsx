@@ -63,14 +63,31 @@ export function CTASection() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6">
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
               {socials.map((s) => (
                 <a
                   key={s.name}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${s.bg} group flex items-center justify-center gap-3 h-[52px] min-w-[170px] w-full sm:w-[170px] rounded-2xl text-white font-semibold text-[15px] shadow-lg transition-all duration-250 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl hover:brightness-110`}
+                  className={`${s.bg} group`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 10,
+                    height: 52,
+                    minWidth: 170,
+                    width: "100%",
+                    maxWidth: 170,
+                    borderRadius: 16,
+                    color: "#fff",
+                    fontWeight: 600,
+                    fontSize: 15,
+                    textDecoration: "none",
+                    boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+                    transition: "all 0.25s",
+                  }}
                 >
                   <span className="flex items-center justify-center">{s.icon}</span>
                   <span>{s.name}</span>

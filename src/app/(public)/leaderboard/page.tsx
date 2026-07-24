@@ -85,8 +85,69 @@ export default function LeaderboardPage() {
         overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
       }}>
         {entries.length > 0 ? (
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <>
+            {/* Mobile Card View */}
+            <div className="block md:hidden" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+              {entries.map((entry) => {
+                const isCurrentUser = entry.userId === currentUserId;
+                const rankBg = entry.rank === 1 ? "#FEF3C7" : entry.rank === 2 ? "#F0EBE3" : entry.rank === 3 ? "#FEE2E2" : "transparent";
+                const rankColor = entry.rank === 1 ? "#D97706" : entry.rank === 2 ? "#7B5B43" : entry.rank === 3 ? "#DC2626" : "#7B5B43";
+
+                return (
+                  <div
+                    key={entry.userId}
+                    style={{
+                      padding: "14px 18px",
+                      borderBottom: "1px solid #F0EBE3",
+                      background: isCurrentUser ? "rgba(200,154,43,0.06)" : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                    }}
+                  >
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                      background: rankBg, color: rankColor,
+                      fontSize: 13, fontWeight: 800,
+                      border: entry.rank <= 3 ? `1.5px solid ${rankColor}20` : "none",
+                    }}>
+                      {entry.rank <= 3 ? (entry.rank === 1 ? "🥇" : entry.rank === 2 ? "🥈" : "🥉") : `#${entry.rank}`}
+                    </span>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: 18, flexShrink: 0,
+                      background: isCurrentUser ? "#FEF3C7" : "#F0EBE3",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 12, fontWeight: 700,
+                      color: isCurrentUser ? "#D97706" : "#7B5B43",
+                    }}>
+                      {entry.fullName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                        {entry.fullName}
+                        {isCurrentUser && (
+                          <span style={{ fontSize: 11, color: "#C89A2B", marginLeft: 6, fontWeight: 600 }}>(You)</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: 12, color: "#999" }}>{entry.instagram}</div>
+                    </div>
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: 4, flexShrink: 0,
+                      background: "#DCFCE7", color: "#16A34A",
+                      padding: "4px 10px", borderRadius: 20,
+                      fontSize: 12, fontWeight: 700,
+                    }}>
+                      {entry.verifiedReferrals}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table */}
+            <div className="hidden md:block" style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
                   <th style={{
@@ -185,7 +246,8 @@ export default function LeaderboardPage() {
                 })}
               </tbody>
             </table>
-          </div>
+            </div>
+          </>
         ) : (
           <div style={{ padding: "64px 32px", textAlign: "center" }}>
             <div style={{
