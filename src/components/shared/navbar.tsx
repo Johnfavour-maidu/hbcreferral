@@ -80,31 +80,30 @@ export function Navbar() {
             transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="md:hidden border-t border-border overflow-hidden"
           >
-            <div className="py-4 space-y-2 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
+            <div className="py-4 bg-white" style={{ paddingLeft: 32, paddingRight: 32 }}>
               {hideButtons ? (
-                <button
-                  className="w-full inline-flex items-center justify-center gap-3 h-11 min-w-[140px] px-6 rounded-xl bg-gold text-white font-semibold text-[14px] shadow-[0_4px_12px_rgba(200,154,43,0.25)] hover:bg-gold-dark transition-colors"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    signOut({ callbackUrl: "/" });
-                  }}
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </button>
+                <div className="flex justify-end">
+                  <button
+                    className="inline-flex items-center gap-2 text-[15px] font-medium text-brown hover:text-gold transition-colors py-2"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      signOut({ callbackUrl: "/" });
+                    }}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </button>
+                </div>
               ) : (
-                <>
-                  <Button variant="outline" className="w-full h-12 rounded-xl text-[15px]" asChild>
-                    <Link href="/login" onClick={() => setMobileOpen(false)}>
-                      Login
-                    </Link>
-                  </Button>
-                  <Button className="w-full h-12 rounded-xl text-[15px]" asChild>
-                    <Link href="/register" onClick={() => setMobileOpen(false)}>
-                      Register Now
-                    </Link>
-                  </Button>
-                </>
+                <div className="flex flex-col items-end">
+                  <Link href="/login" onClick={() => setMobileOpen(false)} className="text-[15px] font-medium text-brown hover:text-gold transition-colors py-2">
+                    Login
+                  </Link>
+                  <div className="w-full border-t border-border my-2" />
+                  <Link href="/register" onClick={() => setMobileOpen(false)} className="text-[15px] font-medium text-gold hover:text-gold-dark transition-colors py-2">
+                    Register Now
+                  </Link>
+                </div>
               )}
             </div>
           </motion.div>

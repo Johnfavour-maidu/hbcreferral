@@ -63,7 +63,7 @@ export default function DashboardPage() {
   const [referrals, setReferrals] = useState<
     { id: string; fullName: string; instagram: string; status: string; createdAt: string }[]
   >([]);
-  const [refSearch, setRefSearch] = useState("");
+  const [historyOpen, setHistoryOpen] = useState(true);
   const [refPage, setRefPage] = useState(1);
   const [historyOpen, setHistoryOpen] = useState(false);
   const REF_PER_PAGE = 10;
@@ -402,27 +402,6 @@ export default function DashboardPage() {
 
         {historyOpen && (
           <div style={{ padding: "0 32px 28px" }}>
-            {/* Search */}
-            <div style={{ position: "relative", marginBottom: 20 }}>
-              <Search style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", width: 16, height: 16, color: "#999" }} />
-              <input
-                type="text"
-                placeholder="Search by Instagram username..."
-                value={refSearch}
-                onChange={(e) => { setRefSearch(e.target.value); setRefPage(1); }}
-                style={{
-                  width: "100%",
-                  padding: "12px 14px 12px 40px",
-                  borderRadius: 12,
-                  border: "1px solid #E7D8C6",
-                  background: "#FCF8F3",
-                  fontSize: 13,
-                  color: "#2D2118",
-                  outline: "none",
-                  boxSizing: "border-box",
-                }}
-              />
-            </div>
 
           {/* Table or Empty */}
           {referrals.length === 0 ? (
@@ -445,7 +424,6 @@ export default function DashboardPage() {
                   </thead>
                   <tbody>
                     {referrals
-                      .filter((r) => !refSearch || r.instagram.toLowerCase().includes(refSearch.toLowerCase()))
                       .slice((refPage - 1) * REF_PER_PAGE, refPage * REF_PER_PAGE)
                       .map((ref) => (
                         <tr key={ref.id} style={{ borderBottom: "1px solid #F8F2EA" }}>
@@ -476,8 +454,7 @@ export default function DashboardPage() {
 
               {/* Pagination */}
               {(() => {
-                const filtered = referrals.filter((r) => !refSearch || r.instagram.toLowerCase().includes(refSearch.toLowerCase()));
-                const totalPages = Math.ceil(filtered.length / REF_PER_PAGE);
+                const totalPages = Math.ceil(referrals.length / REF_PER_PAGE);
                 if (totalPages <= 1) return null;
                 return (
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 20 }}>
