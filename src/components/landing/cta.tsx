@@ -57,7 +57,7 @@ export function CTASection() {
               Follow Us on Social Media
             </h2>
             <div style={{ maxWidth: 580, marginBottom: 20, marginLeft: "auto", marginRight: "auto" }}>
-              <p className="text-cream/65 text-lg leading-[1.8]">
+              <p className="text-cream/65 text-base md:text-lg leading-[1.7]">
                 Stay connected with Hearts by Charming for inspiring content and community highlights.
                 Follow us and never miss an update.
               </p>
