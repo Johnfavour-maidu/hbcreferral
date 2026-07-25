@@ -54,14 +54,11 @@ export async function GET(request: NextRequest) {
           orderBy: { createdAt: "desc" },
           include: {
             referrer: { include: { profile: { select: { fullName: true, instagram: true } } } },
-            referredUser: { include: { profile: { select: { fullName: true, instagram: true } } } },
           },
         });
         data = referrals.map((r) => ({
           referrer_name: r.referrer.profile?.fullName || "",
           referrer_username: r.referrer.profile?.instagram || "",
-          referred_name: r.referredUser?.profile?.fullName || "",
-          referred_username: r.referredUser?.profile?.instagram || "",
           referred_instagram: r.referredInstagram || "",
           status: r.status,
           created: r.createdAt.toISOString(),
