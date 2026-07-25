@@ -98,6 +98,7 @@ export default function AdminDashboard() {
   };
 
   const handleReverse = async (id: string) => {
+    const current = verifications.find((v) => v.id === id);
     try {
       const res = await fetch("/api/admin/verify", {
         method: "PUT",
@@ -106,7 +107,11 @@ export default function AdminDashboard() {
       });
       if (res.ok) {
         setVerifications((prev) => prev.map((v) => v.id === id ? { ...v, status: "PENDING" } : v));
-        setStats((prev) => prev ? { ...prev, verifiedReferrals: prev.verifiedReferrals - 1, pendingVerifications: prev.pendingVerifications + 1 } : prev);
+        if (current?.status === "VERIFIED") {
+          setStats((prev) => prev ? { ...prev, verifiedReferrals: prev.verifiedReferrals - 1, pendingVerifications: prev.pendingVerifications + 1 } : prev);
+        } else if (current?.status === "REJECTED") {
+          setStats((prev) => prev ? { ...prev, rejectedReferrals: prev.rejectedReferrals - 1, pendingVerifications: prev.pendingVerifications + 1 } : prev);
+        }
         toast.success("Referral reversed to pending");
       }
     } catch {
@@ -449,7 +454,7 @@ export default function AdminDashboard() {
                               </button>
                             </>
                           )}
-                          {v.status === "VERIFIED" && (
+                          {(v.status === "VERIFIED" || v.status === "REJECTED") && (
                             <button onClick={() => handleReverse(v.id)} title="Reverse to pending" style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEF3C7", color: "#D97706", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                               <RotateCcw style={{ width: 14, height: 14 }} />
                             </button>
