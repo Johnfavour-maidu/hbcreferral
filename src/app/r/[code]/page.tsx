@@ -153,10 +153,10 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
         {/* Required Title */}
         <div style={{ textAlign: "center", marginBottom: 20 }}>
           <h1 style={{ fontSize: 18, fontWeight: 800, color: "#2D2118", lineHeight: 1.3 }}>
-            Required Steps
+            Complete the steps below
           </h1>
           <p style={{ fontSize: 13, color: "#999", marginTop: 4 }}>
-            Complete all 4 steps to make your referral count
+            Complete the first 4 steps to make your referral count and the other two are optional
           </p>
         </div>
 
