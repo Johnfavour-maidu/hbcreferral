@@ -288,9 +288,8 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
 
             {/* Optional Step 5 */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-              <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(200,154,43,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, position: "relative" }}>
+              <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(200,154,43,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ fontSize: 14, fontWeight: 700, color: "#C89A2B" }}>5</span>
-                <span style={{ position: "absolute", top: -6, right: -8, fontSize: 8, fontWeight: 700, color: "#999", background: "#F0E6D6", padding: "1px 5px", borderRadius: 6 }}>Optional</span>
               </div>
               <div style={{ flex: 1 }}>
                 <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2D2118", marginBottom: 4 }}>Follow on Facebook</h3>
@@ -312,9 +311,8 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
 
             {/* Optional Step 6 */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-              <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(200,154,43,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, position: "relative" }}>
+              <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(200,154,43,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ fontSize: 14, fontWeight: 700, color: "#C89A2B" }}>6</span>
-                <span style={{ position: "absolute", top: -6, right: -8, fontSize: 8, fontWeight: 700, color: "#999", background: "#F0E6D6", padding: "1px 5px", borderRadius: 6 }}>Optional</span>
               </div>
               <div style={{ flex: 1 }}>
                 <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2D2118", marginBottom: 4 }}>Follow on TikTok</h3>
