@@ -11,7 +11,6 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type") || "participants";
-    const format = searchParams.get("format") || "csv";
 
     let data: any[] = [];
     const filename = type;
@@ -54,50 +53,35 @@ export async function GET(request: NextRequest) {
         const referrals = await prisma.referral.findMany({
           orderBy: { createdAt: "desc" },
           include: {
-            referrer: { include: { profile: { select: { fullName: true } } } },
-            referredUser: { include: { profile: { select: { fullName: true } } } },
+            referrer: { include: { profile: { select: { fullName: true, instagram: true } } } },
+            referredUser: { include: { profile: { select: { fullName: true, instagram: true } } } },
           },
         });
         data = referrals.map((r) => ({
-          referrer: r.referrer.profile?.fullName || "",
-          referred: r.referredUser?.profile?.fullName || "",
+          referrer_name: r.referrer.profile?.fullName || "",
+          referrer_username: r.referrer.profile?.instagram || "",
+          referred_name: r.referredUser?.profile?.fullName || "",
+          referred_username: r.referredUser?.profile?.instagram || "",
+          referred_instagram: r.referredInstagram || "",
           status: r.status,
           created: r.createdAt.toISOString(),
           verified: r.verifiedAt?.toISOString() || "",
         }));
         break;
-
-      case "verification":
-        const logs = await prisma.verificationLog.findMany({
-          orderBy: { createdAt: "desc" },
-          include: { user: { include: { profile: { select: { fullName: true } } } } },
-        });
-        data = logs.map((l) => ({
-          participant: l.user.profile?.fullName || "",
-          action: l.action,
-          details: l.details || "",
-          performedBy: l.performedBy,
-          date: l.createdAt.toISOString(),
-        }));
-        break;
     }
 
-    if (format === "csv") {
-      if (data.length === 0) {
-        return new NextResponse("No data", { status: 200 });
-      }
-      const headers = Object.keys(data[0]);
-      const csv = [headers.join(","), ...data.map((row) => headers.map((h) => `"${String(row[h]).replace(/"/g, '""')}"`).join(","))].join("\n");
-
-      return new NextResponse(csv, {
-        headers: {
-          "Content-Type": "text/csv",
-          "Content-Disposition": `attachment; filename="${filename}.csv"`,
-        },
-      });
+    if (data.length === 0) {
+      return new NextResponse("No data", { status: 200 });
     }
+    const headers = Object.keys(data[0]);
+    const csv = [headers.join(","), ...data.map((row) => headers.map((h) => `"${String(row[h]).replace(/"/g, '""')}"`).join(","))].join("\n");
 
-    return NextResponse.json(data);
+    return new NextResponse(csv, {
+      headers: {
+        "Content-Type": "text/csv",
+        "Content-Disposition": `attachment; filename="${filename}.csv"`,
+      },
+    });
   } catch (error) {
     console.error("Admin export error:", error);
     return NextResponse.json(

@@ -2,34 +2,57 @@
 
 import { useState } from "react";
 import { PageWrapper, FadeIn } from "@/components/shared/animations";
-import { Download, FileSpreadsheet, File, Loader2 } from "lucide-react";
+import { Download, FileSpreadsheet, Users, Trophy, UserCheck, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const EXPORTS = [
-  { type: "participants", label: "Participants", description: "All registered participants with their details" },
-  { type: "leaderboard", label: "Leaderboard", description: "Current rankings and referral counts" },
-  { type: "referrals", label: "Referrals", description: "All referral records with statuses" },
-  { type: "verification", label: "Verification Log", description: "Admin verification actions log" },
+  {
+    type: "participants",
+    label: "Participants",
+    description: "All registered participants with their details",
+    icon: Users,
+    iconBg: "#FEF3C7",
+    iconColor: "#D97706",
+  },
+  {
+    type: "leaderboard",
+    label: "Leaderboard",
+    description: "Current rankings and referral counts",
+    icon: Trophy,
+    iconBg: "#DCFCE7",
+    iconColor: "#16A34A",
+  },
+  {
+    type: "referrals",
+    label: "Referrals",
+    description: "All referral records with usernames and statuses",
+    icon: UserCheck,
+    iconBg: "#EDE9FE",
+    iconColor: "#7C3AED",
+  },
 ];
 
 export default function AdminExportsPage() {
   const [loading, setLoading] = useState<string | null>(null);
 
-  const handleExport = async (type: string, format: string) => {
-    setLoading(`${type}-${format}`);
+  const handleExport = async (type: string) => {
+    setLoading(type);
     try {
-      const res = await fetch(`/api/admin/export?type=${type}&format=${format}`);
+      const res = await fetch(`/api/admin/export?type=${type}&format=csv`);
       if (res.ok) {
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${type}.${format}`;
+        a.download = `${type}.csv`;
         a.click();
-        toast.success(`${type} exported as ${format.toUpperCase()}!`);
+        toast.success(`${type} exported as CSV!`);
       }
-    } catch { toast.error("Export failed"); }
-    finally { setLoading(null); }
+    } catch {
+      toast.error("Export failed");
+    } finally {
+      setLoading(null);
+    }
   };
 
   return (
@@ -43,51 +66,60 @@ export default function AdminExportsPage() {
         </div>
       </FadeIn>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
-        {EXPORTS.map((exp, i) => (
-          <FadeIn key={exp.type} delay={i * 0.08}>
-            <div style={{
-              background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
-              padding: "24px", transition: "all 0.2s",
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 20px rgba(74,46,31,0.06)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
-            >
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118", marginBottom: 6 }}>{exp.label}</h3>
-              <p style={{ fontSize: 13, color: "#7B5B43", marginBottom: 20 }}>{exp.description}</p>
-              <div style={{ display: "flex", gap: 8 }}>
-                {["csv", "json"].map((format) => {
-                  const isLoading = loading === `${exp.type}-${format}`;
-                  return (
-                    <button
-                      key={format}
-                      onClick={() => handleExport(exp.type, format)}
-                      disabled={isLoading}
-                      style={{
-                        display: "inline-flex", alignItems: "center", gap: 6,
-                        padding: "8px 16px", borderRadius: 10, fontSize: 13, fontWeight: 600,
-                        background: "white", color: "#4A2E1F",
-                        border: "1.5px solid #E7D8C6", cursor: isLoading ? "wait" : "pointer",
-                        transition: "all 0.2s", opacity: isLoading ? 0.7 : 1,
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#C89A2B"; e.currentTarget.style.background = "#FFF8EF"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E7D8C6"; e.currentTarget.style.background = "white"; }}
-                    >
-                      {isLoading ? (
-                        <Loader2 style={{ width: 14, height: 14, animation: "spin 0.8s linear infinite" }} />
-                      ) : format === "csv" ? (
-                        <FileSpreadsheet style={{ width: 14, height: 14 }} />
-                      ) : (
-                        <File style={{ width: 14, height: 14 }} />
-                      )}
-                      {format.toUpperCase()}
-                    </button>
-                  );
-                })}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gap: 20,
+      }}>
+        {EXPORTS.map((exp, i) => {
+          const Icon = exp.icon;
+          const isLoading = loading === exp.type;
+          return (
+            <FadeIn key={exp.type} delay={i * 0.08}>
+              <div style={{
+                background: "white", borderRadius: 20, border: "1.5px solid #E7D8C6",
+                padding: 24, transition: "all 0.2s", display: "flex", flexDirection: "column", gap: 16,
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 20px rgba(74,46,31,0.06)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "none"; }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12, background: exp.iconBg,
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  }}>
+                    <Icon style={{ width: 22, height: 22, color: exp.iconColor }} />
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2D2118", margin: 0 }}>{exp.label}</h3>
+                    <p style={{ fontSize: 13, color: "#7B5B43", margin: "4px 0 0", lineHeight: 1.4 }}>{exp.description}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleExport(exp.type)}
+                  disabled={isLoading}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    padding: "10px 20px", borderRadius: 12, fontSize: 14, fontWeight: 600,
+                    background: "#C89A2B", color: "white", border: "none",
+                    cursor: isLoading ? "wait" : "pointer",
+                    transition: "all 0.2s", opacity: isLoading ? 0.7 : 1,
+                    width: "100%",
+                  }}
+                  onMouseEnter={(e) => { if (!isLoading) { e.currentTarget.style.background = "#B8891F"; } }}
+                  onMouseLeave={(e) => { if (!isLoading) { e.currentTarget.style.background = "#C89A2B"; } }}
+                >
+                  {isLoading ? (
+                    <Loader2 style={{ width: 16, height: 16, animation: "spin 0.8s linear infinite" }} />
+                  ) : (
+                    <FileSpreadsheet style={{ width: 16, height: 16 }} />
+                  )}
+                  {isLoading ? "Exporting..." : "Download CSV"}
+                </button>
               </div>
-            </div>
-          </FadeIn>
-        ))}
+            </FadeIn>
+          );
+        })}
       </div>
     </PageWrapper>
   );
