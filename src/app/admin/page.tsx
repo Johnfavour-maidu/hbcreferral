@@ -41,6 +41,7 @@ interface Participant {
   totalReferrals: number;
   verifiedReferrals: number;
   isActive: boolean;
+  participantStatus: string;
   createdAt: string;
 }
 
@@ -106,7 +107,7 @@ export default function AdminDashboard() {
         body: JSON.stringify({ id, action: "softDelete" }),
       });
       if (res.ok) {
-        setParticipants((prev) => prev.map((p) => p.id === id ? { ...p, isActive: false } : p));
+        setParticipants((prev) => prev.map((p) => p.id === id ? { ...p, isActive: false, participantStatus: "DELETED" } : p));
         toast.success("Participant moved to recycle bin");
       } else {
         const data = await res.json();
@@ -114,6 +115,26 @@ export default function AdminDashboard() {
       }
     } catch {
       toast.error("Failed to delete participant");
+    }
+  };
+
+  const handleSuspendParticipant = async (id: string) => {
+    if (!confirm("Suspend this participant?")) return;
+    try {
+      const res = await fetch("/api/admin/participants", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action: "suspend" }),
+      });
+      if (res.ok) {
+        setParticipants((prev) => prev.map((p) => p.id === id ? { ...p, isActive: false, participantStatus: "SUSPENDED" } : p));
+        toast.success("Participant suspended");
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Failed to suspend participant");
+      }
+    } catch {
+      toast.error("Failed to suspend participant");
     }
   };
 
@@ -332,18 +353,29 @@ export default function AdminDashboard() {
                         <span style={{ display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "#DCFCE7", color: "#16A34A" }}>{p.verifiedReferrals}</span>
                       </td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
-                        <span style={{ display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: p.isActive ? "#DCFCE7" : "#FEE2E2", color: p.isActive ? "#16A34A" : "#DC2626" }}>
-                          {p.isActive ? "Active" : "Suspended"}
+                        <span style={{ display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: p.participantStatus === "ACTIVE" ? "#DCFCE7" : p.participantStatus === "SUSPENDED" ? "#FEF3C7" : "#FEE2E2", color: p.participantStatus === "ACTIVE" ? "#16A34A" : p.participantStatus === "SUSPENDED" ? "#D97706" : "#DC2626" }}>
+                          {p.participantStatus}
                         </span>
                       </td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
-                        <button
-                          onClick={() => handleDeleteParticipant(p.id)}
-                          style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEE2E2", color: "#DC2626", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                          title="Delete participant"
-                        >
-                          <Trash2 style={{ width: 14, height: 14 }} />
-                        </button>
+                        <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                          {p.participantStatus === "ACTIVE" && (
+                            <button
+                              onClick={() => handleSuspendParticipant(p.id)}
+                              style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEF3C7", color: "#D97706", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                              title="Suspend participant"
+                            >
+                              <Ban style={{ width: 14, height: 14 }} />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleDeleteParticipant(p.id)}
+                            style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEE2E2", color: "#DC2626", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                            title="Delete participant"
+                          >
+                            <Trash2 style={{ width: 14, height: 14 }} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
