@@ -98,6 +98,46 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
+    if (action === "reverse" && previousStatus === "VERIFIED") {
+      const profile = await prisma.profile.findFirst({ where: { userId: referral.referrerId } });
+      if (profile) {
+        await prisma.profile.update({
+          where: { id: profile.id },
+          data: {
+            verifiedReferrals: { decrement: 1 },
+            pendingReferrals: { increment: 1 },
+          },
+        });
+      }
+
+      await prisma.referral.update({
+        where: { id },
+        data: { status: "PENDING", verifiedAt: null, verifiedBy: null },
+      });
+
+      await prisma.verificationLog.create({
+        data: {
+          userId: referral.referrerId,
+          action: "APPROVAL_REVERSED",
+          performedBy: session.user.id,
+          details: `Referral reversed to pending (was VERIFIED)`,
+        },
+      });
+
+      await prisma.adminAuditLog.create({
+        data: {
+          adminId: session.user.id,
+          adminEmail: session.user.email || "",
+          action: "REFERRAL_REVERSED_TO_PENDING",
+          targetType: "REFERRAL",
+          targetId: id,
+          details: `Reversed referral @${referral.referredInstagram} to PENDING (was VERIFIED)`,
+        },
+      });
+
+      return NextResponse.json({ success: true });
+    }
+
     const updateData: Record<string, unknown> = {
       status: action === "approve" ? "VERIFIED" : "REJECTED",
       verifiedAt: action === "approve" ? new Date() : null,

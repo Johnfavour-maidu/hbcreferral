@@ -15,8 +15,9 @@ import {
   Check,
   X,
   Trash2,
-  Ban,
   Inbox,
+  RotateCcw,
+  Ban,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -95,6 +96,23 @@ export default function AdminDashboard() {
       }
     } catch {
       toast.error("Failed to process");
+    }
+  };
+
+  const handleReverse = async (id: string) => {
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action: "reverse" }),
+      });
+      if (res.ok) {
+        setVerifications((prev) => prev.map((v) => v.id === id ? { ...v, status: "PENDING" } : v));
+        setStats((prev) => prev ? { ...prev, verifiedReferrals: prev.verifiedReferrals - 1, pendingVerifications: prev.pendingVerifications + 1 } : prev);
+        toast.success("Referral reversed to pending");
+      }
+    } catch {
+      toast.error("Failed to reverse referral");
     }
   };
 
@@ -424,16 +442,23 @@ export default function AdminDashboard() {
                       </td>
                       <td style={{ padding: "14px 16px", fontSize: 12, color: "#A08060" }}>{new Date(v.createdAt).toLocaleDateString()}</td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
-                        {v.status === "PENDING" && (
-                          <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
-                            <button onClick={() => handleVerify(v.id, "approve")} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#DCFCE7", color: "#16A34A", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <Check style={{ width: 14, height: 14 }} />
+                        <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                          {v.status === "PENDING" && (
+                            <>
+                              <button onClick={() => handleVerify(v.id, "approve")} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#DCFCE7", color: "#16A34A", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <Check style={{ width: 14, height: 14 }} />
+                              </button>
+                              <button onClick={() => handleVerify(v.id, "reject")} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEE2E2", color: "#DC2626", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <X style={{ width: 14, height: 14 }} />
+                              </button>
+                            </>
+                          )}
+                          {v.status === "VERIFIED" && (
+                            <button onClick={() => handleReverse(v.id)} title="Reverse to pending" style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEF3C7", color: "#D97706", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <RotateCcw style={{ width: 14, height: 14 }} />
                             </button>
-                            <button onClick={() => handleVerify(v.id, "reject")} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: "#FEE2E2", color: "#DC2626", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <X style={{ width: 14, height: 14 }} />
-                            </button>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
