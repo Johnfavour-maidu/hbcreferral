@@ -307,7 +307,7 @@ export default function AdminDashboard() {
                   {pendingVerifications.slice(0, 5).map((v) => (
                     <div key={v.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0", borderBottom: "1px solid #F0EBE3" }}>
                       <div style={{ minWidth: 0 }}>
-                        <p style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", margin: 0 }}>Verification {v.id.slice(0, 8)}</p>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", margin: 0 }}>@{v.referredInstagram?.replace("@", "") || "unknown"}</p>
                         <p style={{ fontSize: 12, color: "#A08060", margin: "4px 0 0" }}>{new Date(v.createdAt).toLocaleDateString()}</p>
                       </div>
                       <div style={{ display: "flex", gap: 8 }}>

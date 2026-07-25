@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 interface VerificationItem {
   id: string;
+  referredInstagram: string;
   followsPage: boolean;
   likedPost: boolean;
   commentedPost: boolean;
@@ -122,7 +123,7 @@ function VerificationCard({
             <Instagram className="h-5 w-5 text-gold" />
           </div>
           <div>
-            <p className="text-[15px] font-bold text-brown-dark">Verification {item.id.slice(0, 8)}</p>
+            <p className="text-[15px] font-bold text-brown-dark">@{item.referredInstagram?.replace("@", "") || "unknown"}</p>
             <p className="text-[12px] text-brown-light/50">
               {new Date(item.createdAt).toLocaleDateString()}
             </p>
