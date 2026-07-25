@@ -48,6 +48,7 @@ interface Participant {
 
 interface VerificationItem {
   id: string;
+  referredInstagram: string;
   status: string;
   createdAt: string;
 }
@@ -419,7 +420,7 @@ export default function AdminDashboard() {
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                    {["Status", "Date", "Actions"].map((h) => (
+                    {["Instagram", "Status", "Date", "Actions"].map((h) => (
                       <th key={h} style={{
                         padding: "14px 16px", fontSize: 11, fontWeight: 700,
                         textTransform: "uppercase" as const, letterSpacing: "0.05em",
@@ -434,6 +435,7 @@ export default function AdminDashboard() {
                       onMouseEnter={(e) => { e.currentTarget.style.background = "#FFF8EF"; }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                     >
+                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{v.referredInstagram.replace(/^@+/, "")}</td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
                         <span style={{
                           display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600,
@@ -464,7 +466,7 @@ export default function AdminDashboard() {
                     </tr>
                   ))}
                   {verifications.length === 0 && (
-                    <tr><td colSpan={3} style={{ padding: "48px 16px", textAlign: "center", color: "#A08060", fontSize: 13 }}>No verifications yet</td></tr>
+                    <tr><td colSpan={4} style={{ padding: "48px 16px", textAlign: "center", color: "#A08060", fontSize: 13 }}>No verifications yet</td></tr>
                   )}
                 </tbody>
               </table>

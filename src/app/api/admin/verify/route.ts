@@ -14,6 +14,7 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
+        referredInstagram: true,
         followsPage: true,
         likedPost: true,
         commentedPost: true,
@@ -25,6 +26,7 @@ export async function GET() {
 
     const formatted = verifications.map((v) => ({
       id: v.id,
+      referredInstagram: v.referredInstagram,
       followsPage: v.followsPage,
       likedPost: v.likedPost,
       commentedPost: v.commentedPost,
