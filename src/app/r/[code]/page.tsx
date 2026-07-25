@@ -160,7 +160,7 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
           </p>
         </div>
 
-        {/* Required Steps */}
+        {/* All Steps */}
         <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #E7D8C6", padding: "28px 24px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", marginBottom: 28 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {/* Step 1 */}
@@ -283,27 +283,9 @@ export default function ReferralPage({ params }: { params: Promise<{ code: strin
                 )}
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Divider */}
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
-          <div style={{ flex: 1, height: 1, background: "#E7D8C6" }} />
-          <span style={{ fontSize: 13, fontWeight: 700, color: "#C89A2B", whiteSpace: "nowrap" }}>Bonus Tasks (Optional)</span>
-          <div style={{ flex: 1, height: 1, background: "#E7D8C6" }} />
-        </div>
+            <div style={{ height: 1, background: "#F0E6D6" }} />
 
-        {/* Optional Description */}
-        <div style={{ textAlign: "center", marginBottom: 20 }}>
-          <p style={{ fontSize: 13, color: "#999", lineHeight: 1.6 }}>
-            Help Hearts by Charming grow by following our other social platforms.<br />
-            These steps are optional and are not required for your referral to count.
-          </p>
-        </div>
-
-        {/* Optional Steps */}
-        <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #E7D8C6", padding: "28px 24px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", marginBottom: 28 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {/* Optional Step 5 */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
               <div style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(200,154,43,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, position: "relative" }}>
