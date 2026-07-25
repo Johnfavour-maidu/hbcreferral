@@ -424,7 +424,7 @@ export default function AdminDashboard() {
                       <th key={h} style={{
                         padding: "14px 16px", fontSize: 11, fontWeight: 700,
                         textTransform: "uppercase" as const, letterSpacing: "0.05em",
-                        color: "#A08060", textAlign: ["Actions"].includes(h) ? "center" : "left",
+                        color: "#A08060", textAlign: ["Actions", "Status"].includes(h) ? "center" : "left",
                       }}>{h}</th>
                     ))}
                   </tr>
