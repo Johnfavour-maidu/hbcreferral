@@ -15,6 +15,7 @@ import {
   Check,
   X,
   Trash2,
+  Ban,
   Inbox,
 } from "lucide-react";
 import { toast } from "sonner";
