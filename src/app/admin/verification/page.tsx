@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 interface VerificationItem {
   id: string;
-  referredInstagram: string;
   followsPage: boolean;
   likedPost: boolean;
   commentedPost: boolean;
@@ -56,8 +55,6 @@ export default function AdminVerificationPage() {
   };
 
   const filtered = items.filter((i) => filter === "ALL" || i.status === filter);
-
-  const normalize = (s: string) => s.replace(/^@+/, "");
 
   if (loading) {
     return (
@@ -117,8 +114,6 @@ function VerificationCard({
   const [liked, setLiked] = useState(item.likedPost);
   const [commented, setCommented] = useState(item.commentedPost);
 
-  const normalize = (s: string) => s.replace(/^@+/, "");
-
   return (
     <div className="bg-white rounded-2xl border border-cream-dark p-5 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-4">
@@ -127,7 +122,7 @@ function VerificationCard({
             <Instagram className="h-5 w-5 text-gold" />
           </div>
           <div>
-            <p className="text-[15px] font-bold text-brown-dark">{normalize(item.referredInstagram)}</p>
+            <p className="text-[15px] font-bold text-brown-dark">Verification {item.id.slice(0, 8)}</p>
             <p className="text-[12px] text-brown-light/50">
               {new Date(item.createdAt).toLocaleDateString()}
             </p>

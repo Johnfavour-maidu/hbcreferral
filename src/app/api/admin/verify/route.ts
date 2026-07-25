@@ -12,20 +12,19 @@ export async function GET() {
 
     const verifications = await prisma.referral.findMany({
       orderBy: { createdAt: "desc" },
-      include: {
-        referrer: {
-          include: { profile: { select: { fullName: true } } },
-        },
-        referredUser: {
-          include: { profile: { select: { fullName: true, instagram: true } } },
-        },
+      select: {
+        id: true,
+        followsPage: true,
+        likedPost: true,
+        commentedPost: true,
+        commentText: true,
+        status: true,
+        createdAt: true,
       },
     });
 
     const formatted = verifications.map((v) => ({
       id: v.id,
-      referrerName: v.referrer.profile?.fullName || "Unknown",
-      referredInstagram: v.referredInstagram,
       followsPage: v.followsPage,
       likedPost: v.likedPost,
       commentedPost: v.commentedPost,

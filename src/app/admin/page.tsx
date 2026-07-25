@@ -48,8 +48,6 @@ interface Participant {
 
 interface VerificationItem {
   id: string;
-  referrerName: string;
-  referredInstagram: string;
   status: string;
   createdAt: string;
 }
@@ -303,8 +301,8 @@ export default function AdminDashboard() {
                   {pendingVerifications.slice(0, 5).map((v) => (
                     <div key={v.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0", borderBottom: "1px solid #F0EBE3" }}>
                       <div style={{ minWidth: 0 }}>
-                        <p style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", margin: 0 }}>{v.referredInstagram.replace(/^@+/, "")}</p>
-                        <p style={{ fontSize: 12, color: "#7B5B43", margin: "4px 0 0" }}>by {v.referrerName}</p>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: "#2D2118", margin: 0 }}>Verification {v.id.slice(0, 8)}</p>
+                        <p style={{ fontSize: 12, color: "#A08060", margin: "4px 0 0" }}>{new Date(v.createdAt).toLocaleDateString()}</p>
                       </div>
                       <div style={{ display: "flex", gap: 8 }}>
                         <button onClick={() => handleVerify(v.id, "approve")} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "#DCFCE7", color: "#16A34A", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -416,7 +414,7 @@ export default function AdminDashboard() {
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: "2px solid #F0EBE3" }}>
-                    {["Instagram", "Referred By", "Status", "Date", "Actions"].map((h) => (
+                    {["Status", "Date", "Actions"].map((h) => (
                       <th key={h} style={{
                         padding: "14px 16px", fontSize: 11, fontWeight: 700,
                         textTransform: "uppercase" as const, letterSpacing: "0.05em",
@@ -431,8 +429,6 @@ export default function AdminDashboard() {
                       onMouseEnter={(e) => { e.currentTarget.style.background = "#FFF8EF"; }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                     >
-                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{v.referredInstagram.replace(/^@+/, "")}</td>
-                      <td style={{ padding: "14px 16px", fontSize: 13, color: "#7B5B43" }}>{v.referrerName}</td>
                       <td style={{ padding: "14px 16px", textAlign: "center" }}>
                         <span style={{
                           display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600,
@@ -463,7 +459,7 @@ export default function AdminDashboard() {
                     </tr>
                   ))}
                   {verifications.length === 0 && (
-                    <tr><td colSpan={6} style={{ padding: "48px 16px", textAlign: "center", color: "#A08060", fontSize: 13 }}>No verifications yet</td></tr>
+                    <tr><td colSpan={3} style={{ padding: "48px 16px", textAlign: "center", color: "#A08060", fontSize: 13 }}>No verifications yet</td></tr>
                   )}
                 </tbody>
               </table>
