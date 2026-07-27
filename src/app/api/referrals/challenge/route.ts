@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { applyRateLimit } from "@/lib/api-rate-limit";
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = applyRateLimit(request, "referrals-challenge");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const { code, instagram } = body;

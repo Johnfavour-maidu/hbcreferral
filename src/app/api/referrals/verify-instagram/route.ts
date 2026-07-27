@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { applyRateLimit } from "@/lib/api-rate-limit";
 
 export async function GET(request: NextRequest) {
+  const rateLimitResponse = applyRateLimit(request, "verify-instagram");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { searchParams } = new URL(request.url);
     const username = searchParams.get("username");

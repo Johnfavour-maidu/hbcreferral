@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import prisma from "@/lib/prisma";
+import { applyRateLimit } from "@/lib/api-rate-limit";
 
 export async function POST(request: Request) {
+  const rateLimitResponse = applyRateLimit(request, "verify-otp");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { email, otp } = await request.json();
 
@@ -12,6 +16,7 @@ export async function POST(request: Request) {
 
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedOtp = otp.trim();
+    const otpHash = crypto.createHash("sha256").update(normalizedOtp).digest("hex");
 
     const record = await prisma.passwordResetOTP.findFirst({
       where: {
@@ -36,7 +41,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Verification code has expired. Please request a new one." }, { status: 400 });
     }
 
-    if (!crypto.timingSafeEqual(Buffer.from(record.otp), Buffer.from(normalizedOtp))) {
+    if (!crypto.timingSafeEqual(Buffer.from(record.otp), Buffer.from(otpHash))) {
       await prisma.passwordResetOTP.update({
         where: { id: record.id },
         data: { attemptCount: { increment: 1 } },

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import crypto from "crypto";
 import prisma from "@/lib/prisma";
+import { applyRateLimit } from "@/lib/api-rate-limit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -10,6 +11,9 @@ function generateOTP(): string {
 }
 
 export async function POST(request: Request) {
+  const rateLimitResponse = applyRateLimit(request, "forgot-password");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { email } = await request.json();
 
@@ -46,12 +50,13 @@ export async function POST(request: Request) {
     }
 
     const otp = generateOTP();
+    const otpHash = crypto.createHash("sha256").update(otp).digest("hex");
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     await prisma.passwordResetOTP.create({
       data: {
         email: normalizedEmail,
-        otp,
+        otp: otpHash,
         expiresAt,
       },
     });

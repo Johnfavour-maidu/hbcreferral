@@ -4,8 +4,12 @@ import prisma from "@/lib/prisma";
 import { generateReferralCode, generateReferralLink, generateParticipantId } from "@/lib/referral";
 import { registerSchema } from "@/lib/validations";
 import { sendWelcomeEmail } from "@/lib/email";
+import { applyRateLimit } from "@/lib/api-rate-limit";
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = applyRateLimit(request, "register");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const validated = registerSchema.parse(body);
