@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { siteConfig } from "@/config/site";
 import {
   Users,
   CheckCircle,
@@ -116,21 +117,21 @@ export default function DashboardPage() {
     {
       name: "Instagram",
       icon: InstagramIcon,
-      href: "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr",
+      href: siteConfig.social.instagramUrl,
       bg: "bg-gradient-to-br from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888]",
       hoverShadow: "hover:shadow-[0_8px_24px_rgba(225,48,108,0.3)]",
     },
     {
       name: "Facebook",
       icon: FacebookIcon,
-      href: "https://www.facebook.com/share/195h1uZfnZ/?mibextid=wwXIfr",
+      href: siteConfig.social.facebookUrl,
       bg: "bg-[#1877F2]",
       hoverShadow: "hover:shadow-[0_8px_24px_rgba(24,119,242,0.3)]",
     },
     {
       name: "TikTok",
       icon: TikTokIcon,
-      href: "https://www.tiktok.com/@hbc_teens?_r=1&_t=ZS-98DgJMe73Nl",
+      href: siteConfig.social.tiktokUrl,
       bg: "bg-[#010101]",
       hoverShadow: "hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]",
     },

@@ -5,8 +5,15 @@ export const siteConfig = {
   ogImage: "/og-image.png",
   links: {
     twitter: "https://twitter.com/heartsbycharming",
-    instagram: "https://instagram.com/heartsbycharming",
+    instagram: "https://www.instagram.com/heartsbycharming_",
     facebook: "https://facebook.com/heartsbycharming",
+    tiktok: "https://www.tiktok.com/@heartsbycharming",
+  },
+  social: {
+    instagramUrl: "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr",
+    facebookUrl: "https://www.facebook.com/share/195h1uZfnZ/?mibextid=wwXIfr",
+    tiktokUrl: "https://www.tiktok.com/@hbc_teens?_r=1&_t=ZS-98DgJMe73Nl",
+    challengePostUrl: "https://www.instagram.com/p/DbGbfYDs74v/",
   },
 };
 

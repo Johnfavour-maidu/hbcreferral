@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import crypto from "crypto";
 import prisma from "@/lib/prisma";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 function generateOTP(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return crypto.randomInt(100000, 999999).toString();
 }
 
 export async function POST(request: Request) {

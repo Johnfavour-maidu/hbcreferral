@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Verification code has expired. Please request a new one." }, { status: 400 });
     }
 
-    if (record.otp !== normalizedOtp) {
+    if (!crypto.timingSafeEqual(Buffer.from(record.otp), Buffer.from(normalizedOtp))) {
       await prisma.passwordResetOTP.update({
         where: { id: record.id },
         data: { attemptCount: { increment: 1 } },
@@ -54,6 +55,11 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    await prisma.passwordResetOTP.update({
+      where: { id: record.id },
+      data: { used: true },
+    });
 
     return NextResponse.json({ message: "OTP verified successfully.", email: normalizedEmail });
   } catch (error) {

@@ -61,7 +61,6 @@ model Profile {
   fullName          String
   instagram         String   @unique
   state             String   @default("")
-  school            String   @default("")
   referralCode      String   @unique
   referralLink      String   @unique
   qrCodeUrl         String?

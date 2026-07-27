@@ -147,11 +147,21 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Participant ID is required" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({ where: { id }, select: { id: true, email: true } });
     if (!user) {
       return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
+    await prisma.adminAuditLog.create({
+      data: {
+        adminId: session.user.id,
+        adminEmail: session.user.email || "",
+        action: "PARTICIPANT_PERMANENTLY_DELETED",
+        targetType: "USER",
+        targetId: id,
+        details: `Permanently deleted participant ${user.email} via DELETE endpoint`,
+      },
+    });
     await prisma.user.delete({ where: { id } });
 
     return NextResponse.json({ success: true });

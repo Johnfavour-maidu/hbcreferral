@@ -40,7 +40,6 @@ async function main() {
           fullName: "Admin User",
           instagram: "@heartsbycharming",
           state: "Lagos",
-          school: "Hearts by Charming HQ",
           referralCode: "HBC-ADMIN0",
           referralLink: "https://heartsbycharming.org/r/HBC-ADMIN0",
         },
@@ -51,11 +50,11 @@ async function main() {
 
   // Create sample participants
   const sampleUsers = [
-    { name: "Mary Johnson", email: "mary@example.com", phone: "+2348012345678", instagram: "@mary_j", state: "Lagos", school: "University of Lagos", code: "HBC-MARY1", pid: "HBC000001" },
-    { name: "David Chen", email: "david@example.com", phone: "+2348012345679", instagram: "@david_c", state: "Abuja", school: "Ahmadu Bello University", code: "HBC-DAVI2", pid: "HBC000002" },
-    { name: "Sarah Williams", email: "sarah@example.com", phone: "+2348012345680", instagram: "@sarah_w", state: "Rivers", school: "University of Port Harcourt", code: "HBC-SARA3", pid: "HBC000003" },
-    { name: "James Brown", email: "james@example.com", phone: "+2348012345681", instagram: "@james_b", state: "Oyo", school: "University of Ibadan", code: "HBC-JAME4", pid: "HBC000004" },
-    { name: "Grace Adekunle", email: "grace@example.com", phone: "+2348012345682", instagram: "@grace_a", state: "Ogun", school: "Olabisi Onabanjo University", code: "HBC-GRAC5", pid: "HBC000005" },
+    { name: "Mary Johnson", email: "mary@example.com", phone: "+2348012345678", instagram: "@mary_j", state: "Lagos", code: "HBC-MARY1", pid: "HBC000001" },
+    { name: "David Chen", email: "david@example.com", phone: "+2348012345679", instagram: "@david_c", state: "Abuja", code: "HBC-DAVI2", pid: "HBC000002" },
+    { name: "Sarah Williams", email: "sarah@example.com", phone: "+2348012345680", instagram: "@sarah_w", state: "Rivers", code: "HBC-SARA3", pid: "HBC000003" },
+    { name: "James Brown", email: "james@example.com", phone: "+2348012345681", instagram: "@james_b", state: "Oyo", code: "HBC-JAME4", pid: "HBC000004" },
+    { name: "Grace Adekunle", email: "grace@example.com", phone: "+2348012345682", instagram: "@grace_a", state: "Ogun", code: "HBC-GRAC5", pid: "HBC000005" },
   ];
 
   const participantPassword = await bcrypt.hash("Participant@1", 12);
@@ -75,7 +74,6 @@ async function main() {
             fullName: user.name,
             instagram: user.instagram,
             state: user.state,
-            school: user.school,
             referralCode: user.code,
             referralLink: `https://heartsbycharming.org/r/${user.code}`,
           },

@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { siteConfig } from "@/config/site";
 
 const socials = [
   {
     name: "Instagram",
-    href: "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr",
+    href: siteConfig.social.instagramUrl,
     bg: "bg-gradient-to-br from-[#f09433] via-[#e6683c] via-[#dc2743] via-[#cc2366] to-[#bc1888]",
     icon: (
       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -18,7 +19,7 @@ const socials = [
   },
   {
     name: "Facebook",
-    href: "https://www.facebook.com/share/195h1uZfnZ/?mibextid=wwXIfr",
+    href: siteConfig.social.facebookUrl,
     bg: "bg-[#1877F2]",
     icon: (
       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -28,7 +29,7 @@ const socials = [
   },
   {
     name: "TikTok",
-    href: "https://www.tiktok.com/@hbc_teens?_r=1&_t=ZS-98DgJMe73Nl",
+    href: siteConfig.social.tiktokUrl,
     bg: "bg-[#010101]",
     icon: (
       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

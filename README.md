@@ -61,10 +61,7 @@ npm run dev
 
 ### Admin Credentials
 
-After seeding:
-
-- **Email:** admin@heartsbycharming.org
-- **Password:** Admin@123
+After seeding, the admin account is created with credentials defined in `prisma/seed.ts`. Change the default password before deploying to production.
 
 ## Scripts
 

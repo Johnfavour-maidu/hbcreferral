@@ -126,9 +126,9 @@ export default function RulesPage() {
                 gap: 12,
                 margin: "16px 0",
               }}>
-                <PrizeCard medal="🥇" label="1st Place" amount="₦20,000" color="#D97706" bg="#FEF3C7" border="#FDE68A" />
-                <PrizeCard medal="🥈" label="2nd Place" amount="₦15,000" color="#7B5B43" bg="#F0EBE3" border="#E7D8C6" />
-                <PrizeCard medal="🥉" label="3rd Place" amount="₦10,000" color="#DC2626" bg="#FEE2E2" border="#FECACA" />
+                <PrizeCard medal="🥇" label="1st Place" amount="₦10,000" color="#D97706" bg="#FEF3C7" border="#FDE68A" />
+                <PrizeCard medal="🥈" label="2nd Place" amount="₦7,000" color="#7B5B43" bg="#F0EBE3" border="#E7D8C6" />
+                <PrizeCard medal="🥉" label="3rd Place" amount="₦5,000" color="#DC2626" bg="#FEE2E2" border="#FECACA" />
               </div>
               <p>Hearts by Charming reserves the right to verify all winning referrals before prizes are awarded.</p>
             </Section>

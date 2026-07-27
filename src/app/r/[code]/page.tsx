@@ -4,12 +4,13 @@ import { useEffect, useState, use } from "react";
 import { ExternalLink, Copy, Check, Instagram, Send, MessageCircle, Facebook, Music } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { siteConfig } from "@/config/site";
 
-const INSTAGRAM_URL = "https://www.instagram.com/heartsbycharming_";
-const CHALLENGE_POST_URL = "https://www.instagram.com/p/DbGbfYDs74v/";
-const CHALLENGE_POST_COMMENT_URL = "https://www.instagram.com/p/DbGbfYDs74v/";
-const FACEBOOK_URL = "https://www.facebook.com/share/195h1uZfnZ/?mibextid=wwXIfr";
-const TIKTOK_URL = "https://www.tiktok.com/@hbc_teens?_r=1&_t=ZS-98DgJMe73Nl";
+const INSTAGRAM_URL = siteConfig.social.instagramUrl.split("?")[0];
+const CHALLENGE_POST_URL = siteConfig.social.challengePostUrl;
+const CHALLENGE_POST_COMMENT_URL = siteConfig.social.challengePostUrl;
+const FACEBOOK_URL = siteConfig.social.facebookUrl;
+const TIKTOK_URL = siteConfig.social.tiktokUrl;
 
 export default function ReferralPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = use(params);
