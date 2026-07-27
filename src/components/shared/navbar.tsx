@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, LogOut, UserCog } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/shared/logo";
 
@@ -13,6 +13,8 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "ADMIN" || session?.user?.role === "MODERATOR";
 
   const isDashboard = pathname.startsWith("/dashboard") || pathname.startsWith("/admin") || pathname.startsWith("/profile");
   const isLeaderboard = pathname.startsWith("/leaderboard");
@@ -93,7 +95,7 @@ export function Navbar() {
               {hideButtons ? (
                 <div className="flex flex-col gap-1">
                   <Link
-                    href="/dashboard"
+                    href={isAdmin ? "/admin" : "/dashboard"}
                     onClick={() => setMobileOpen(false)}
                     className="text-[15px] font-medium text-brown hover:text-gold transition-colors py-2.5 text-right"
                   >

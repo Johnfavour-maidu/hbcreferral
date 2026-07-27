@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   Users,
   CheckCircle,
@@ -57,6 +58,7 @@ function TikTokIcon({ className }: { className?: string }) {
 }
 
 export default function DashboardPage() {
+  const { data: session } = useSession();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -68,6 +70,14 @@ export default function DashboardPage() {
   const REF_PER_PAGE = 10;
 
   useEffect(() => {
+    if (session && (session.user.role === "ADMIN" || session.user.role === "MODERATOR")) {
+      window.location.href = "/admin";
+      return;
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (session && (session.user.role === "ADMIN" || session.user.role === "MODERATOR")) return;
     fetch("/api/dashboard")
       .then((r) => r.json())
       .then(setData)
@@ -88,12 +98,8 @@ export default function DashboardPage() {
     );
   }
 
-  if (!data) {
-    return (
-      <div className="text-center py-20 text-brown-light">
-        Failed to load dashboard data.
-      </div>
-    );
+  if (!data || (session && (session.user.role === "ADMIN" || session.user.role === "MODERATOR"))) {
+    return null;
   }
 
   const { profile } = data;
