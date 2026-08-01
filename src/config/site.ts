@@ -13,7 +13,7 @@ export const siteConfig = {
     instagramUrl: "https://www.instagram.com/heartsbycharming_?igsh=MWRtbjlzeGZtNGI5MA%3D%3D&utm_source=qr",
     facebookUrl: "https://www.facebook.com/share/195h1uZfnZ/?mibextid=wwXIfr",
     tiktokUrl: "https://www.tiktok.com/@hbc_teens?_r=1&_t=ZS-98DgJMe73Nl",
-    challengePostUrl: "https://www.instagram.com/p/DbGbfYDs74v/",
+    challengePostUrl: "https://www.instagram.com/p/DbfjqXUNEUD/?igsh=c3JyZWh0Y2RvYWR5",
   },
 };
 
