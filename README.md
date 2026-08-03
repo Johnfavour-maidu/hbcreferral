@@ -6,7 +6,7 @@ A premium, production-ready referral management platform for Hearts by Charming,
 
 - **Referral System** — Unique branded referral codes (HBC-XXXXX), links, and QR codes
 - **Live Leaderboard** — Real-time rankings with animated podium
-- **Rewards System** — Gold (₦10K), Silver (₦7K), Bronze (₦5K) tiers
+- **Rewards System** — Gold (₦20K), Silver (₦15K), Bronze (₦10K) tiers
 - **Admin Dashboard** — Full management with analytics, verification, exports
 - **Email Notifications** — Welcome, verification, leaderboard, and reward emails
 - **Responsive Design** — Mobile-first, premium UI with Framer Motion animations

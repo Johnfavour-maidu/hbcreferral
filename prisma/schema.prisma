@@ -111,9 +111,9 @@ model Campaign {
   endDate             DateTime?
   registrationEnabled Boolean        @default(true)
   leaderboardVisible  Boolean        @default(true)
-  goldReward          Int            @default(10000)
-  silverReward        Int            @default(7000)
-  bronzeReward        Int            @default(5000)
+  goldReward          Int            @default(20000)
+  silverReward        Int            @default(15000)
+  bronzeReward        Int            @default(10000)
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 

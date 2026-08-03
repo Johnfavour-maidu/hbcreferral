@@ -17,9 +17,9 @@ async function main() {
       status: "ACTIVE",
       registrationEnabled: true,
       leaderboardVisible: true,
-      goldReward: 10000,
-      silverReward: 7000,
-      bronzeReward: 5000,
+      goldReward: 20000,
+      silverReward: 15000,
+      bronzeReward: 10000,
     },
   });
   console.log("Campaign created");

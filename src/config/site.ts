@@ -39,9 +39,9 @@ export const colors = {
 };
 
 export const REWARD_TIERS = {
-  GOLD: { name: "Gold", value: 10000, referrals: 30, color: "#C89A2B" },
-  SILVER: { name: "Silver", value: 7000, referrals: 20, color: "#C0C0C0" },
-  BRONZE: { name: "Bronze", value: 5000, referrals: 10, color: "#CD7F32" },
+  GOLD: { name: "Gold", value: 20000, referrals: 30, color: "#C89A2B" },
+  SILVER: { name: "Silver", value: 15000, referrals: 20, color: "#C0C0C0" },
+  BRONZE: { name: "Bronze", value: 10000, referrals: 10, color: "#CD7F32" },
 } as const;
 
 export const NIGERIAN_STATES = [

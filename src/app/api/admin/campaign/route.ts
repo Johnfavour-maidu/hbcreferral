@@ -22,9 +22,9 @@ export async function GET() {
           status: "ACTIVE",
           registrationEnabled: true,
           leaderboardVisible: true,
-          goldReward: 10000,
-          silverReward: 7000,
-          bronzeReward: 5000,
+          goldReward: 20000,
+          silverReward: 15000,
+          bronzeReward: 10000,
         },
       });
     }
@@ -67,9 +67,9 @@ export async function PUT(request: NextRequest) {
         status: body.status || "ACTIVE",
         registrationEnabled: body.registrationEnabled ?? true,
         leaderboardVisible: body.leaderboardVisible ?? true,
-        goldReward: body.goldReward || 10000,
-        silverReward: body.silverReward || 7000,
-        bronzeReward: body.bronzeReward || 5000,
+        goldReward: body.goldReward || 20000,
+        silverReward: body.silverReward || 15000,
+        bronzeReward: body.bronzeReward || 10000,
       },
     });
 

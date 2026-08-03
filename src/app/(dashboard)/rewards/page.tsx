@@ -6,9 +6,9 @@ import { PageWrapper, FadeIn } from "@/components/shared/animations";
 import { Gift, Trophy, Medal, Award, ArrowRight } from "lucide-react";
 
 const tiers = [
-  { name: "Gold", icon: Trophy, referrals: 30, amount: 10000, gradient: "from-gold/10 to-gold/5", border: "border-gold/20", iconColor: "text-gold", badge: "gold" as const },
-  { name: "Silver", icon: Medal, referrals: 20, amount: 7000, gradient: "from-gray-100 to-gray-50", border: "border-gray-200", iconColor: "text-gray-400", badge: "brown" as const },
-  { name: "Bronze", icon: Award, referrals: 10, amount: 5000, gradient: "from-amber-50 to-orange-50", border: "border-amber-200", iconColor: "text-amber-600", badge: "warning" as const },
+  { name: "Gold", icon: Trophy, referrals: 30, amount: 20000, gradient: "from-gold/10 to-gold/5", border: "border-gold/20", iconColor: "text-gold", badge: "gold" as const },
+  { name: "Silver", icon: Medal, referrals: 20, amount: 15000, gradient: "from-gray-100 to-gray-50", border: "border-gray-200", iconColor: "text-gray-400", badge: "brown" as const },
+  { name: "Bronze", icon: Award, referrals: 10, amount: 10000, gradient: "from-amber-50 to-orange-50", border: "border-amber-200", iconColor: "text-amber-600", badge: "warning" as const },
 ];
 
 export default function RewardsPage() {

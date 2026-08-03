@@ -6,7 +6,7 @@ const tiers = [
   {
     name: "GOLD",
     subtitle: "Highest Referrals",
-    amount: "₦10,000",
+    amount: "₦20,000",
     label: "GRAND PRIZE",
     cardClass: "reward-card-gold",
     badgeClass: "tier-badge-gold",
@@ -15,7 +15,7 @@ const tiers = [
   {
     name: "SILVER",
     subtitle: "2nd Highest Referrals",
-    amount: "₦7,000",
+    amount: "₦15,000",
     label: "RUNNER UP",
     cardClass: "reward-card-silver",
     badgeClass: "tier-badge-silver",
@@ -24,7 +24,7 @@ const tiers = [
   {
     name: "BRONZE",
     subtitle: "3rd Highest Referrals",
-    amount: "₦5,000",
+    amount: "₦10,000",
     label: "TOP FINALIST",
     cardClass: "reward-card-bronze",
     badgeClass: "tier-badge-bronze",
